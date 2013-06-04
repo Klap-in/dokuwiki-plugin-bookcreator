@@ -7,27 +7,10 @@
 // must be run within Dokuwiki
 if(!defined('DOKU_INC')) die();
 
-if(!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN', DOKU_INC.'lib/plugins/');
-require_once(DOKU_PLUGIN.'action.php');
-
 class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
 
     var $temp;
     var $num;
-
-    /**
-     * return some info
-     */
-    function getInfo() {
-        return array(
-            'author' => 'Luigi micco',
-            'email'  => 'l.micco@tiscali.it',
-            'date'   => '2010-04-19',
-            'name'   => 'bookcreator Plugin (action component)',
-            'desc'   => 'Allow to make a book (PDF or text) from selected pages',
-            'url'    => 'http://www.bitlibero.com/dokuwiki/bookcreator-19.04.2010.zip',
-        );
-    }
 
     /**
      * Constructor

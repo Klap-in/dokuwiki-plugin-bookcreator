@@ -9,8 +9,6 @@
 // must be run within Dokuwiki
 if(!defined('DOKU_INC')) die();
 
-if(!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN', DOKU_INC.'lib/plugins/');
-require_once(DOKU_PLUGIN.'syntax.php');
 require_once(DOKU_INC.'inc/search.php');
 
 /**
@@ -20,17 +18,6 @@ require_once(DOKU_INC.'inc/search.php');
 class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
 
     var $usercansave;
-
-    function getInfo() {
-        return array(
-            'author' => 'Luigi micco',
-            'email'  => 'l.micco@tiscali.it',
-            'date'   => '2010-04-19',
-            'name'   => 'bookcreator Plugin (syntax component)',
-            'desc'   => 'Allow to make a book (PDF or text) from selected pages',
-            'url'    => 'http://www.bitlibero.com/dokuwiki/bookcreator-19.04.2010.zip',
-        );
-    }
 
     function connectTo($mode) {
         $this->Lexer->addSpecialPattern('~~\w*?BOOK.*?~~', $mode, 'plugin_bookcreator');

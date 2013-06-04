@@ -1,0 +1,7 @@
+base   bookcreator
+author Luigi micco
+email  l.micco@tiscali.it
+date   2010-04-19
+name   Bookcreator Plugin
+desc   Allow to make a book (PDF or text) from selected pages
+url    https://www.dokuwiki.org/plugin:bookcreator
