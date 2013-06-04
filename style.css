@@ -1,0 +1,47 @@
+/*
+<!-- http://free-script.it/ -->
+<!-- Free script - Script gratuiti per il web. Script php, script asp, script javascript, script ajax. -->
+<!-- Script ajax: Drag and drop con scriptaculous e salvataggio posizione -->
+*/
+
+ul.boxes li { margin: 0px; }
+#pagelist {
+	margin-bottom: 1em;
+}
+#pagelist li {
+	cursor: move;
+	margin-bottom: 0px;
+	margin-top: 4px;
+	border: 1px solid __medium__;
+	background-color: __lightgray__;
+	padding: 2px 2px 2px 2px;
+}
+
+div.bookcreator__ {
+  border: 1px solid __border__;
+  background-color: __background_alt__;
+  background-image: url(images/book.png);
+	
+  margin: 0.5em;
+  margin-left: auto;
+  margin-right: auto;
+  width: 85% !important;
+  min-height: 40px;
+  text-align: justify;
+  vertical-align: middle;
+  border-collapse: collapse;
+  padding: 5px 5px 5px 90px;
+  background-position: 5px 50%;
+  background-repeat: no-repeat;
+}
+
+div.bookcreator__panel {
+  text-align: justify;
+  vertical-align: middle;
+  margin-right: 20px;
+  float:left; 
+  display:block;  
+  
+}
+
+
