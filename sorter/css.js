@@ -8,10 +8,10 @@ ToolMan._cssFactory = {
 		} else if (element.currentStyle) {
 			return element.currentStyle[property]
 		} else if (document.defaultView && document.defaultView.getComputedStyle) {
-			var style = document.defaultView.getComputedStyle(element, null)
+			var style = document.defaultView.getComputedStyle(element, null);
 			return style.getPropertyValue(property)
 		} else {
 			return null
 		}
 	}
-}
+};

@@ -6,22 +6,23 @@ based on http://www.quirksmode.org/js/cookies.html
 ToolMan._cookieOven = {
 
 	set : function(name, value, expirationInDays) {
+        var expires;
 		if (expirationInDays) {
-			var date = new Date()
-			date.setTime(date.getTime() + (expirationInDays * 24 * 60 * 60 * 1000))
-			var expires = "; expires=" + date.toGMTString()
+			var date = new Date();
+			date.setTime(date.getTime() + (expirationInDays * 24 * 60 * 60 * 1000));
+			expires = "; expires=" + date.toGMTString();
 		} else {
-			var expires = ""
+			expires = "";
 		}
 		document.cookie = name + "=" + value + expires + "; path=/"
 	},
 
 	get : function(name) {
-		var namePattern = name + "="
-		var cookies = document.cookie.split(';')
+		var namePattern = name + "=";
+		var cookies = document.cookie.split(';');
 		for(var i = 0, n = cookies.length; i < n; i++) {
-			var c = cookies[i]
-			while (c.charAt(0) == ' ') c = c.substring(1, c.length)
+			var c = cookies[i];
+			while (c.charAt(0) == ' ') c = c.substring(1, c.length);
 			if (c.indexOf(namePattern) == 0)
 				return c.substring(namePattern.length, c.length)
 		}
@@ -31,4 +32,4 @@ ToolMan._cookieOven = {
 	eraseCookie : function(name) {
 		createCookie(name, "", -1)
 	}
-}
+};

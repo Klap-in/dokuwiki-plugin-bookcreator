@@ -59,7 +59,7 @@ var ToolMan = {
 		return ToolMan._junkdrawer
 	}
 
-}
+};
 
 ToolMan._helpers = {
 	map : function(array, func) {
@@ -67,36 +67,36 @@ ToolMan._helpers = {
 	},
 
 	nextItem : function(item, nodeName) {
-		if (item == null) return
-		var next = item.nextSibling
+		if (item == null) return;
+		var next = item.nextSibling;
 		while (next != null) {
-			if (next.nodeName == nodeName) return next
+			if (next.nodeName == nodeName) return next;
 			next = next.nextSibling
 		}
 		return null
 	},
 
 	previousItem : function(item, nodeName) {
-		var previous = item.previousSibling
+		var previous = item.previousSibling;
 		while (previous != null) {
-			if (previous.nodeName == nodeName) return previous
+			if (previous.nodeName == nodeName) return previous;
 			previous = previous.previousSibling
 		}
 		return null
 	},
 
 	moveBefore : function(item1, item2) {
-		var parent = item1.parentNode
-		parent.removeChild(item1)
+		var parent = item1.parentNode;
+		parent.removeChild(item1);
 		parent.insertBefore(item1, item2)
 	},
 
 	moveAfter : function(item1, item2) {
-		var parent = item1.parentNode
-		parent.removeChild(item1)
+		var parent = item1.parentNode;
+		parent.removeChild(item1);
 		parent.insertBefore(item1, item2 ? item2.nextSibling : null)
 	}
-}
+};
 
 /** 
  * scripts without a proper home
@@ -105,10 +105,10 @@ ToolMan._helpers = {
  */
 ToolMan._junkdrawer = {
 	serializeList : function(list) {
-		var items = list.getElementsByTagName("li")
-		var array = new Array()
+		var items = list.getElementsByTagName("li");
+		var array = new Array();
 		for (var i = 0, n = items.length; i < n; i++) {
-			var item = items[i]
+			var item = items[i];
 
 			array.push(ToolMan.junkdrawer()._identifier(item))
 		}
@@ -120,33 +120,33 @@ ToolMan._junkdrawer = {
 	},
 
 	restoreListOrder : function(listID) {
-		var list = document.getElementById(listID)
-		if (list == null) return
+		var list = document.getElementById(listID);
+		if (list == null) return;
 
-		var cookie = ToolMan.cookies().get("list-" + listID)
+		var cookie = ToolMan.cookies().get("list-" + listID);
 		if (!cookie) return;
 
-		var IDs = cookie.split('|')
-		var items = ToolMan.junkdrawer()._itemsByID(list)
+		var IDs = cookie.split('|');
+		var items = ToolMan.junkdrawer()._itemsByID(list);
 
 		for (var i = 0, n = IDs.length; i < n; i++) {
-			var itemID = IDs[i]
+			var itemID = IDs[i];
 			if (itemID in items) {
-				var item = items[itemID]
-				list.removeChild(item)
+				var item = items[itemID];
+				list.removeChild(item);
 				list.insertBefore(item, null)
 			}
 		}
 	},
 
 	_identifier : function(item) {
-		var trim = ToolMan.junkdrawer().trim
-		var identifier
+		var trim = ToolMan.junkdrawer().trim;
+		var identifier;
 
-		identifier = trim(item.getAttribute("id"))
+		identifier = trim(item.getAttribute("id"));
 		if (identifier != null && identifier.length > 0) return identifier;
 		
-		identifier = trim(item.getAttribute("itemID"))
+		identifier = trim(item.getAttribute("itemID"));
 		if (identifier != null && identifier.length > 0) return identifier;
 		
 		// FIXME: strip out special chars or make this an MD5 hash or something
@@ -154,17 +154,17 @@ ToolMan._junkdrawer = {
 	},
 
 	_itemsByID : function(list) {
-		var array = new Array()
-		var items = list.getElementsByTagName('li')
+		var array = new Array();
+		var items = list.getElementsByTagName('li');
 		for (var i = 0, n = items.length; i < n; i++) {
-			var item = items[i]
+			var item = items[i];
 			array[ToolMan.junkdrawer()._identifier(item)] = item
 		}
 		return array
 	},
 
 	trim : function(text) {
-		if (text == null) return null
+		if (text == null) return null;
 		return text.replace(/^(\s+)?(.*\S)(\s+)?$/, '$2')
 	}
-}
+};

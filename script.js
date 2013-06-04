@@ -1,12 +1,11 @@
 function book_changePage(name, value, expires, path, domain, secure) {
-  var curCookie = name + "=" + escape(value) +
+  var curCookie = name + "=" + encodeURIComponent(value) +
                   ((expires) ? "; expires=" + expires.toGMTString() : "") +
                   ((path) ? "; path=" + path : "") +
                   ((domain) ? "; domain=" + domain : "") +
                   ((secure) ? "; secure" : "");
   document.cookie = curCookie;
 }
-
 // recupera lo stato di una pagina
 function book_getPage(name) {
   var dc = document.cookie;
@@ -19,7 +18,7 @@ function book_getPage(name) {
   else begin += 2;
   var end = document.cookie.indexOf(";", begin);
   if (end == -1) end = dc.length;
-  return unescape(dc.substring(begin + prefix.length, end));
+  return decodeURIComponent(dc.substring(begin + prefix.length, end));
 }
 
 // cancella la pagina della selezione

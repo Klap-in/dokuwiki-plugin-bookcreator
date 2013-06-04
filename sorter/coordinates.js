@@ -18,10 +18,10 @@ ToolMan._coordinatesFactory = {
 	 * FIXME: Safari 1.2, returns (0,0) on absolutely positioned elements
 	 */
 	topLeftPosition : function(element) {
-		var left = parseInt(ToolMan.css().readStyle(element, "left"))
-		var left = isNaN(left) ? 0 : left
-		var top = parseInt(ToolMan.css().readStyle(element, "top"))
-		var top = isNaN(top) ? 0 : top
+		var left = parseInt(ToolMan.css().readStyle(element, "left"));
+		left = isNaN(left) ? 0 : left;
+		var top = parseInt(ToolMan.css().readStyle(element, "top"));
+		top = isNaN(top) ? 0 : top;
 
 		return this.create(left, top)
 	},
@@ -31,11 +31,11 @@ ToolMan._coordinatesFactory = {
 	},
 
 	topLeftOffset : function(element) {
-		var offset = this._offset(element) 
+		var offset = this._offset(element);
 
-		var parent = element.offsetParent
+		var parent = element.offsetParent;
 		while (parent) {
-			offset = offset.plus(this._offset(parent))
+			offset = offset.plus(this._offset(parent));
 			parent = parent.offsetParent
 		}
 		return offset
@@ -81,7 +81,7 @@ ToolMan._coordinatesFactory = {
 	 * NOTE: in Safari the coordinate is relative to the document
 	 */
 	mousePosition : function(event) {
-		event = ToolMan.events().fix(event)
+		event = ToolMan.events().fix(event);
 		return this.create(event.clientX, event.clientY)
 	},
 
@@ -89,7 +89,7 @@ ToolMan._coordinatesFactory = {
 	 * mouse coordinate relative to the document
 	 */
 	mouseOffset : function(event) {
-		event = ToolMan.events().fix(event)
+		event = ToolMan.events().fix(event);
 		if (event.pageX >= 0 || event.pageX < 0) {
 			return this.create(event.pageX, event.pageY)
 		} else if (event.clientX >= 0 || event.clientX < 0) {
@@ -105,11 +105,11 @@ ToolMan._coordinatesFactory = {
 	_offset : function(element) {
 		return this.create(element.offsetLeft, element.offsetTop)
 	}
-}
+};
 
 function _ToolManCoordinate(factory, x, y) {
-	this.factory = factory
-	this.x = isNaN(x) ? 0 : x
+	this.factory = factory;
+	this.x = isNaN(x) ? 0 : x;
 	this.y = isNaN(y) ? 0 : y
 }
 
@@ -137,8 +137,8 @@ _ToolManCoordinate.prototype = {
 	},
 
 	constrainTo : function (one, two) {
-		var min = one.min(two)
-		var max = one.max(two)
+		var min = one.min(two);
+		var max = one.max(two);
 
 		return this.max(min).min(max)
 	},
@@ -148,7 +148,7 @@ _ToolManCoordinate.prototype = {
 	},
 
 	reposition : function(element) {
-		element.style["top"] = this.y + "px"
+		element.style["top"] = this.y + "px";
 		element.style["left"] = this.x + "px"
 	}
-}
+};
