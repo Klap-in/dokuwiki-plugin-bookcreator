@@ -90,9 +90,9 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
 
         if ($mode == 'xhtml') {
 
-          // verifica che se l'utente può salvare/eliminare le selezioni
+          // verifica che se l'utente pu salvare/eliminare le selezioni
           $this->usercansave = (auth_quickaclcheck($this->getConf('save_namespace').':*') >= AUTH_CREATE);
-          // verifica che se l'utente può salvare/eliminare le selezioni
+          // verifica che se l'utente pu salvare/eliminare le selezioni
 
           if ($this->usercansave) {        
             if ((isset($_POST['task'])) && ($_POST['task'] == "save")) {
@@ -155,7 +155,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
               $list = array();
               $i = 0;
               
-              // c'è una selezione salvata da recuperare
+              // c' una selezione salvata da recuperare
               if ((isset($_POST['task'])) && ($_POST['task'] == "read")) {
                 checkSecurityToken();
                 $renderer->doc .= "
@@ -188,7 +188,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
               } elseif (isset($_COOKIE['bookcreator']) )  {
                 $fav=$_COOKIE['bookcreator'];
 
-                //Se non ci sono pagine già inserite
+                //Se non ci sono pagine giï¿½ inserite
                 if ( ($fav == "") || ( count($fav) == 0) ) {
                   $renderer->doc .= $this->getLang('bookcreator_empty');
                   return;
@@ -367,12 +367,18 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
 
     function _getlist($order, $limit=0) {
       global $conf;
-      
-      $result = array();
-      $opts = array('depth' => 1,'listfiles' => true,'listdirs' => false,'skipacl' => false, 'pagesonly' => true,'meta' => true);
-      $tt = str_replace(':','/',$this->getConf('save_namespace'));
-      search(&$result,$conf['datadir'],'search_allpages',$opts,$tt);
 
+      $ns = cleanID($this->getConf('save_namespace'));
+      $tt = utf8_encodeFN(str_replace(':', '/', $ns));
+      $nsdepth = count(explode('/',$tt));
+      $result = array();
+      $opts = array(
+          'depth' => $nsdepth+1,
+          'skipacl' => false
+      );
+      $ns = cleanID($this->getConf('save_namespace'));
+      $tt = utf8_encodeFN(str_replace(':', '/', $ns));
+      search($result,$conf['datadir'],'search_allpages',$opts,$tt);
       if (sizeof($result) > 0) {
       
         if($order == 'date'){
