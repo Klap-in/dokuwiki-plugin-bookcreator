@@ -387,25 +387,25 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         $renderer->doc .= '
 <script type="text/javascript"><!--//--><![CDATA[//><!-- 
 function actionList(action,page) {
-  var msg = "";
-  var flag = true;
-  var flagconfirm = true;
-  if (action == "del") {
-    msg = "'.$this->getLang('bookcreator_confirmdel').'";
-  } else {
-    if (book_countPages("bookcreator") == 0) {
-      flag = false;
-    }  
-    msg = "'.$this->getLang('bookcreator_confirmload').'";
-  }
-  
-  if (flag) flagconfirm = confirm(msg);
-  if(flagconfirm) {
-    document.bookcreator__selections__list.task.value=action;
-    document.bookcreator__selections__list.page.value=page;
-    document.bookcreator__selections__list.submit();
-    return true;
-  }  
+    var msg = "";
+    var flag = true;
+    var flagconfirm = true;
+    if (action == "del") {
+        msg = "'.$this->getLang('bookcreator_confirmdel').'";
+    } else {
+        if (book_countPages("bookcreator") == 0) {
+            flag = false;
+        }
+        msg = "'.$this->getLang('bookcreator_confirmload').'";
+    }
+
+    if (flag) flagconfirm = confirm(msg);
+    if(flagconfirm) {
+        document.bookcreator__selections__list.task.value=action;
+        document.bookcreator__selections__list.page.value=page;
+        document.bookcreator__selections__list.submit();
+        return true;
+    }
 }
 //--><!]]></script>';
 

@@ -115,18 +115,19 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
 
         echo '<script type="text/javascript"><!--//--><![CDATA[//><!--
 function book_revertLink(id) {
-  if (document && $(id)) 
-    if ($(id).style.display=="block") 
-      $(id).style.display="none";
-    else
-      $(id).style.display="block";
+    var elem = jQuery("#"+id)[0];
+    if (document && elem)
+        if (elem.style.display=="block")
+            elem.style.display="none";
+        else
+            elem.style.display="block";
 }
 
 function book_updateSelection(id, value) {
   book_changePage("bookcreator["+id+"]", value, new Date("July 21, 2099 00:00:00"), "/");
   book_revertLink("bookcreator__remove");
   book_revertLink("bookcreator__add");
-  $("bookcreator__pages").innerHTML= book_countPages("bookcreator");
+  jQuery("#bookcreator__pages")[0].innerHTML= book_countPages("bookcreator");
 }
 //--><!]]></script>';
 
