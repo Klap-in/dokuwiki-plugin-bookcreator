@@ -20,12 +20,15 @@ function book_saveSelection(item) {
 }
 
 function book_sorter() {
-    junkdrawer.restoreListOrder("pagelist");
-    dragsort.makeListSortable(jQuery("#pagelist")[0], verticalOnly, book_saveOrder);
-    book_saveSelection("pagelist")
+    var list = jQuery("#pagelist")[0];
+    if(list) {
+        junkdrawer.restoreListOrder("pagelist");
+        dragsort.makeListSortable(list, verticalOnly, book_saveOrder);
+        book_saveSelection("pagelist")
+    }
 }
 
 //old: addEvent(window, 'load', book_sorter);
-jQuery(window).load(function () {
+jQuery(function () {
     book_sorter();
 });
