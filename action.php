@@ -29,12 +29,12 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
 
     function _handle_tpl_act(&$event, $param) {
 
-        global $conf, $ID;
+        global $ID;
 
         $i = 0;
         if(isset($_COOKIE['bookcreator'])) {
             $fav = $_COOKIE['bookcreator'];
-
+            //load page data from cookie
             list($cpt, $date) = explode(";", $fav[$ID]);
 
             if($cpt == 0 || $cpt == "") {
@@ -42,41 +42,49 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
             } else {
                 $cpt = 1;
             }
-
+            //count selected pages
             foreach($fav as $value) {
                 if($value < 1) continue;
                 $i = $i + 1;
             }
-        } else $cpt = 0;
+        } else {
+            //no cookie info
+            $cpt = 0;
+        }
         $this->temp = $cpt;
         $this->num  = $i;
 
         if($event->data != 'addtobook') return;
 
-        $this->diff = 0;
         if(isset($_COOKIE['bookcreator'])) {
+            //cookie available
             $fav = $_COOKIE['bookcreator'];
 
             list($cpt, $date) = explode(";", $fav[$ID]);
 
             if($cpt == 0 || $cpt == "") {
+                //add this page
                 $cpt       = 1;
                 $this->num = $this->num + 1;
-                $msg       = $this->getLang('bookcreator_pageadded');
+                $msg       = $this->getLang('pageadded');
             } else {
+                //remove this page
                 $cpt       = 0;
                 $this->num = $this->num - 1;
-                $msg       = $this->getLang('bookcreator_pageremoved');
+                $msg       = $this->getLang('pageremoved');
             }
         } else {
+            //no cookie available, this is first page added to selection
             $cpt       = 1;
             $this->num = $this->num + 1;
-            $msg       = $this->getLang('bookcreator_pageadded');
+            $msg       = $this->getLang('pageadded');
         }
         if($this->getConf('toolbar') == "never") msg($msg);
 
         $this->temp = $cpt;
         setCookie("bookcreator[".$ID."]", "$cpt;".time(), time() + 60 * 60 * 24 * 7, '/');
+
+        //Show the wikipage
         $event->data = 'show';
     }
 
@@ -91,76 +99,70 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
 
         if($event->data != 'show') return; // nothing to do for us
 
-        /*
-        *  assume that page does not exists
-        */
+        //assume that page does not exists
         $exists = false;
         $id     = $ID;
         resolve_pageid('', $id, $exists);
 
-        /*
-        *  show or not the toolbar ?
-        */
+        // show or not the toolbar ?
         if(($this->getConf('toolbar') == "never") || (($this->getConf('toolbar') == "noempty") && ($this->num == 0)))
             return;
 
-        /*
-        *  find skip pages
-        */
+        // find skip pages
         $sp = join("|", explode(",", preg_quote($this->getConf('skip_ids'))));
         if(!$exists || preg_match("/$sp/i", $ID))
             return;
 
         $cpt = $this->temp;
 
-        echo '<script type="text/javascript"><!--//--><![CDATA[//><!--
-function book_revertLink(id) {
-    var elem = jQuery("#"+id)[0];
-    if (document && elem)
-        if (elem.style.display=="block")
-            elem.style.display="none";
-        else
-            elem.style.display="block";
-}
-
-function book_updateSelection(id, value) {
-  book_changePage("bookcreator["+id+"]", value, new Date("July 21, 2099 00:00:00"), "/");
-  book_revertLink("bookcreator__remove");
-  book_revertLink("bookcreator__add");
-  jQuery("#bookcreator__pages")[0].innerHTML= book_countPages("bookcreator");
-}
-//--><!]]></script>';
-
+        /**
+         * Display toolbar
+         */
         echo "<div class='bookcreator__' style='vertical-align:bottom;'>";
+
+        //add page to selection
         echo "<div class='bookcreator__panel' id='bookcreator__add' style='"; // '>";
         if($cpt == 0 || $cpt == "") {
             echo "display:block;'>";
         } else {
             echo "display:none;'>";
         }
-        echo '<b>'.$this->getLang('bookcreator_toolbar').'</b><br><a href="javascript:book_updateSelection(\''.$ID.'\', 1); ">';
-        echo "<img src='".DOKU_URL."lib/plugins/bookcreator/images/add.png'>&nbsp;".$this->getLang('bookcreator_addpage')."</a>";
+        echo '<b>'.$this->getLang('toolbar').'</b><br>';
+        echo '<a href="javascript:book_updateSelection(\''.$ID.'\', 1); ">';
+        echo "  <img src='".DOKU_URL."lib/plugins/bookcreator/images/add.png'>&nbsp;".$this->getLang('addpage');
+        echo "</a>";
         echo "</div>";
 
+        //remove page to selection
         echo "<div class='bookcreator__panel' id='bookcreator__remove' style='";
         if($cpt == 1) {
             echo "display:block;'>";
         } else {
             echo "display:none;'>";
         }
-        echo '<b>'.$this->getLang('bookcreator_toolbar').'</b><br><a href="javascript:book_updateSelection(\''.$ID.'\', 0); ">';
-        echo "<img src='".DOKU_URL."lib/plugins/bookcreator/images/del.png'>&nbsp;".$this->getLang('bookcreator_removepage')."</a>&nbsp;";
+        echo '<b>'.$this->getLang('toolbar').'</b><br>';
+        echo '<a href="javascript:book_updateSelection(\''.$ID.'\', 0); ">';
+        echo "  <img src='".DOKU_URL."lib/plugins/bookcreator/images/del.png'>&nbsp;".$this->getLang('removepage');
+        echo "</a>&nbsp;";
         echo "</div>";
 
-        echo "<div class='bookcreator__panel' >";
-        echo "<br><a href='".wl($this->getConf('book_page'))."'><img src='".DOKU_URL."lib/plugins/bookcreator/images/smallbook.png'>&nbsp;".$this->getLang('bookcreator_showbook')." (";
-        echo "<span id='bookcreator__pages'>";
-        echo  $this->num;
-        echo "</span> ".$this->getLang('bookcreator_pages').")";
-        echo "</a></div>";
-        echo "<div class='bookcreator__panel' style='float:right;'>";
-        echo "<a href='".wl($this->getConf('help_page'))."'><img src='".DOKU_URL."lib/plugins/bookcreator/images/help.png'>&nbsp;".$this->getLang('bookcreator_help')."</a>";
+        //pointer to Book Manager
+        echo "<div class='bookcreator__panel' ><br>";
+        echo "  <a href='".wl($this->getConf('book_page'))."'>";
+        echo "    <img src='".DOKU_URL."lib/plugins/bookcreator/images/smallbook.png'>&nbsp;".$this->getLang('showbook')." (";
+        echo "    <span id='bookcreator__pages'>";
+        echo        $this->num;
+        echo "    </span> ".$this->getLang('pages').")";
+        echo "  </a>";
         echo "</div>";
+
+        // pointer to help
+        echo "<div class='bookcreator__panel' style='float:right;'>";
+        echo "  <a href='".wl($this->getConf('help_page'))."'>";
+        echo "    <img src='".DOKU_URL."lib/plugins/bookcreator/images/help.png'>&nbsp;".$this->getLang('help');
+        echo "  </a>";
+        echo "</div>";
+
         echo "</div>";
 
     }
