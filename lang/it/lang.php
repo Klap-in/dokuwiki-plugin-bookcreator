@@ -13,8 +13,8 @@ $lang['removed']         = "Voci rimosse dalla selezione";
 $lang['reserconfirm']    = "Vuoi realmente azzerare la selezione ?";
 $lang['reset']           = "Azzera selezione";
 
-$lang['include']         = "Ripristina la pagina nella selezione";
-$lang['remove']          = "Rimuovi la pagina dalla selezione";
+$lang['js']['include']         = "Ripristina la pagina nella selezione";
+$lang['js']['remove']          = "Rimuovi la pagina dalla selezione";
 $lang['export']          = "Esporta selezione";
 $lang['create']          = "Esporta";
 
@@ -30,17 +30,18 @@ $lang['pageremoved']     = "Pagina rimossa dalla selezione";
 $lang['addpage']         = "Aggiungi questa pagina al tuo libro";
 $lang['removepage']      = "Rimuovi questa pagina dal tuo libro";
 $lang['showbook']        = "Mostra, modifica libro";
+$lang['sortable']        = "Drag and drop to sort/remove/add pages";
 
 $lang['pages']           = "pagina/e";
 $lang['help']            = "Aiuto";
 
 $lang['toolbar']         = "Creatore di libri";
 
-
 $lang['saveselection']   = "Salva selezione";
 $lang['needtitle']       = "Occorre indicare un titolo";
 $lang['saved']           = "Selezione salvata con successo";
 $lang['deleted']         = "Selezione rimossa con successo";
+$lang['duplicate']       = "&lt;The list with saved selections is already displayed on this page&gt;";
 
 $lang['save']            = "Salva";
 $lang['listselections']  = "Elenco selezioni salvate";

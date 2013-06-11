@@ -8,8 +8,8 @@ $lang['removed']         = "Pages removed from selection";
 $lang['reserconfirm']    = "Do you really clear selection ?";
 $lang['reset']           = "Clear selection";
 
-$lang['include']         = "Add to selection";
-$lang['remove']          = "Remove page from selection";
+$lang['js']['include']   = "Add to selection";
+$lang['js']['remove']    = "Remove page from selection";
 $lang['export']          = "Export selection";
 $lang['create']          = "Export";
 
@@ -25,22 +25,24 @@ $lang['pageremoved']     = "Page removed from selection";
 $lang['addpage']         = "Add this page to your book";
 $lang['removepage']      = "Remove this page from your book";
 $lang['showbook']        = "Show, modify book";
+$lang['sortable']        = "Drag and drop to sort/remove/add pages";
 
 $lang['pages']           = "page/s";
-$lang['help']            = "Help'";
+$lang['help']            = "Help";
 
 $lang['toolbar']         = "Book creator";
 
 $lang['saveselection']   = "Save selection";
-$lang['needtitle']       = "should indicate a title";
-$lang['saved']           = "Select saved successfully";
-$lang['deleted']         = "Selecting successfully removed";
+$lang['needtitle']       = "Save failed: please provide a title";
+$lang['saved']           = "Selection saved successfully";
+$lang['deleted']         = "Selection successfully removed";
+$lang['duplicate']       = "&lt;The list with saved selections is already displayed on this page&gt;";
 
 $lang['save']            = "Save";
-$lang['listselections']  = "Selection List saved";
+$lang['listselections']  = "Selection Lists saved";
 
-$lang['delselection']    = "Remove saved selection";
 $lang['showpage']        = "Show page";
+$lang['delselection']    = "Remove saved selection";
 $lang['loadselection']   = "Load saved selection";
 
 $lang['js']['confirmdel']      = "Do you really delete this selection from the archive?";

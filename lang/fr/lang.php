@@ -25,7 +25,8 @@ $lang['pageremoved']     = "Page retir�e de la s�lection";
 $lang['addpage']         = "Ajouter cette page � votre livre";
 $lang['removepage']      = "Retirer cette page de votre livre";
 $lang['showbook']        = "Voir ou modifier le livre";
- 
+ $lang['sortable']        = "Drag and drop to sort/remove/add pages";
+
 $lang['pages']           = "page/s";
 $lang['help']            = "Aide";
  
@@ -35,6 +36,7 @@ $lang['saveselection']   = "Enregistrer la s�lection";
 $lang['needtitle']       = "Il faut indiquer un titre";
 $lang['saved']           = "S�lectionnez sauvegard�s avec succ�s";
 $lang['deleted']         = "S�lection supprim� avec succ�s";
+$lang['duplicate']       = "&lt;The list with saved selections is already displayed on this page&gt;";
 
 $lang['save']            = "Enregistrer";
 $lang['listselections']  = "Liste de s�lection sauv�";
