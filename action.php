@@ -9,7 +9,7 @@ if(!defined('DOKU_INC')) die();
 
 class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
 
-    var $temp;
+    var $cpt;
     var $num;
 
     /**
@@ -27,75 +27,171 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
         $contr->register_hook('TPL_ACT_RENDER', 'BEFORE', $this, 'bookbar', array());
     }
 
+    /**
+     * Read data from cookie and handle the 'addtobook' action
+     *
+     * @param Doku_Event $event  event object by reference
+     * @param array      $param  empty
+     */
     function _handle_tpl_act(&$event, $param) {
-
-        global $ID;
-
-        $i = 0;
-        if(isset($_COOKIE['bookcreator'])) {
-            $fav = $_COOKIE['bookcreator'];
-            //load page data from cookie
-            list($cpt, $date) = explode(";", $fav[$ID]);
-
-            if($cpt == 0 || $cpt == "") {
-                $cpt = 0;
-            } else {
-                $cpt = 1;
-            }
-            //count selected pages
-            foreach($fav as $value) {
-                if($value < 1) continue;
-                $i = $i + 1;
-            }
-        } else {
-            //no cookie info
-            $cpt = 0;
+        //unify the action
+        $do = $event->data;
+        if(is_array($do)) {
+            list($do) = array_keys($do);
         }
-        $this->temp = $cpt;
-        $this->num  = $i;
 
-        if($event->data != 'addtobook') return;
+        //set selection in cookie before html is outputted
+        switch($do) {
+            case  'readsavedselection':
+                if(checkSecurityToken()) {
+                    //clear selection
+                    $this->clearSelectionCookie();
 
-        if(isset($_COOKIE['bookcreator'])) {
-            //cookie available
-            $fav = $_COOKIE['bookcreator'];
+                    //load new selection
+                    list($title, $list) = $this->loadSavedSelection($_REQUEST['page']);
 
-            list($cpt, $date) = explode(";", $fav[$ID]);
+                    setCookie("bookcreator_title", "$title", time() + 60 * 60 * 24 * 7, DOKU_BASE);
+                    $_COOKIE['bookcreator_title'] = $title;
 
-            if($cpt == 0 || $cpt == "") {
-                //add this page
-                $cpt       = 1;
-                $this->num = $this->num + 1;
-                $msg       = $this->getLang('pageadded');
-            } else {
-                //remove this page
-                $cpt       = 0;
-                $this->num = $this->num - 1;
-                $msg       = $this->getLang('pageremoved');
-            }
-        } else {
-            //no cookie available, this is first page added to selection
-            $cpt       = 1;
-            $this->num = $this->num + 1;
-            $msg       = $this->getLang('pageadded');
+                    foreach($list as $pageid => $cpt) {
+                        setCookie("bookcreator[".$pageid."]", "$cpt", time() + 60 * 60 * 24 * 7, DOKU_BASE);
+                        $_COOKIE['bookcreator'][$pageid] = $cpt;
+                    }
+                }
+
+                $event->data = 'show';
+                return;
+
+            case 'delsavedselection':
+                if(checkSecurityToken()) {
+
+                }
+                $event->data = 'show';
+                return;
+
+            case 'clearactiveselection':
+                if(checkSecurityToken()) {
+                    $this->clearSelectionCookie();
+                }
+
+                $event->data = 'show';
+                return;
+
+            case 'addtobook':
+            case 'show':
+                if(!in_array($event->data, array('show', 'addtobook'))) return;
+                global $ID;
+
+                //default: do not select page
+                $this->cpt = false;
+                $i         = 0;
+
+                //check data stored in the cookie
+                if(isset($_COOKIE['bookcreator'])) {
+                    $fav = $_COOKIE['bookcreator'];
+                    //load page data from cookie
+                    $cpt = $fav[$ID];
+
+                    if($cpt == 0 || $cpt == "") {
+                        $this->cpt = false;
+                    } else {
+                        $this->cpt = true;
+                    }
+
+                    //count selected pages
+                    foreach($fav as $value) {
+                        if($value < 1) continue;
+                        $i = $i + 1;
+                    }
+                }
+                $this->num = $i;
+
+                //further handle only the 'addtobook' action
+                if($event->data != 'addtobook') return;
+
+                //toggle page selection
+                if($this->cpt == false) {
+                    //add this page
+                    $this->cpt = true;
+                    $this->num = $this->num + 1;
+                    $msg       = $this->getLang('pageadded');
+                } else {
+                    //remove this page
+                    $this->cpt = false;
+                    $this->num = $this->num - 1;
+                    $msg       = $this->getLang('pageremoved');
+                }
+
+                //show message when toolbar isn't displayed
+                if($this->getConf('toolbar') == "never") msg($msg);
+
+                setCookie("bookcreator[".$ID."]", ($this->cpt ? "1" : "0"), time() + 60 * 60 * 24 * 7, DOKU_BASE);
+
+                //Change action to: show the wikipage
+                $event->data = 'show';
         }
-        if($this->getConf('toolbar') == "never") msg($msg);
-
-        $this->temp = $cpt;
-        setCookie("bookcreator[".$ID."]", "$cpt;".time(), time() + 60 * 60 * 24 * 7, '/');
-
-        //Show the wikipage
-        $event->data = 'show';
     }
 
     /**
-     *  Prints bookbar
+     * Clear current selection
+     */
+    private function clearSelectionCookie() {
+        if(isset($_COOKIE['bookcreator'])) {
+            //clear list
+            foreach($_COOKIE['bookcreator'] as $pageid => $value) {
+                setCookie("bookcreator[".$pageid."]", "", time() - 60 * 60, DOKU_BASE);
+            }
+            unset($_COOKIE['bookcreator']);
+
+            //clear title
+            setCookie("bookcreator_title", "", time() - 60 * 60, DOKU_BASE);
+            unset($_COOKIE['bookcreator_title']);
+        }
+    }
+
+    /**
+     * Load a Saved Selection from a page
+     *
+     * @param string $page pagename containing the selection
+     * @return array(pageid, title, array(list))
+     */
+    public function loadSavedSelection($page) {
+        $title = '';
+        $list  = array();
+
+        $id = cleanID($this->getConf('save_namespace').":".$page);
+        $pagecontent = rawWiki($id);
+        $lines       = explode("\n", $pagecontent);
+
+        foreach($lines as $i => $line) {
+            //skip nonsense
+            if(trim($line) == '') continue;
+            if((($i > 0) && substr($line, 0, 7) != "  * [[:")) continue;
+
+            //read title and list
+            if($i === 0) {
+                $line  = str_replace("====== ", '', $line);
+                $title = str_replace(" ======", '', $line);
+            } else {
+                $line        = str_replace("  * [[:", '', $line);
+                $line        = str_replace("]]", '', $line);
+                $list[$line] = 1;
+            }
+        }
+
+        return array($title, $list);
+    }
+
+    /**
+     *  Prints bookbar (performed before the wikipage content is output)
+     *
+     * @param Doku_Event $event  event object by reference
+     * @param array      $param  empty
      *
      * @author     Luigi Micco <l.micco@tiscali.it>
      */
     function bookbar(&$event, $param) {
         global $ID;
-        global $conf;
 
         if($event->data != 'show') return; // nothing to do for us
 
@@ -113,8 +209,6 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
         if(!$exists || preg_match("/$sp/i", $ID))
             return;
 
-        $cpt = $this->temp;
-
         /**
          * Display toolbar
          */
@@ -122,26 +216,26 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
 
         //add page to selection
         echo "<div class='bookcreator__panel' id='bookcreator__add' style='"; // '>";
-        if($cpt == 0 || $cpt == "") {
+        if($this->cpt == false) {
             echo "display:block;'>";
         } else {
             echo "display:none;'>";
         }
         echo '<b>'.$this->getLang('toolbar').'</b><br>';
-        echo '<a href="javascript:book_updateSelection(\''.$ID.'\', 1); ">';
+        echo '<a class="bookcreator__tglPgSelection" href="#">';
         echo "  <img src='".DOKU_URL."lib/plugins/bookcreator/images/add.png'>&nbsp;".$this->getLang('addpage');
         echo "</a>";
         echo "</div>";
 
         //remove page to selection
         echo "<div class='bookcreator__panel' id='bookcreator__remove' style='";
-        if($cpt == 1) {
+        if($this->cpt == true) {
             echo "display:block;'>";
         } else {
             echo "display:none;'>";
         }
         echo '<b>'.$this->getLang('toolbar').'</b><br>';
-        echo '<a href="javascript:book_updateSelection(\''.$ID.'\', 0); ">';
+        echo '<a class="bookcreator__tglPgSelection" href="#">';
         echo "  <img src='".DOKU_URL."lib/plugins/bookcreator/images/del.png'>&nbsp;".$this->getLang('removepage');
         echo "</a>&nbsp;";
         echo "</div>";
