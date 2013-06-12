@@ -47,3 +47,6 @@ $lang['loadselection']   = "Laad opgeslagen selectie";
 
 $lang['js']['confirmdel']      = "Weet u zeker dat u deze selectie uit het archief wilt verwijderen?";
 $lang['js']['confirmload']     = "Weet u zeker dat u deze selectie wilt opslaan en de huidige selectie wilt overschrijven?";
+
+$lang['js']['btn_addtobook']    = "Voeg toe aan boek";
+$lang['js']['btn_removetobook'] = "Verwijder uit boek";

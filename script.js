@@ -17,6 +17,8 @@ var Bookcreator = {
         //toggle add/remove in UI
         jQuery("#bookcreator__add").toggle(!addORremove);
         jQuery("#bookcreator__remove").toggle(addORremove);
+
+        Bookcreator.updatePagetoolLink();
     },
 
     /**
@@ -95,9 +97,9 @@ var Bookcreator = {
             '; path=' + DOKU_BASE
         ].join(''));
     },
-    storePageOrder: function(){
+    storePageOrder: function () {
         var pagelist = new Array();
-        jQuery('div.bookcreator__pagelist ul.pagelist.include li').each(function(){
+        jQuery('div.bookcreator__pagelist ul.pagelist.include li').each(function () {
             pagelist.push(jQuery(this).attr('id').substr(4));
         });
         jQuery.cookie.raw = true;
@@ -150,6 +152,39 @@ var Bookcreator = {
             document.bookcreator__selections__list.submit();
             return true;
         }
+    },
+    /**
+     * Add addtobook button to pagetools of 'dokuwiki' template,when its exists
+     */
+    addPagetoolLink: function () {
+        var pgtools = jQuery('#dokuwiki__pagetools ul');
+        if (pgtools.length) {
+            var $a = jQuery('<a class="action addtobook" rel="nofollow"></a>')
+                .attr('href', DOKU_BASE + JSINFO.id + "?do=addtobook")
+                .attr('title', LANG.plugins.bookcreator.btn_addtobook)
+                .append(jQuery('<span>' + LANG.plugins.bookcreator.btn_addtobook + '</span>'));
+            var $li = jQuery('<li></li>').append($a);
+
+            jQuery('#dokuwiki__pagetools ul li a.action.top').parent().before($li);
+            Bookcreator.updatePagetoolLink();
+        }
+
+    },
+    /**
+     * Toggle addtobook button between add and remove
+     */
+    updatePagetoolLink: function () {
+        var $bkcrtr = jQuery('.bookcreator__');
+        if ($bkcrtr.length) {
+            var addORremove = $bkcrtr.find("#bookcreator__add").is(':visible');
+            var $addtobookbtn = jQuery('#dokuwiki__pagetools ul a.action.addtobook');
+            if ($addtobookbtn.length) {
+                var text = LANG.plugins.bookcreator['btn_' + (addORremove ? 'add' : 'remove') + 'tobook'];
+                $addtobookbtn.toggleClass('remove', !addORremove)
+                    .attr('title', text)
+                    .children('span').html(text);
+            }
+        }
     }
 };
 
@@ -157,10 +192,11 @@ var Bookcreator = {
 jQuery(function () {
     //bookcreator toolbar
     jQuery('a.bookcreator__tglPgSelection').click(Bookcreator.togglePageSelection);
+    Bookcreator.addPagetoolLink();
 
     //bookmanager
     var $pagelist = jQuery('div.bookcreator__pagelist');
-    if($pagelist.length){
+    if ($pagelist.length) {
         $pagelist.find('a.action').click(Bookcreator.movePage);
         $pagelist.find('ul.pagelist.include,ul.pagelist.remove').sortable({
             connectWith: "div.bookcreator__pagelist ul.pagelist",

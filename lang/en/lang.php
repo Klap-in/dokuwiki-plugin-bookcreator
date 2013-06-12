@@ -45,6 +45,8 @@ $lang['showpage']        = "Show page";
 $lang['delselection']    = "Remove saved selection";
 $lang['loadselection']   = "Load saved selection";
 
-$lang['js']['confirmdel']      = "Do you really delete this selection from the archive?";
-$lang['js']['confirmload']     = "Do you really load this selection, replacing any pages already selected?";
+$lang['js']['confirmdel']  = "Do you really delete this selection from the archive?";
+$lang['js']['confirmload'] = "Do you really load this selection, replacing any pages already selected?";
 
+$lang['js']['btn_addtobook']    = "Add to book";
+$lang['js']['btn_removetobook'] = "Remove from book";

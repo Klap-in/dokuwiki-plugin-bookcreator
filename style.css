@@ -111,5 +111,60 @@ div#dokuwiki__site div.bookcreator__ {
 }
 
 
+/*
+ * Page tools
+ */
+/* export_pdf */
+/*
+#dokuwiki__pagetools ul li a.export_pdf {
+    background-position: right 0;
+}
+#dokuwiki__pagetools ul li a.export_pdf:before {
+    content: url(images/pagetools-pdf-sprite.png);
+    margin-top: 0;
+}
+#dokuwiki__pagetools:hover ul li a.export_pdf,
+#dokuwiki__pagetools ul li a.export_pdf:focus,
+#dokuwiki__pagetools ul li a.export_pdf:active {
+    background-image: url(images/pagetools-pdf-sprite.png);
+}
+#dokuwiki__pagetools ul li a.export_pdf:hover,
+#dokuwiki__pagetools ul li a.export_pdf:active,
+#dokuwiki__pagetools ul li a.export_pdf:focus {
+    background-position: right -45px;
+}
+*/
 
+/* addtobook */
+/* show add icon */
+#dokuwiki__pagetools ul li a.addtobook {
+    background-position: right -90px;
+}
+#dokuwiki__pagetools ul li a.addtobook:before {
+    content: url(images/pagetools-pdf-sprite.png);
+    margin-top: -90px;
+}
+#dokuwiki__pagetools:hover ul li a.addtobook,
+#dokuwiki__pagetools ul li a.addtobook:focus,
+#dokuwiki__pagetools ul li a.addtobook:active {
+    background-image: url(images/pagetools-pdf-sprite.png);
+}
+#dokuwiki__pagetools ul li a.addtobook:hover,
+#dokuwiki__pagetools ul li a.addtobook:active,
+#dokuwiki__pagetools ul li a.addtobook:focus {
+    background-position: right -135px;
+}
+
+/* show remove icon */
+#dokuwiki__pagetools ul li a.addtobook.remove {
+    background-position: right -180px;
+}
+#dokuwiki__pagetools ul li a.addtobook.remove:before {
+    margin-top: -180px;
+}
+#dokuwiki__pagetools ul li a.addtobook.remove:hover,
+#dokuwiki__pagetools ul li a.addtobook.remove:active,
+#dokuwiki__pagetools ul li a.addtobook.remove:focus {
+    background-position: right -225px;
+}
 

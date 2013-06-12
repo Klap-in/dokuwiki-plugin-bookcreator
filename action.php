@@ -129,6 +129,8 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
 
                 //Change action to: show the wikipage
                 $event->data = 'show';
+                //trigger reload (due to changed ACT & this fake POST) to remove url parameter
+                $_SERVER['REQUEST_METHOD'] = 'POST';
         }
     }
 

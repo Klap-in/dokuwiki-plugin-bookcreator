@@ -25,7 +25,7 @@ $lang['pageremoved']     = "Aus Auswahl entfernte Seite";
 $lang['addpage']         = "Diese Seite zum Buch hinzufügen";
 $lang['removepage']      = "Diese Seite aus Buch entfernen";
 $lang['showbook']        = "Buch anzeigen, ändern";
-$lang['sortable']        = "Drag and drop to sort/remove/a
+$lang['sortable']        = "Drag and drop to sort/remove/add pages";
 
 $lang['pages']           = "Seite/n";
 $lang['help']            = "Hilfe";
