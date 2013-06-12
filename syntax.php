@@ -124,6 +124,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
 
                     // Displays the list of saved selections
                     $this->renderSelectionslist($renderer, $bookmanager = true, $ID, $order);
+                    $renderer->doc .= "<br />";
                 }
             }
             return false;
