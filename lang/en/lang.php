@@ -33,7 +33,7 @@ $lang['help']            = "Help";
 $lang['toolbar']         = "Book creator";
 
 $lang['saveselection']   = "Save selection";
-$lang['needtitle']       = "Save failed: please provide a title";
+$lang['needtitle']       = "Please provide a title";
 $lang['saved']           = "Selection saved successfully";
 $lang['deleted']         = "Selection successfully removed";
 $lang['duplicate']       = "&lt;The list with saved selections is already displayed on this page&gt;";

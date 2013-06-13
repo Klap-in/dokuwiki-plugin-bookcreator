@@ -196,7 +196,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
                 saveWikiText($this->getConf('save_namespace').":".$_POST['bookcreator_title'], $content, "selection created");
                 msg($this->getLang('saved').": ".$this->getConf('save_namespace').":".$_POST['bookcreator_title']);
             } else {
-                msg($this->getLang('needtitle'));
+                msg($this->getLang('needtitle'), -1);
             }
         } else {
             msg($this->getLang('empty'));

@@ -33,7 +33,7 @@ $lang['help']            = "Help";
 $lang['toolbar']         = "Book creator";
 
 $lang['saveselection']   = "Selectie opslaan";
-$lang['needtitle']       = "titel niet gegeven";
+$lang['needtitle']       = "Er moet een titel ingevuld worden";
 $lang['saved']           = "Succesvol opgeslagen in";
 $lang['deleted']         = "Succesvol verwijderd";
 $lang['duplicate']       = "&lt;De lijst met opgeslagen selecties is al weergegeven op deze pagina&gt;";
