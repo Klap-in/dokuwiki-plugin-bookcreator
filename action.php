@@ -122,7 +122,7 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
                 }
 
                 //show message when toolbar isn't displayed
-                if($this->getConf('toolbar') == "never") msg($msg);
+                if($this->getConf('toolbar') == "never") msg($msg, 1);
 
                 setCookie("bookcreator[".$ID."]", ($this->cpt ? "1" : "0"), time() + 60 * 60 * 24 * 7, DOKU_BASE);
 

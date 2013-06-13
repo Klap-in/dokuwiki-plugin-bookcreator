@@ -194,12 +194,12 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
                 }
 
                 saveWikiText($this->getConf('save_namespace').":".$_POST['bookcreator_title'], $content, "selection created");
-                msg($this->getLang('saved').": ".$this->getConf('save_namespace').":".$_POST['bookcreator_title']);
+                msg($this->getLang('saved').": ".$this->getConf('save_namespace').":".$_POST['bookcreator_title'], 1);
             } else {
                 msg($this->getLang('needtitle'), -1);
             }
         } else {
-            msg($this->getLang('empty'));
+            msg($this->getLang('empty'), -1);
         }
     }
 
@@ -208,7 +208,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
      */
     private function deleteSelection() {
         saveWikiText($this->getConf('save_namespace').":".$_POST['page'], '', "selection removed");
-        msg($this->getLang('deleted').": ".$this->getConf('save_namespace').":".$_POST['page']);
+        msg($this->getLang('deleted').": ".$this->getConf('save_namespace').":".$_POST['page'], 1);
     }
 
     /**
