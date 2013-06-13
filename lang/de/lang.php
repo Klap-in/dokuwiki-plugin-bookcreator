@@ -1,15 +1,12 @@
-﻿<?php
-
+<?php
 $lang['nocookies']       = "Sie haben noch keine Seiten gewählt. Bitte überprüfen Sie, ob ihr Browser Cookies erlaubt und versuchen Sie es erneut.";
 $lang['empty']           = "Sie haben noch keine Seiten gewählt.";
 $lang['toprint']         = "Ausgewählte Seiten";
 $lang['removed']         = "Seiten, die aus der Auswahl entfernt wurden";
-
 $lang['reserconfirm']    = "Wollen Sie die Auswahl wirklich löschen?";
 $lang['reset']           = "Auswahl löschen";
-
-$lang['js']['include']         = "Zur Auswahl hinzufügen";
-$lang['js']['remove']          = "Seite aus Auswahl entfernen";
+$lang['js']['include']   = "Zur Auswahl hinzufügen";
+$lang['js']['remove']    = "Seite aus Auswahl entfernen";
 $lang['export']          = "Ausgewählte Seiten exportieren";
 $lang['create']          = "Exportieren";
 
@@ -47,4 +44,5 @@ $lang['loadselection']   = "Lade gespeicherte Liste mit Auswahl";
 
 $lang['js']['confirmdel']      = "Diese Auswahl aus dem Archiv löschen?";
 $lang['js']['confirmload']     = "Wollen Sie diese Auswahl laden? Damit werden bereits ausgwählte Seiten ersetzt!";
-
+$lang['js']['btn_addtobook']    = "Add to book";
+$lang['js']['btn_removetobook'] = "Remove from book";
