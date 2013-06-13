@@ -25,6 +25,7 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
     function register(&$contr) {
         $contr->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, '_handle_tpl_act', array());
         $contr->register_hook('TPL_ACT_RENDER', 'BEFORE', $this, 'bookbar', array());
+        $contr->register_hook('DOKUWIKI_STARTED', 'AFTER', $this, '_extendJSINFO');
     }
 
     /**
@@ -44,28 +45,26 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
         switch($do) {
             case  'readsavedselection':
                 if(checkSecurityToken()) {
-                    //clear selection
-                    $this->clearSelectionCookie();
 
-                    //load new selection
-                    list($title, $list) = $this->loadSavedSelection($_REQUEST['page']);
+                    $id = cleanID($this->getConf('save_namespace').":".$_POST['page']);
+                    $hasaccess = (auth_quickaclcheck($id) >= AUTH_READ);
+                    if($hasaccess) {
+                        //clear selection
+                        $this->clearSelectionCookie();
 
-                    setCookie("bookcreator_title", "$title", time() + 60 * 60 * 24 * 7, DOKU_BASE);
-                    $_COOKIE['bookcreator_title'] = $title;
+                        //load new selection
+                        list($title, $list) = $this->loadSavedSelection($id);
 
-                    foreach($list as $pageid => $cpt) {
-                        setCookie("bookcreator[".$pageid."]", "$cpt", time() + 60 * 60 * 24 * 7, DOKU_BASE);
-                        $_COOKIE['bookcreator'][$pageid] = $cpt;
+                        setCookie("bookcreator_title", "$title", time() + 60 * 60 * 24 * 7, DOKU_BASE);
+                        $_COOKIE['bookcreator_title'] = $title;
+
+                        foreach($list as $pageid => $cpt) {
+                            setCookie("bookcreator[".$pageid."]", "$cpt", time() + 60 * 60 * 24 * 7, DOKU_BASE);
+                            $_COOKIE['bookcreator'][$pageid] = $cpt;
+                        }
                     }
                 }
 
-                $event->data = 'show';
-                return;
-
-            case 'delsavedselection':
-                if(checkSecurityToken()) {
-
-                }
                 $event->data = 'show';
                 return;
 
@@ -154,15 +153,14 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
     /**
      * Load a Saved Selection from a page
      *
-     * @param string $page pagename containing the selection
-     * @return array(pageid, title, array(list))
+     * @param string $pageid pagename containing the selection
+     * @return array(title, array(list))
      */
-    public function loadSavedSelection($page) {
+    public function loadSavedSelection($pageid) {
         $title = '';
         $list  = array();
 
-        $id = cleanID($this->getConf('save_namespace').":".$page);
-        $pagecontent = rawWiki($id);
+        $pagecontent = rawWiki($pageid);
         $lines       = explode("\n", $pagecontent);
 
         foreach($lines as $i => $line) {
@@ -260,6 +258,20 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
         echo "</div>";
 
         echo "</div>";
+
+    }
+
+    /**
+     * Add additional info to $JSINFO
+     *
+     * @author Gerrit Uitslag <klapinklapin@gmail.com>
+     *
+     * @param Doku_Event $event
+     * @param mixed      $param not defined
+     */
+    function _extendJSINFO(&$event, $param) {
+        global $JSINFO;
+        $JSINFO['hasbookcreatoraccess'] = (int)(auth_quickaclcheck(cleanID($this->getConf('book_page'))) >= AUTH_READ);
 
     }
 }

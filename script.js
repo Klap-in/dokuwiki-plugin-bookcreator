@@ -157,27 +157,33 @@ var Bookcreator = {
      * Add addtobook button to pagetools of 'dokuwiki' template,when its exists
      */
     addPagetoolLink: function () {
+        //is pagetools available
         var pgtools = jQuery('#dokuwiki__pagetools ul');
-        if (pgtools.length) {
-            var $a = jQuery('<a class="action addtobook" rel="nofollow"></a>')
-                .attr('href', DOKU_BASE + JSINFO.id + "?do=addtobook")
-                .attr('title', LANG.plugins.bookcreator.btn_addtobook)
-                .append(jQuery('<span>' + LANG.plugins.bookcreator.btn_addtobook + '</span>'));
-            var $li = jQuery('<li></li>').append($a);
+        if (pgtools.length && JSINFO && JSINFO.hasbookcreatoraccess) {
+            //is page shown
+            if(!jQuery('#dokuwiki__pagetools ul a.action.show').length) {
+                var $a = jQuery('<a class="action addtobook" rel="nofollow"></a>')
+                    .attr('href', DOKU_BASE + JSINFO.id + "?do=addtobook")
+                    .attr('title', LANG.plugins.bookcreator.btn_addtobook)
+                    .append(jQuery('<span>' + LANG.plugins.bookcreator.btn_addtobook + '</span>'));
+                var $li = jQuery('<li></li>').append($a);
 
-            jQuery('#dokuwiki__pagetools ul li a.action.top').parent().before($li);
-            Bookcreator.updatePagetoolLink();
+                //insert above top link
+                jQuery('#dokuwiki__pagetools ul li a.action.top').parent().before($li);
+                Bookcreator.updatePagetoolLink();
+            }
         }
-
     },
     /**
      * Toggle addtobook button between add and remove
      */
     updatePagetoolLink: function () {
+        //is bookcreator toolbar available
         var $bkcrtr = jQuery('.bookcreator__');
         if ($bkcrtr.length) {
             var addORremove = $bkcrtr.find("#bookcreator__add").is(':visible');
             var $addtobookbtn = jQuery('#dokuwiki__pagetools ul a.action.addtobook');
+            //exist the addtobook link
             if ($addtobookbtn.length) {
                 var text = LANG.plugins.bookcreator['btn_' + (addORremove ? 'add' : 'remove') + 'tobook'];
                 $addtobookbtn.toggleClass('remove', !addORremove)
