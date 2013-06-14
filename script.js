@@ -161,9 +161,9 @@ var Bookcreator = {
         var pgtools = jQuery('#dokuwiki__pagetools ul');
         if (pgtools.length && JSINFO && JSINFO.hasbookcreatoraccess) {
             //is page shown
-            if(!jQuery('#dokuwiki__pagetools ul a.action.show').length) {
+            if(!jQuery('#dokuwiki__pagetools ul a.action.show').length && JSINFO.wikipagelink != undefined) {
                 var $a = jQuery('<a class="action addtobook" rel="nofollow"></a>')
-                    .attr('href', DOKU_BASE + JSINFO.id + "?do=addtobook")
+                    .attr('href', JSINFO.wikipagelink + (JSINFO.wikipagelink.indexOf("?") < 0 ? '?' : '&') +"do=addtobook")
                     .attr('title', LANG.plugins.bookcreator.btn_addtobook)
                     .append(jQuery('<span>' + LANG.plugins.bookcreator.btn_addtobook + '</span>'));
                 var $li = jQuery('<li></li>').append($a);

@@ -270,8 +270,9 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
      * @param mixed      $param not defined
      */
     function _extendJSINFO(&$event, $param) {
-        global $JSINFO;
+        global $JSINFO, $ID;
         $JSINFO['hasbookcreatoraccess'] = (int)(auth_quickaclcheck(cleanID($this->getConf('book_page'))) >= AUTH_READ);
+        $JSINFO['wikipagelink'] = wl($ID);
 
     }
 }
