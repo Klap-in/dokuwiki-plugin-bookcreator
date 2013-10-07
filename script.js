@@ -81,7 +81,7 @@ var Bookcreator = {
     storePageStatus: function (pageid, addORremove) {
         var key = Bookcreator.cookieName + '[' + pageid + ']',
             days = 7,
-            path = DOKU_BASE;
+            path = (typeof DOKU_COOKIEPATH === "undefined" ? JSINFO.DOKU_COOKIEPATH : DOKU_COOKIEPATH );
 
         if (addORremove === null) {
             days = -1;
@@ -90,20 +90,22 @@ var Bookcreator = {
 
         var t = new Date();
         t.setDate(t.getDate() + days);
-
         return (document.cookie = [
             key, '=', encodeURIComponent(value),
             '; expires=' + t.toUTCString(), // use expires attribute, max-age is not supported by IE
-            '; path=' + DOKU_BASE
+            '; path=' + path
         ].join(''));
     },
     storePageOrder: function () {
-        var pagelist = new Array();
+        var pagelist = [],
+            path = (typeof DOKU_COOKIEPATH === "undefined" ? JSINFO.DOKU_COOKIEPATH : DOKU_COOKIEPATH );
+
         jQuery('div.bookcreator__pagelist ul.pagelist.include li').each(function () {
             pagelist.push(jQuery(this).attr('id').substr(4));
         });
         jQuery.cookie.raw = true;
-        jQuery.cookie("list-pagelist", pagelist.join('|'), { expires: 7 });
+
+        jQuery.cookie("list-pagelist", pagelist.join('|'), { expires: 7, path:  path });
     },
 
     /**

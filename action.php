@@ -55,11 +55,11 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
                         //load new selection
                         list($title, $list) = $this->loadSavedSelection($id);
 
-                        setCookie("bookcreator_title", "$title", time() + 60 * 60 * 24 * 7, DOKU_BASE);
+                        $this->setCookie("bookcreator_title", "$title");
                         $_COOKIE['bookcreator_title'] = $title;
 
                         foreach($list as $pageid => $cpt) {
-                            setCookie("bookcreator[".$pageid."]", "$cpt", time() + 60 * 60 * 24 * 7, DOKU_BASE);
+                            $this->setCookie("bookcreator[".$pageid."]", "$cpt");
                             $_COOKIE['bookcreator'][$pageid] = $cpt;
                         }
                     }
@@ -124,7 +124,7 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
                 //show message when toolbar isn't displayed
                 if($this->getConf('toolbar') == "never") msg($msg, 1);
 
-                setCookie("bookcreator[".$ID."]", ($this->cpt ? "1" : "0"), time() + 60 * 60 * 24 * 7, DOKU_BASE);
+                $this->setCookie("bookcreator[" . $ID . "]", ($this->cpt ? "1" : "0"));
 
                 //Change action to: show the wikipage
                 $event->data = 'show';
@@ -140,12 +140,12 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
         if(isset($_COOKIE['bookcreator'])) {
             //clear list
             foreach($_COOKIE['bookcreator'] as $pageid => $value) {
-                setCookie("bookcreator[".$pageid."]", "", time() - 60 * 60, DOKU_BASE);
+                $this->setCookie("bookcreator[".$pageid."]", "", time() - 60 * 60);
             }
             unset($_COOKIE['bookcreator']);
 
             //clear title
-            setCookie("bookcreator_title", "", time() - 60 * 60, DOKU_BASE);
+            $this->setCookie("bookcreator_title", "", time() - 60 * 60);
             unset($_COOKIE['bookcreator_title']);
         }
     }
@@ -206,7 +206,7 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
 
         // find skip pages
         $sp = join("|", explode(",", preg_quote($this->getConf('skip_ids'))));
-        if(!$exists || preg_match("/$sp/i", $ID))
+        if(!$exists || ($this->getConf('skip_ids') !== '' && preg_match("/$sp/i", $ID)))
             return;
 
         /**
@@ -270,10 +270,30 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
      * @param mixed      $param not defined
      */
     function _extendJSINFO(&$event, $param) {
-        global $JSINFO, $ID;
+        global $JSINFO, $ID, $conf;
         $JSINFO['hasbookcreatoraccess'] = (int)(auth_quickaclcheck(cleanID($this->getConf('book_page'))) >= AUTH_READ);
         $JSINFO['wikipagelink'] = wl($ID);
+        $JSINFO['DOKU_COOKIEPATH'] = empty($conf['cookiedir']) ? DOKU_REL : $conf['cookiedir'];
+    }
 
+    /**
+     * Set a cookie
+     *
+     * @param string     $name  cookie name
+     * @param string     $value cookie value
+     * @param int|string $expire
+     *     - The time the cookie expires. This is a Unix timestamp so is in number of seconds since the epoch.
+     *     - or 'week' is converted to expire time of a week
+     */
+    private function setCookie($name, $value, $expire = 'week') {
+        global $conf;
+        $cookieDir = empty($conf['cookiedir']) ? DOKU_REL : $conf['cookiedir'];
+
+        if($expire == 'week') {
+            $expire = time() + 60 * 60 * 24 * 7;
+        }
+
+        setCookie($name, $value, $expire, $cookieDir, '', ($conf['securecookie'] && is_ssl()));
     }
 }
 
