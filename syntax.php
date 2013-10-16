@@ -36,7 +36,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         return 190;
     }
 
-    function handle($match, $state, $pos, &$handler) {
+    function handle($match, $state, $pos, Doku_Handler &$handler) {
 
         $match = substr($match, 2, -2); // strip markup
         if(substr($match, 0, 7) == 'ARCHIVE') $type = 'archive';
@@ -68,7 +68,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
      * @param array         $data return of handle()
      * @return bool
      */
-    function render($mode, &$renderer, $data) {
+    function render($mode, Doku_Renderer &$renderer, $data) {
         global $ID;
 
         list($type, $num, $order) = $data;

@@ -22,7 +22,7 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
     /**
      * register the eventhandlers
      */
-    function register(&$contr) {
+    function register(Doku_Event_Handler $contr) {
         $contr->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, '_handle_tpl_act', array());
         $contr->register_hook('TPL_ACT_RENDER', 'BEFORE', $this, 'bookbar', array());
         $contr->register_hook('DOKUWIKI_STARTED', 'AFTER', $this, '_extendJSINFO');
