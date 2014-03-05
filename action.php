@@ -26,6 +26,7 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
         $contr->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, '_handle_tpl_act', array());
         $contr->register_hook('TPL_ACT_RENDER', 'BEFORE', $this, 'bookbar', array());
         $contr->register_hook('DOKUWIKI_STARTED', 'AFTER', $this, '_extendJSINFO');
+        $contr->register_hook('TEMPLATE_PAGETOOLS_DISPLAY', 'BEFORE', $this, 'addbutton');
     }
 
     /**
@@ -105,8 +106,14 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
                 }
                 $this->num = $i;
 
-                //further handle only the 'addtobook' action
+                // further handle only the 'addtobook' action
                 if($event->data != 'addtobook') return;
+                // has access to bookmanager?
+                if(auth_quickaclcheck(cleanID($this->getConf('book_page'))) < AUTH_READ) {
+                    msg($this->getLang('nobookmanageraccess'), -1);
+                    $event->data = 'show';
+                    return;
+                }
 
                 //toggle page selection
                 if($this->cpt == false) {
@@ -201,13 +208,20 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
         resolve_pageid('', $id, $exists);
 
         // show or not the toolbar ?
-        if(($this->getConf('toolbar') == "never") || (($this->getConf('toolbar') == "noempty") && ($this->num == 0)))
+        if(($this->getConf('toolbar') == "never") || (($this->getConf('toolbar') == "noempty") && ($this->num == 0))) {
             return;
+        }
+
+        //has read no permissions to bookmanager page?
+        if(auth_quickaclcheck(cleanID($this->getConf('book_page'))) < AUTH_READ) {
+            return;
+        }
 
         // find skip pages
         $sp = join("|", explode(",", preg_quote($this->getConf('skip_ids'))));
-        if(!$exists || ($this->getConf('skip_ids') !== '' && preg_match("/$sp/i", $ID)))
+        if(!$exists || ($this->getConf('skip_ids') !== '' && preg_match("/$sp/i", $ID))) {
             return;
+        }
 
         /**
          * Display toolbar
@@ -269,11 +283,12 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
      * @param Doku_Event $event
      * @param mixed      $param not defined
      */
-    function _extendJSINFO(&$event, $param) {
-        global $JSINFO, $ID, $conf;
-        $JSINFO['hasbookcreatoraccess'] = (int)(auth_quickaclcheck(cleanID($this->getConf('book_page'))) >= AUTH_READ);
-        $JSINFO['wikipagelink'] = wl($ID);
-        $JSINFO['DOKU_COOKIEPATH'] = empty($conf['cookiedir']) ? DOKU_REL : $conf['cookiedir'];
+    public function _extendJSINFO(&$event, $param) {
+        global $JSINFO, $conf;
+        $JSINFO['DOKU_COOKIE_PARAM'] = array(
+            'path' => empty($conf['cookiedir']) ? DOKU_REL : $conf['cookiedir'],
+            'secure' => $conf['securecookie'] && is_ssl()
+        );
     }
 
     /**
@@ -294,6 +309,33 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
         }
 
         setCookie($name, $value, $expire, $cookieDir, '', ($conf['securecookie'] && is_ssl()));
+    }
+
+    /**
+     * Add 'add page'-button to pagetools
+     *
+     * @param Doku_Event $event
+     * @param mixed      $param not defined
+     */
+    public function addbutton(&$event, $param) {
+        global $ID, $conf;
+
+        if(auth_quickaclcheck(cleanID($this->getConf('book_page'))) >= AUTH_READ && $event->data['view'] == 'main') {
+            $jslocal = $this->getLang('js');
+
+            switch($conf['template']) {
+                case 'dokuwiki':
+                case 'arago':
+                case 'adoradark':
+                    $event->data['items']['addtobook'] =
+                        '<li>'
+                        .'    <a href='.wl($ID, array('do' => 'addtobook')).'  class="action addtobook" rel="nofollow" title="'.$jslocal['btn_addtobook'].'">'
+                        .'        <span>'.$jslocal['btn_addtobook'].'</span>'
+                        .'    </a>'
+                        .'</li>';
+                break;
+            }
+        }
     }
 }
 

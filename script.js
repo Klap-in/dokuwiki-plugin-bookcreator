@@ -1,5 +1,8 @@
 var Bookcreator = {
     cookieName: 'bookcreator',
+    //TODO: Introduced and deprecated October 2013 JSINFO.DOKU_COOKIE_PARAM
+    cookiePath: (typeof DOKU_COOKIE_PARAM === "undefined" ? JSINFO.DOKU_COOKIE_PARAM.path : DOKU_COOKIE_PARAM.path),
+    cookieSecure: (typeof DOKU_COOKIE_PARAM === "undefined" ? JSINFO.DOKU_COOKIE_PARAM.secure : DOKU_COOKIE_PARAM.secure),
 
     /**
      * Handler add or removes page to selection, called via buttons of toolbar
@@ -14,7 +17,7 @@ var Bookcreator = {
         Bookcreator.storePageOrder();
         jQuery("#bookcreator__pages").html(Bookcreator.countPages());
 
-        //toggle add/remove in UI
+        //toggle add/remove in UI        ne
         jQuery("#bookcreator__add").toggle(!addORremove);
         jQuery("#bookcreator__remove").toggle(addORremove);
 
@@ -80,8 +83,7 @@ var Bookcreator = {
      */
     storePageStatus: function (pageid, addORremove) {
         var key = Bookcreator.cookieName + '[' + pageid + ']',
-            days = 7,
-            path = (typeof DOKU_COOKIEPATH === "undefined" ? JSINFO.DOKU_COOKIEPATH : DOKU_COOKIEPATH );
+            days = 7;
 
         if (addORremove === null) {
             days = -1;
@@ -93,19 +95,19 @@ var Bookcreator = {
         return (document.cookie = [
             key, '=', encodeURIComponent(value),
             '; expires=' + t.toUTCString(), // use expires attribute, max-age is not supported by IE
-            '; path=' + path
+            '; path=' + Bookcreator.cookiePath,
+            Bookcreator.cookieSecure ? '; secure' : ''
         ].join(''));
     },
     storePageOrder: function () {
-        var pagelist = [],
-            path = (typeof DOKU_COOKIEPATH === "undefined" ? JSINFO.DOKU_COOKIEPATH : DOKU_COOKIEPATH );
+        var pagelist = [];
 
         jQuery('div.bookcreator__pagelist ul.pagelist.include li').each(function () {
             pagelist.push(jQuery(this).attr('id').substr(4));
         });
         jQuery.cookie.raw = true;
 
-        jQuery.cookie("list-pagelist", pagelist.join('|'), { expires: 7, path:  path });
+        jQuery.cookie("list-pagelist", pagelist.join('|'), { expires: 7, path: Bookcreator.cookiePath, secure: Bookcreator.cookieSecure });
     },
 
     /**
@@ -155,27 +157,7 @@ var Bookcreator = {
             return true;
         }
     },
-    /**
-     * Add addtobook button to pagetools of 'dokuwiki' template,when its exists
-     */
-    addPagetoolLink: function () {
-        //is pagetools available
-        var pgtools = jQuery('#dokuwiki__pagetools ul');
-        if (pgtools.length && JSINFO && JSINFO.hasbookcreatoraccess) {
-            //is page shown
-            if(!jQuery('#dokuwiki__pagetools ul a.action.show').length && JSINFO.wikipagelink != undefined) {
-                var $a = jQuery('<a class="action addtobook" rel="nofollow"></a>')
-                    .attr('href', JSINFO.wikipagelink + (JSINFO.wikipagelink.indexOf("?") < 0 ? '?' : '&') +"do=addtobook")
-                    .attr('title', LANG.plugins.bookcreator.btn_addtobook)
-                    .append(jQuery('<span>' + LANG.plugins.bookcreator.btn_addtobook + '</span>'));
-                var $li = jQuery('<li></li>').append($a);
 
-                //insert above top link
-                jQuery('#dokuwiki__pagetools ul li a.action.top').parent().before($li);
-                Bookcreator.updatePagetoolLink();
-            }
-        }
-    },
     /**
      * Toggle addtobook button between add and remove
      */
@@ -200,7 +182,7 @@ var Bookcreator = {
 jQuery(function () {
     //bookcreator toolbar
     jQuery('a.bookcreator__tglPgSelection').click(Bookcreator.togglePageSelection);
-    Bookcreator.addPagetoolLink();
+    Bookcreator.updatePagetoolLink();
 
     //bookmanager
     var $pagelist = jQuery('div.bookcreator__pagelist');

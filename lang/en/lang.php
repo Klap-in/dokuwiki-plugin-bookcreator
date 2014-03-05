@@ -45,6 +45,8 @@ $lang['showpage']        = "Show page";
 $lang['delselection']    = "Remove saved selection";
 $lang['loadselection']   = "Load saved selection";
 
+$lang['nobookmanageraccess'] = "You may not change the selection. Only allowed when you have access to the bookmanager as well.";
+
 $lang['js']['confirmdel']  = "Do you really delete this selection from the archive?";
 $lang['js']['confirmload'] = "Do you really load this selection, replacing any pages already selected?";
 
