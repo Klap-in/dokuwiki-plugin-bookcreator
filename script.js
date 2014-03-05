@@ -17,7 +17,7 @@ var Bookcreator = {
         Bookcreator.storePageOrder();
         jQuery("#bookcreator__pages").html(Bookcreator.countPages());
 
-        //toggle add/remove in UI        ne
+        //toggle add/remove in UI
         jQuery("#bookcreator__add").toggle(!addORremove);
         jQuery("#bookcreator__remove").toggle(addORremove);
 
