@@ -4,6 +4,7 @@
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  * 
  * @author ronny <el_cherone@airpost.net>
+ * @author Thor Weinreich <thorweinreich@nefkom.net>
  */
 $lang['nocookies']             = 'Sie haben noch keine Seiten gewählt. Bitte überprüfen Sie, ob ihr Browser Cookies erlaubt und versuchen Sie es erneut.';
 $lang['empty']                 = 'Sie haben noch keine Seiten gewählt.';
@@ -42,3 +43,4 @@ $lang['listselections']        = 'Liste der abgespeicherten Auswahl';
 $lang['showpage']              = 'Zeige Seite';
 $lang['delselection']          = 'Entferne gespeicherte Auswahl';
 $lang['loadselection']         = 'Lade gespeicherte Liste mit Auswahl';
+$lang['nobookmanageraccess']   = 'Du darfst diese Auswahl nur ändern, wenn du auch Zugriff auf den Bookmanager hast.';
