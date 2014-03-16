@@ -3,6 +3,7 @@
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  * 
+ * @author Rene <wllywlnt@yahoo.com>
  */
 $lang['nocookies']             = 'Er zijn nog geen pagina\'s geselecteerd. Controleer of je browser cookies accepteerd en probeer het opnieuw.';
 $lang['empty']                 = 'Er zijn nog geen pagina\'s geselecteerd.';
@@ -41,3 +42,4 @@ $lang['listselections']        = 'Opgeslagen Selecties';
 $lang['showpage']              = 'Toon pagina';
 $lang['delselection']          = 'Verwijder opgeslagen selectie';
 $lang['loadselection']         = 'Laad opgeslagen selectie';
+$lang['nobookmanageraccess']   = 'Je mag de selectie niet wijzigen. Wijzigen is alleen toegestaan als je toegang tot de boekmanager.';
