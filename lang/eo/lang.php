@@ -42,3 +42,4 @@ $lang['listselections']        = 'Listo kun selektoj konserviĝis';
 $lang['showpage']              = 'Montri paĝon';
 $lang['delselection']          = 'Forigi konservitan selekton';
 $lang['loadselection']         = 'Ŝargi konservitan selekton';
+$lang['nobookmanageraccess']   = 'Vi ne rajtas ŝanĝi la selekton. Tio nur eblas, kiam vi ankaŭ havas aliron al la libroadministrado.';
