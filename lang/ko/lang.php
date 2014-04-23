@@ -42,3 +42,4 @@ $lang['listselections']        = '선택 목록 저장됨';
 $lang['showpage']              = '문서 보기';
 $lang['delselection']          = '저장된 선택 제거';
 $lang['loadselection']         = '저장된 선택 불러오기';
+$lang['nobookmanageraccess']   = '선택을 바꾸지 않았을 수 있습니다. 또한 책관리자에 접근할 수 있을 때에만 허용합니다.';

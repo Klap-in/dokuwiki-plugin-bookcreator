@@ -5,7 +5,7 @@
  * 
  * @author Myeongjin <aranet100@gmail.com>
  */
-$lang['toolbar']               = '도구막대 보이기';
+$lang['toolbar']               = '도구 모음 보이기';
 $lang['toolbar_o_never']       = '없음';
 $lang['toolbar_o_always']      = '항상';
 $lang['toolbar_o_noempty']     = '선택이 비어 있지 않을 때';
