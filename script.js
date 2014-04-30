@@ -150,7 +150,7 @@ var Bookcreator = {
         if (confirmrequired) comfirmed = confirm(msg);
         if (comfirmed) {
             //special do action is handled in action.php, otherwise task is handled in syntax.php
-            document.bookcreator__selections__list.do.value = (action == 'read' ? 'readsavedselection' : 'show');
+            document.bookcreator__selections__list['do'].value = (action == 'read' ? 'readsavedselection' : 'show');
             document.bookcreator__selections__list.task.value = action;
             document.bookcreator__selections__list.page.value = pageid;
             document.bookcreator__selections__list.submit();
