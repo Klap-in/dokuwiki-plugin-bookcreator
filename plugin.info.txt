@@ -1,5 +1,5 @@
 base   bookcreator
-author Gerrit Uitslag (previous: Luigi micco--l.micco@tiscali.it)
+author Gerrit Uitslag (previous: Luigi Micco)
 email  klapinklapin@gmail.com 
 date   2014-04-30
 name   Bookcreator Plugin
