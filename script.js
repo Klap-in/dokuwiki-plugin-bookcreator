@@ -166,7 +166,7 @@ var Bookcreator = {
         var $bkcrtr = jQuery('.bookcreator__');
         if ($bkcrtr.length) {
             var addORremove = $bkcrtr.find("#bookcreator__add").is(':visible');
-            var $addtobookbtn = jQuery('#dokuwiki__pagetools ul a.action.addtobook');
+            var $addtobookbtn = jQuery('#dokuwiki__pagetools').find('ul a.action.addtobook');
             //exist the addtobook link
             if ($addtobookbtn.length) {
                 var text = LANG.plugins.bookcreator['btn_' + (addORremove ? 'add' : 'remove') + 'tobook'];
