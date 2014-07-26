@@ -36,7 +36,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         return 190;
     }
 
-    function handle($match, $state, $pos, Doku_Handler &$handler) {
+    function handle($match, $state, $pos, Doku_Handler $handler) {
 
         $match = substr($match, 2, -2); // strip markup
         if(substr($match, 0, 7) == 'ARCHIVE') $type = 'archive';
@@ -68,7 +68,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
      * @param array         $data return of handle()
      * @return bool
      */
-    function render($mode, Doku_Renderer &$renderer, $data) {
+    function render($mode, Doku_Renderer $renderer, $data) {
         global $ID;
 
         list($type, $num, $order) = $data;
@@ -152,7 +152,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
      * if in the Book Manager, the delete buttons are displayed
      * the list with save selections is only displayed once, and the bookmanager with priority
      */
-    public function renderSelectionslist(&$renderer, $bookmanager, $bmpage, $order, $num = 0) {
+    public function renderSelectionslist($renderer, $bookmanager, $bmpage, $order, $num = 0) {
         static $selectionlistshown = false;
 
         if($selectionlistshown == true) {
@@ -243,7 +243,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
      * @param bool                $usercansave User has permissions to save the selection
      * @return bool false: empty cookie, true: selection found and bookmanager is rendered
      */
-    private function showBookManager(&$renderer, $usercansave) {
+    private function showBookManager($renderer, $usercansave) {
         global $ID;
         $title = '';
         $list  = array();
@@ -326,7 +326,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
      * @param array               $list array with pageids as key, status as value
      * @param string              $action 'remove' or 'include'
      */
-    private function showPagelist(&$renderer, $list, $action) {
+    private function showPagelist($renderer, $list, $action) {
         $jslang = $this->getLang('js');
         if($action == 'remove') {
             $id          = 'deletedpagelist';
