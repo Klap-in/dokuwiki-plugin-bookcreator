@@ -4,6 +4,7 @@
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  * 
  * @author Hideaki SAWADA <chuno@live.jp>
+ * @author Nobuyuki Fukuyori <self@spumoni.org>
  */
 $lang['nocookies']             = '選択したページがありません。クッキーを許可しているかブラウザを確認し、再度試して下さい。';
 $lang['empty']                 = '選択したページがありません。';
@@ -42,3 +43,4 @@ $lang['listselections']        = '保存済選択の一覧';
 $lang['showpage']              = 'ページを表示する。';
 $lang['delselection']          = '保存済選択を削除する。';
 $lang['loadselection']         = '保存済選択を読み込む。';
+$lang['nobookmanageraccess']   = '選択を変更することはできません。ブックマネージャーへのアクセス権が必要です。';
