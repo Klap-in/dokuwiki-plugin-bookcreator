@@ -182,8 +182,8 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
      * Selection is saved as bullet list on a wikipage
      */
     private function saveSelection() {
-        if(isset($_COOKIE['list-pagelist'])) {
-            if(isset($_POST['bookcreator_title']) && !empty($_POST['bookcreator_title'])) {
+        if(!empty($_COOKIE['list-pagelist'])) {
+            if(!empty($_POST['bookcreator_title'])) {
                 $list = explode("|", $_COOKIE['list-pagelist']);
 
                 //generate content
@@ -246,11 +246,13 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
     private function showBookManager($renderer, $usercansave) {
         global $ID;
         $title = '';
-        $list  = array();
 
-        // get a saved selection from file
+        // get a saved selection array from file
         $list = $_COOKIE['bookcreator'];
-        if(isset($_COOKIE['bookcreator_title'])) {
+        // title
+        if(isset($_POST['bookcreator_title'])) {
+            $title = $_POST['bookcreator_title'];
+        } elseif(isset($_COOKIE['bookcreator_title'])) {
             $title = $_COOKIE['bookcreator_title'];
         }
 
