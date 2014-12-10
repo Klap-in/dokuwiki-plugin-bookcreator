@@ -203,11 +203,6 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
 
         if($event->data != 'show') return; // nothing to do for us
 
-        //assume that page does not exists
-        $exists = false;
-        $id     = $ID;
-        resolve_pageid('', $id, $exists);
-
         // show or not the toolbar ?
         if(($this->getConf('toolbar') == "never") || (($this->getConf('toolbar') == "noempty") && ($this->num == 0))) {
             return;
@@ -219,6 +214,10 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
         }
 
         // find skip pages
+        $exists = false; //assume that page does not exists
+        $id     = $ID;
+        resolve_pageid('', $id, $exists);
+
         $sp = join("|", explode(",", preg_quote($this->getConf('skip_ids'))));
         if(!$exists || ($this->getConf('skip_ids') !== '' && preg_match("/$sp/i", $ID))) {
             return;
@@ -285,10 +284,29 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
      * @param mixed      $param not defined
      */
     public function _extendJSINFO(&$event, $param) {
-        global $JSINFO, $conf;
+        global $JSINFO, $conf, $ID;
+
+        $showpagetools = true;
+        //has no read permissions to bookmanager page?
+        if(auth_quickaclcheck(cleanID($this->getConf('book_page'))) < AUTH_READ) {
+            $showpagetools = false;
+        }
+
+        // find skip pages
+        $exists = false; //assume that page does not exists
+        $id     = $ID;
+        resolve_pageid('', $id, $exists);
+
+        $skipPagesRegexp = join("|", explode(",", preg_quote($this->getConf('skip_ids'))));
+        if(!$exists || ($this->getConf('skip_ids') !== '' && preg_match("/$skipPagesRegexp/i", $ID))) {
+            $showpagetools = false;
+        }
+
+        $JSINFO['showbookcreatorpagetool'] = $showpagetools;
+
         $JSINFO['DOKU_COOKIE_PARAM'] = array(
             'path' => empty($conf['cookiedir']) ? DOKU_REL : $conf['cookiedir'],
-            'secure' => $conf['securecookie'] && is_ssl()
+            'secure' => $conf['securecookie'] && is_ssl(),
         );
     }
 
