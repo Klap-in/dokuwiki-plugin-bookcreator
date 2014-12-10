@@ -182,7 +182,8 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
             } else {
                 $line        = str_replace("  * [[:", '', $line);
                 $line        = str_replace("]]", '', $line);
-                $list[$line] = 1;
+                list($link, /* $title */) = explode('|', $line, 2);
+                $list[$link] = 1;
             }
         }
 
