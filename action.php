@@ -214,7 +214,12 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
         if($event->data != 'show') return; // nothing to do for us
 
         // show or not the toolbar ?
-        if(($this->getConf('toolbar') == "never") || (($this->getConf('toolbar') == "noempty") && ($this->num == 0))) {
+        if((($this->getConf('toolbar') == "never") || ($this->getConf('toolbar') == "noempty")) && ($this->num == 0)) {
+            return;
+        }
+        if($this->getConf('toolbar') == "never") {
+            $state = $this->selected ? 'true' : 'false';
+            echo "<div id='bookcreator__memory' style='display: none;' data-isselected=$state></div>";
             return;
         }
 
@@ -347,23 +352,20 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
      * @param mixed      $param not defined
      */
     public function addbutton(&$event, $param) {
-        global $ID, $conf;
+        global $ID;
 
         if(auth_quickaclcheck(cleanID($this->getConf('book_page'))) >= AUTH_READ && $event->data['view'] == 'main') {
             $jslocal = $this->getLang('js');
 
-            switch($conf['template']) {
-                case 'dokuwiki':
-                case 'arago':
-                case 'adoradark':
-                    $event->data['items']['addtobook'] =
-                        '<li>'
-                        .'    <a href='.wl($ID, array('do' => 'addtobook')).'  class="action addtobook" rel="nofollow" title="'.$jslocal['btn_addtobook'].'">'
-                        .'        <span>'.$jslocal['btn_addtobook'].'</span>'
-                        .'    </a>'
-                        .'</li>';
-                break;
-            }
+            $event->data['items'] = array_slice($event->data['items'], 0, -1, true) +
+                                    array('addtobook' =>
+                                        '<li>'
+                                        .'    <a href='.wl($ID, array('do' => 'addtobook')).'  class="action addtobook" rel="nofollow" title="'.$jslocal['btn_addtobook'].'">'
+                                        .'        <span>'.$jslocal['btn_addtobook'].'</span>'
+                                        .'    </a>'
+                                        .'</li>'
+                                    ) +
+                                    array_slice($event->data['items'], -1, 1, true);
         }
     }
 }

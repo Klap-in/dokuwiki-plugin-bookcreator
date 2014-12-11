@@ -163,9 +163,19 @@ var Bookcreator = {
      */
     updatePagetoolLink: function () {
         //is bookcreator toolbar available
+        var addORremove = null;
+
         var $bkcrtr = jQuery('.bookcreator__');
         if ($bkcrtr.length) {
-            var addORremove = $bkcrtr.find("#bookcreator__add").is(':visible');
+            addORremove = $bkcrtr.find("#bookcreator__add").is(':visible');
+        } else {
+            //if config setting 'toolbar'==never, selection state is store at div#bookcreator__memory
+            var $bkcrtr_memory = jQuery('#bookcreator__memory');
+            if($bkcrtr_memory.length) {
+                addORremove = !$bkcrtr_memory.data('isselected');
+            }
+        }
+        if(addORremove !== null) {
             var $addtobookbtn = jQuery('#dokuwiki__pagetools').find('ul a.action.addtobook');
             //exist the addtobook link
             if ($addtobookbtn.length) {
