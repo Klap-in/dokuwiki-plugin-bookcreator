@@ -4,6 +4,7 @@
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  * 
  * @author Thymopat <thymopat@gmail.com>
+ * @author Dominik <dominik@reichardt-clan.de>
  */
 $lang['nocookies']             = 'Im moment sind keine Seiten ausgewählt. Überprüfen sie ob Cokkies erlaubt sind und versuche sie es erneut.';
 $lang['empty']                 = 'Im moment sind keine Seiten ausgewählt.';
@@ -32,3 +33,8 @@ $lang['pages']                 = 'Seite/n';
 $lang['help']                  = 'Hilfe';
 $lang['toolbar']               = 'Buch Erstellung';
 $lang['saveselection']         = 'Speichere Auswahl';
+$lang['needtitle']             = 'Bitte geben Sie einen Titel ein';
+$lang['saved']                 = 'Auswahl erfolgreich gespeichert';
+$lang['deleted']               = 'Auswahl erfolgreich entfernt';
+$lang['save']                  = 'Speichern';
+$lang['showpage']              = 'Seite anzeigen';
