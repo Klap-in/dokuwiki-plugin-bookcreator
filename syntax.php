@@ -217,6 +217,8 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
      * @param Doku_renderer_xhtml $renderer
      */
     private function exportOnScreen(&$renderer) {
+        global $ID;
+        
         $list = array();
         if(isset($_COOKIE['list-pagelist'])) {
             $renderer->doc = '';
@@ -230,9 +232,12 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
             $lf_subst    = '<br>';
         }
 
+        $keep = $ID;
         foreach($list as $page) {
-            $renderer->doc .= str_replace(DOKU_LF, $lf_subst, p_cached_output(wikiFN($page), $render_mode)); //p_wiki_xhtml($page,$REV,false);
+            $ID = $page;
+            $renderer->doc .= str_replace(DOKU_LF, $lf_subst, p_cached_output(wikiFN($page), $render_mode, $page)); //p_wiki_xhtml($page,$REV,false);
         }
+        $ID = $keep
     }
 
     /**
