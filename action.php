@@ -7,6 +7,9 @@
 // must be run within Dokuwiki
 if(!defined('DOKU_INC')) die();
 
+/**
+ * Class action_plugin_bookcreator
+ */
 class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
 
     var $selected;
@@ -15,18 +18,20 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
     /**
      * Constructor
      */
-    function action_plugin_bookcreator() {
+    function __construct() {
         $this->setupLocale();
     }
 
     /**
-     * register the eventhandlers
+     * Registers a callback function for a given event
+     *
+     * @param Doku_Event_Handler $controller
      */
-    function register(Doku_Event_Handler $contr) {
-        $contr->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, '_handle_tpl_act', array());
-        $contr->register_hook('TPL_ACT_RENDER', 'BEFORE', $this, 'bookbar', array());
-        $contr->register_hook('DOKUWIKI_STARTED', 'AFTER', $this, '_extendJSINFO');
-        $contr->register_hook('TEMPLATE_PAGETOOLS_DISPLAY', 'BEFORE', $this, 'addbutton');
+    function register(Doku_Event_Handler $controller) {
+        $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, '_handle_tpl_act', array());
+        $controller->register_hook('TPL_ACT_RENDER', 'BEFORE', $this, 'bookbar', array());
+        $controller->register_hook('DOKUWIKI_STARTED', 'AFTER', $this, '_extendJSINFO');
+        $controller->register_hook('TEMPLATE_PAGETOOLS_DISPLAY', 'BEFORE', $this, 'addbutton');
     }
 
     /**
@@ -298,7 +303,7 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
      * @param Doku_Event $event
      * @param mixed      $param not defined
      */
-    public function _extendJSINFO(&$event, $param) {
+    public function _extendJSINFO(Doku_Event $event, $param) {
         global $JSINFO, $conf, $ID;
 
         $showpagetools = true;
@@ -351,7 +356,7 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
      * @param Doku_Event $event
      * @param mixed      $param not defined
      */
-    public function addbutton(&$event, $param) {
+    public function addbutton(Doku_Event $event, $param) {
         global $ID;
 
         if(auth_quickaclcheck(cleanID($this->getConf('book_page'))) >= AUTH_READ && $event->data['view'] == 'main') {

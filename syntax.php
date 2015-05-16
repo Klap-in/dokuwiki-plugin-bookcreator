@@ -17,14 +17,27 @@ require_once(DOKU_INC.'inc/search.php');
  */
 class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
 
+    /**
+     * @param string $mode
+     */
     function connectTo($mode) {
         $this->Lexer->addSpecialPattern('~~\w*?BOOK.*?~~', $mode, 'plugin_bookcreator');
     }
 
+    /**
+     * Syntax Type
+     *
+     * @return string
+     */
     function getType() {
         return 'container';
     }
 
+    /**
+     * Paragraph Type
+     *
+     * @return string
+     */
     function getPType() {
         return 'block';
     }
@@ -36,6 +49,15 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         return 190;
     }
 
+    /**
+     * Handler to prepare matched data for the rendering process
+     *
+     * @param   string       $match   The text matched by the patterns
+     * @param   int          $state   The lexer state for the match
+     * @param   int          $pos     The character position of the matched text
+     * @param   Doku_Handler $handler The Doku_Handler object
+     * @return  bool|array Return an array with all data you want to use in render, false don't add an instruction
+     */
     function handle($match, $state, $pos, Doku_Handler $handler) {
 
         $match = substr($match, 2, -2); // strip markup
