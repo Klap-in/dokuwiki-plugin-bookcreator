@@ -308,14 +308,19 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         if(file_exists(DOKU_PLUGIN."text/renderer.php") && !plugin_isdisabled("text")) {
             $values['export_text'] = $this->getLang('exporttext');
         }
+        if(file_exists(DOKU_PLUGIN."odt/action/export.php") && !plugin_isdisabled("odt")) {
+            $values['export_odtbook'] = $this->getLang('exportodt');
+            $selected                 = 'export_odtbook';
+        }
         if(file_exists(DOKU_PLUGIN."dw2pdf/action.php") && !plugin_isdisabled("dw2pdf")) {
             $values['export_pdfbook'] = $this->getLang('exportpdf');
             $selected                 = 'export_pdfbook';
         }
+
         $form = new Doku_Form(array('method'=> 'get'));
         $form->startFieldset($this->getLang('export'));
         $form->addElement($this->getLang('title')." ");
-        $form->addElement(form_makeTextField('pdfbook_title', $title, '', '', 'edit', array('size'=> 40)));
+        $form->addElement(form_makeTextField('book_title', $title, '', '', 'edit', array('size'=> 40)));
         $form->addElement(form_makeListboxField('do', $values, $selected, '', '', '', array('size'=> 1)));
         $form->addHidden('id', $ID);
         $form->addElement(form_makeButton('submit', '', $this->getLang('create')));
