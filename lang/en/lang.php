@@ -14,6 +14,7 @@ $lang['export']          = "Export selection";
 $lang['create']          = "Export";
 
 $lang['exportpdf']       = "Export selection to PDF";
+$lang['exportodt']       = "Export selection to ODT";
 $lang['exportprint']     = "Printable version";
 $lang['exporttext']      = "Text only";
 
