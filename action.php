@@ -40,7 +40,7 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
      * @param Doku_Event $event  event object by reference
      * @param array      $param  empty
      */
-    function _handle_tpl_act(&$event, $param) {
+    function _handle_tpl_act(Doku_Event $event, $param) {
         //unify the action
         $do = $event->data;
         if(is_array($do)) {
@@ -213,7 +213,7 @@ class action_plugin_bookcreator extends DokuWiki_Action_Plugin {
      *
      * @author     Luigi Micco <l.micco@tiscali.it>
      */
-    function bookbar(&$event, $param) {
+    public function bookbar(Doku_Event $event, $param) {
         global $ID;
 
         if($event->data != 'show') return; // nothing to do for us
