@@ -67,7 +67,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         $num   = 10;
         $order = 'date';
         if($type == 'archive') {
-            list($junk, $params) = explode(':', $match, 2);
+            list(/* $junk */, $params) = explode(':', $match, 2);
             list($param1, $param2) = explode('&', $params, 2);
 
             if(is_numeric($param1)) {
@@ -92,12 +92,14 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
      */
     function render($mode, Doku_Renderer $renderer, $data) {
         global $ID;
+        global $INPUT;
 
         list($type, $num, $order) = $data;
 
         if($type == "book") {
             $renderer->info['cache'] = false;
-            if(($mode == 'text') && (isset($_GET['do']) && ($_GET['do'] == 'export_text'))) {
+
+            if($mode == 'text' && $INPUT->get->str('do') == 'export_text') {
                 $mode = 'xhtml';
             }
 
@@ -109,14 +111,19 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
 
                 if($usercansave) {
                     //save or delete selection
-                    if(isset($_POST['task']) && ($_POST['task'] == "save") && checkSecurityToken()) {
+                    if($INPUT->post->str('task') == "save" && checkSecurityToken()) {
                         $this->saveSelection();
-                    } elseif(isset($_POST['task']) && ($_POST['task'] == "delete") && checkSecurityToken()) {
+                    } elseif($INPUT->post->str('task') == "delete" && checkSecurityToken()) {
                         $this->deleteSelection();
                     }
                 }
 
-                if(isset($_GET['do']) && ($_GET['do'] == 'export_html' || $_GET['do'] == 'export_text')) {
+                $do = $INPUT->get->str('do');
+                $allowed_onscreen_exports = array(
+                    'export_html',
+                    'export_text'
+                );
+                if(in_array($do, $allowed_onscreen_exports)) {
                     //export as xhtml or text
                     $this->exportOnScreen($renderer);
 
@@ -155,6 +162,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
             // type == archive
 
             if($mode == 'xhtml') {
+                /** @var $renderer Doku_Renderer_xhtml */
                 // generates the list of saved selections
                 $this->renderSelectionslist($renderer, $bookmanager = false, $this->getConf('book_page'), $order, $num);
             }
@@ -204,19 +212,23 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
      * Selection is saved as bullet list on a wikipage
      */
     private function saveSelection() {
+        global $INPUT;
+
         if(!empty($_COOKIE['list-pagelist'])) {
-            if(!empty($_POST['bookcreator_title'])) {
+            $bookcreator_title = $INPUT->post->str('bookcreator_title');
+
+            if(!empty($bookcreator_title)) {
                 $list = explode("|", $_COOKIE['list-pagelist']);
 
                 //generate content
-                $content = "====== ".$_POST['bookcreator_title']." ======".DOKU_LF;
+                $content = "====== ".$bookcreator_title." ======".DOKU_LF;
                 for($n = 0; $n < count($list); $n++) {
                     $page = $list[$n];
                     $content .= "  * [[:$page]]".DOKU_LF;
                 }
 
-                saveWikiText($this->getConf('save_namespace').":".$_POST['bookcreator_title'], $content, "selection created");
-                msg($this->getLang('saved').": ".$this->getConf('save_namespace').":".$_POST['bookcreator_title'], 1);
+                saveWikiText($this->getConf('save_namespace').":".$bookcreator_title, $content, "selection created");
+                msg($this->getLang('saved').": ".$this->getConf('save_namespace').":".$bookcreator_title, 1);
             } else {
                 msg($this->getLang('needtitle'), -1);
             }
@@ -229,8 +241,11 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
      * Handle request for deleting of selection list
      */
     private function deleteSelection() {
-        saveWikiText($this->getConf('save_namespace').":".$_POST['page'], '', "selection removed");
-        msg($this->getLang('deleted').": ".$this->getConf('save_namespace').":".$_POST['page'], 1);
+        global $INPUT;
+        $page = $INPUT->post->str('page');
+
+        saveWikiText($this->getConf('save_namespace').":".$page, '', "selection removed");
+        msg($this->getLang('deleted').": ".$this->getConf('save_namespace').":".$page, 1);
     }
 
     /**
@@ -239,6 +254,8 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
      * @param Doku_renderer_xhtml $renderer
      */
     private function exportOnScreen(&$renderer) {
+        global $INPUT;
+
         $list = array();
         if(isset($_COOKIE['list-pagelist'])) {
             $renderer->doc = '';
@@ -247,7 +264,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
 
         $render_mode = 'xhtml';
         $lf_subst    = '';
-        if($_GET['do'] == 'export_text') {
+        if($INPUT->get->str('do') == 'export_text') {
             $render_mode = 'text';
             $lf_subst    = '<br>';
         }
@@ -267,13 +284,16 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
      */
     private function showBookManager($renderer, $usercansave) {
         global $ID;
+        global $INPUT;
         $title = '';
 
         // get a saved selection array from file
         $list = $_COOKIE['bookcreator'];
+
         // title
-        if(isset($_POST['bookcreator_title'])) {
-            $title = $_POST['bookcreator_title'];
+        $bookcreator_title = $INPUT->post->str('bookcreator_title');
+        if(!empty($bookcreator_title)) {
+            $title = $bookcreator_title;
         } elseif(isset($_COOKIE['bookcreator_title'])) {
             $title = $_COOKIE['bookcreator_title'];
         }
@@ -383,6 +403,10 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
 
     /**
      * usort callback to sort by file lastmodified time
+     *
+     * @param array $a
+     * @param array $b
+     * @return int
      */
     function _datesort($a, $b) {
         if($b['rev'] < $a['rev']) return -1;
@@ -392,6 +416,10 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
 
     /**
      * usort callback to sort by file title
+     *
+     * @param array $a
+     * @param array $b
+     * @return int
      */
     function _titlesort($a, $b) {
         if($a['id'] <= $b['id']) return -1;
