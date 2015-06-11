@@ -254,13 +254,9 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
      * @param Doku_renderer_xhtml $renderer
      */
     private function exportOnScreen(&$renderer) {
-<<<<<<< HEAD
         global $ID;
-        
-=======
         global $INPUT;
 
->>>>>>> dd8d15ecbd540d879950063000864a608a6d7349
         $list = array();
         if(isset($_COOKIE['list-pagelist'])) {
             $renderer->doc = '';
