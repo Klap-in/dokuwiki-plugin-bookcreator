@@ -275,7 +275,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
             $ID = $page;
             $renderer->doc .= str_replace(DOKU_LF, $lf_subst, p_cached_output(wikiFN($page), $render_mode, $page)); //p_wiki_xhtml($page,$REV,false);
         }
-        $ID = $keep
+        $ID = $keep;
     }
 
     /**
