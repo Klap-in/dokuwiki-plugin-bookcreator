@@ -21,6 +21,7 @@ $lang['js']['btn_removetobook'] = 'ブックから削除';
 $lang['export']                = '選択を出力する。';
 $lang['create']                = '出力';
 $lang['exportpdf']             = 'PDF ファイルで出力';
+$lang['exportodt']             = 'ODT ファイルで出力';
 $lang['exportprint']           = '印刷バージョン';
 $lang['exporttext']            = 'テキストのみ';
 $lang['title']                 = '文書の表題（オプション）';
