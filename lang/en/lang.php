@@ -18,7 +18,7 @@ $lang['exportodt']       = "Export selection to ODT";
 $lang['exportprint']     = "Printable version";
 $lang['exporttext']      = "Text only";
 
-$lang['title']           = "Document's title (optional)";
+$lang['title']           = "Document's title";
 
 $lang['pageadded']       = "Page add to selection";
 $lang['pageremoved']     = "Page removed from selection";
