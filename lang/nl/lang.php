@@ -4,6 +4,7 @@
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  * 
  * @author Rene <wllywlnt@yahoo.com>
+ * @author Peter van Diest <peter.van.diest@xs4all.nl>
  */
 $lang['nocookies']             = 'Er zijn nog geen pagina\'s geselecteerd. Controleer of je browser cookies accepteerd en probeer het opnieuw.';
 $lang['empty']                 = 'Er zijn nog geen pagina\'s geselecteerd.';
@@ -20,6 +21,7 @@ $lang['js']['btn_removetobook'] = 'Verwijder uit boek';
 $lang['export']                = 'Exporteer selectie';
 $lang['create']                = 'Exporteer';
 $lang['exportpdf']             = 'Exporteer selectie naar PDF';
+$lang['exportodt']             = 'Exporteer selectie naar ODT';
 $lang['exportprint']           = 'Printbare versie';
 $lang['exporttext']            = 'Alleen tekst';
 $lang['title']                 = 'Titel van het document (optioneel)';
