@@ -5,7 +5,7 @@ $lang['empty']           = "You don't have pages selected yet.";
 $lang['toprint']         = "Selected pages";
 $lang['removed']         = "Pages removed from selection";
 
-$lang['reserconfirm']    = "Do you really clear selection ?";
+$lang['reserconfirm']    = "Do you really clear selection?";
 $lang['reset']           = "Clear selection";
 
 $lang['js']['include']   = "Add to selection";
