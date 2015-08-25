@@ -5,12 +5,13 @@
  * 
  * @author Luigi Micco <l.micco@tiscali.it>
  * @author Eloy <ej.perezgomez@gmail.com>
+ * @author Henrique <henrifc@gmail.com>
  */
 $lang['nocookies']             = 'La lista está vacía. Verifique que su explorador permite el uso de cookies y vuelva a intentarlo.';
 $lang['empty']                 = 'La lista está vacía.';
 $lang['toprint']               = 'Páginas seleccionadas';
 $lang['removed']               = 'Páginas eliminadas de la selección';
-$lang['reserconfirm']          = 'Realmente quiere eliminar la selección ?';
+$lang['reserconfirm']          = '¿Realmente quiere eliminar la selección?';
 $lang['reset']                 = 'Eliminar selección';
 $lang['js']['include']         = 'Añadir a la selección';
 $lang['js']['remove']          = 'Eliminar de la selección';
@@ -21,6 +22,7 @@ $lang['js']['btn_removetobook'] = 'Eliminar del libro';
 $lang['export']                = 'Exportar selección';
 $lang['create']                = 'Exportar';
 $lang['exportpdf']             = 'Exportar selección a PDF';
+$lang['exportodt']             = 'Esportar la selección a ODT';
 $lang['exportprint']           = 'Versión imprimible';
 $lang['exporttext']            = 'Solo texto';
 $lang['title']                 = 'Título del documento (opcional)';
@@ -29,7 +31,7 @@ $lang['pageremoved']           = 'Página eliminada de la selección';
 $lang['addpage']               = 'Añadir esta página al libro';
 $lang['removepage']            = 'Eliminar esta página del libro';
 $lang['showbook']              = 'Mostrar, modificar libro';
-$lang['sortable']              = 'Drag and drop to sort/remove/add pages';
+$lang['sortable']              = 'Arrastrar y soltar para ordenar / quitar / añadir páginas';
 $lang['pages']                 = 'página/s';
 $lang['help']                  = 'Ayuda';
 $lang['toolbar']               = 'Creación de libros';
