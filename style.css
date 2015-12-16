@@ -162,3 +162,19 @@ div#dokuwiki__site div.bookcreator__ {
 #dokuwiki__pagetools ul li a.addtobook.remove:focus {
     background-position: right -225px;
 }
+/*Keep icons on left side on hover for rtl languages*/
+/*add to book icon*/
+[dir=rtl] #dokuwiki__pagetools ul li a.addtobook:hover,
+#dokuwiki__pagetools ul li a.addtobook:active,
+#dokuwiki__pagetools ul li a.addtobook:focus {
+    background-position: left -135px;
+}
+/*remove from book icon*/
+[dir=rtl] #dokuwiki__pagetools ul li a.addtobook.remove:hover,
+#dokuwiki__pagetools ul li a.addtobook.remove:active,
+#dokuwiki__pagetools ul li a.addtobook.remove:focus {
+    background-position: left -225px;
+}
+[dir=rtl] #dokuwiki__pagetools ul li a.addtobook.remove {
+    background-position: left -180px;
+}
