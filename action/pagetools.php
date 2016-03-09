@@ -9,7 +9,7 @@
 if(!defined('DOKU_INC')) die();
 
 /**
- * Class action_plugin_bookcreator
+ * Show book bar and pagetool button at a wiki page
  */
 class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
 
@@ -37,8 +37,6 @@ class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
      *
      * @param Doku_Event $event event object by reference
      * @param array $param empty
-     *
-     * @author     Luigi Micco <l.micco@tiscali.it>
      */
     public function bookbar(Doku_Event $event, $param) {
         if($event->data != 'show') return; // nothing to do for us
@@ -87,8 +85,6 @@ class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
 
     /**
      * Add additional info to $JSINFO
-     *
-     * @author Gerrit Uitslag <klapinklapin@gmail.com>
      *
      * @param Doku_Event $event
      * @param mixed $param not defined
