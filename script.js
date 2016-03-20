@@ -1,214 +1,196 @@
 var Bookcreator = {
-    cookieName: 'bookcreator',
-    //TODO: Introduced and deprecated October 2013 JSINFO.DOKU_COOKIE_PARAM
-    cookiePath: (typeof DOKU_COOKIE_PARAM === "undefined" ? JSINFO.DOKU_COOKIE_PARAM.path : DOKU_COOKIE_PARAM.path),
-    cookieSecure: (typeof DOKU_COOKIE_PARAM === "undefined" ? JSINFO.DOKU_COOKIE_PARAM.secure : DOKU_COOKIE_PARAM.secure),
+
+    _storage: [],
+    isCurrentPageSelected: false,
 
     /**
-     * Handler add or removes page to selection, called via buttons of toolbar
+     * Initiate storage
      */
-    togglePageSelection: function (e) {
+    init: function() {
+        this._load();
+        this.isCurrentPageSelected = this.isSelected(JSINFO.id);
+    },
+
+    /**
+     * Is pageid in stored selection
+     *
+     * @param {string} pageid
+     * @returns {boolean}
+     */
+    isSelected: function(pageid) {
+        return this._storage.indexOf(pageid) != -1;
+    },
+
+    /**
+     * Delete or add current page from selection
+     */
+    toggleSelectionCurrentPage: function() {
+        if(this.isCurrentPageSelected) {
+            this.deletePage(JSINFO.id);
+        } else {
+            this.addPage(JSINFO.id);
+        }
+        this.isCurrentPageSelected = this.isSelected(JSINFO.id);
+    },
+
+    /**
+     * Add pageid to selection
+     *
+     * @param pageid
+     */
+    addPage: function(pageid) {
+        this._storage.push(pageid);
+        this._save();
+    },
+
+    /**
+     * Delete pageid from selection
+     * @param pageid
+     */
+    deletePage: function(pageid) {
+        var pos = this._storage.indexOf(pageid);
+        if(pos == -1) return;
+
+        this._storage.splice(pos, 1);
+        this._save();
+    },
+
+    /**
+     * Count number of selected pages
+     *
+     * @returns {Number}
+     */
+    count: function() {
+        return this._storage.length;
+    },
+    /**
+     * Save current selection in localStorage
+     *
+     * @private
+     */
+    _save: function() {
+        window.localStorage.setItem('bookcreator_selectedpgs', JSON.stringify(this._storage));
+    },
+
+    /**
+     * Load selection from localStorage
+     *
+     * @private
+     */
+    _load: function() {
+        var source = window.localStorage.getItem('bookcreator_selectedpgs');
+
+        try {
+            Bookcreator._storage = JSON.parse(source) || [];
+        } catch (E) {
+            Bookcreator._storage = [];
+        }
+    },
+
+    /**
+     * Show the allowed tools to the user
+     */
+    showTools: function() {
+        var $addtobookBtn = jQuery('.plugin_bookcreator_addtobook').parent(),
+            $bookbar = jQuery('.bookcreator__bookbar');
+
+        $addtobookBtn.show();
+
+        if(JSINFO.bookcreator.showNoempty) {
+            $bookbar.show();
+        }
+    },
+
+    /**
+     * Update the interface to current selection
+     */
+    updatePageTools: function() {
+        //pagetool button
+        var $addtobookBtn = jQuery('.plugin_bookcreator_addtobook');
+
+        if ($addtobookBtn.length) { //exists the addtobook link
+            var text = LANG.plugins.bookcreator['btn_' + (this.isCurrentPageSelected ? 'remove' : 'add') + 'tobook'];
+
+            $addtobookBtn
+                .toggleClass('remove', this.isCurrentPageSelected)
+                .attr('title', text)
+                .children('span').html(text);
+        }
+
+        //bookbar
+        if(JSINFO.bookcreator.showNoempty) {
+            jQuery("#bookcreator__add").toggle(!this.isCurrentPageSelected);
+            jQuery("#bookcreator__remove").toggle(this.isCurrentPageSelected);
+        }
+
+        jQuery("#bookcreator__pages").html(this.count());
+    },
+
+    /**
+     * Handle click at page add/remove buttons
+     */
+    clickPagetools: function(e) {
         e.preventDefault();
-        //add or remove
-        var addORremove = (jQuery(this).parent().attr('id').substr(13) == 'add');
 
-        //update cookie and counter
-        Bookcreator.storePageStatus(JSINFO.id, addORremove);
-        Bookcreator.storePageOrder();
-        jQuery("#bookcreator__pages").html(Bookcreator.countPages());
-
-        //toggle add/remove in UI
-        jQuery("#bookcreator__add").toggle(!addORremove);
-        jQuery("#bookcreator__remove").toggle(addORremove);
-
-        Bookcreator.updatePagetoolLink();
+        Bookcreator.toggleSelectionCurrentPage();
+        Bookcreator.updatePageTools();
     },
 
     /**
-     * Handler moves pages between the lists of selected and removed pages
+     * Sets up a storage change observer
      */
-    movePage: function () {
-        var $a = jQuery(this),
-            $li = $a.parent(),
-            pageid = $li.attr('id').substr(4);
-
-        //true=add to selected list, false=remove from selected list
-        var addORremove = $li.parent().hasClass('remove');
-
-        //move page to other list
-        var listclass = addORremove ? 'include' : 'remove';
-        $li.appendTo(jQuery('div.bookcreator__pagelist ul.pagelist.' + listclass));
-
-        //store new status in cookie
-        Bookcreator.storePageStatus(pageid, addORremove);
-        Bookcreator.storePageOrder();
-
-        //update interface
-        $a.attr('title', LANG.plugins.bookcreator[addORremove ? 'remove' : 'include']);
-        Bookcreator.toggleDeletelist();
-    },
-
-    /**
-     * Show/hide list of delete pages when empty
-     */
-    toggleDeletelist: function () {
-        var show = jQuery('div.bookcreator__pagelist ul.pagelist.remove li').length > 0;
-        jQuery('#bookcreator__delpglst ul').toggleClass('hint', !show)
-    },
-
-    /**
-     * Counts the pages
-     *
-     * @return {Number} number of pages
-     */
-    countPages: function () {
-        var k = 0;
-        var cookies = document.cookie.split("; ");
-        jQuery.each(cookies, function (i, cookie) {
-            if (cookie.substr(0, Bookcreator.cookieName.length) == Bookcreator.cookieName) {
-                var parts = cookie.split('=');
-                if (parts[1] == 1) {
-                    k = k + 1;
-                }
-            }
+    setupUpdateObserver: function() {
+        jQuery(window).on('storage', function() {
+            Bookcreator._load();
+            Bookcreator.updatePageTools();
         });
-        return k;
-    },
 
-    /**
-     * Set cookie for Bookcreator
-     *
-     * @param {String} pageid whole id of page
-     * @param {Boolean} addORremove whether page should be added to selection, null is removing cookie
-     */
-    storePageStatus: function (pageid, addORremove) {
-        var key = Bookcreator.cookieName + '[' + pageid + ']',
-            days = 7;
-
-        if (addORremove === null) {
-            days = -1;
-        }
-        var value = String(addORremove ? 1 : 0);
-
-        var t = new Date();
-        t.setDate(t.getDate() + days);
-        return (document.cookie = [
-            key, '=', encodeURIComponent(value),
-            '; expires=' + t.toUTCString(), // use expires attribute, max-age is not supported by IE
-            '; path=' + Bookcreator.cookiePath,
-            Bookcreator.cookieSecure ? '; secure' : ''
-        ].join(''));
-    },
-    storePageOrder: function () {
-        var pagelist = [];
-
-        jQuery('div.bookcreator__pagelist ul.pagelist.include li').each(function () {
-            pagelist.push(jQuery(this).attr('id').substr(4));
-        });
-        jQuery.cookie.raw = true;
-
-        jQuery.cookie("list-pagelist", pagelist.join('|'), { expires: 7, path: Bookcreator.cookiePath, secure: Bookcreator.cookieSecure });
-    },
-
-    /**
-     * List item is dropped in other pagelist
-     * @param event
-     * @param ui
-     */
-    droppedInOtherlist: function (event, ui) {
-        var pageid = ui.item.attr('id').substr(4),
-            addORremove = ui.item.parent().hasClass('include');
-
-        //store new status in cookie
-        Bookcreator.storePageStatus(pageid, addORremove);
-        //update layout
-        ui.item.children('a.action').attr('title', LANG.plugins.bookcreator[addORremove ? 'remove' : 'include']);
-        Bookcreator.toggleDeletelist()
-    },
-
-    /**
-     * Handle read or delete of a Selection from the Selection List
-     */
-    actionList: function () {
-        var $this = jQuery(this),
-            action = ($this.hasClass('delete') ? 'delete' : 'read'),
-            pageid = $this.parent().attr('id').substr(5);
-
-        //confirm dialog
-        var msg,
-            confirmrequired = true,
-            comfirmed = true;
-        if (action == "delete") {
-            msg = LANG.plugins.bookcreator.confirmdel;
-        } else {
-            if (Bookcreator.countPages() == 0) {
-                confirmrequired = false;
-            }
-            msg = LANG.plugins.bookcreator.confirmload;
-        }
-
-        if (confirmrequired) comfirmed = confirm(msg);
-        if (comfirmed) {
-            //special do action is handled in action.php, otherwise task is handled in syntax.php
-            document.bookcreator__selections__list['do'].value = (action == 'read' ? 'readsavedselection' : 'show');
-            document.bookcreator__selections__list.task.value = action;
-            document.bookcreator__selections__list.page.value = pageid;
-            document.bookcreator__selections__list.submit();
-            return true;
-        }
-    },
-
-    /**
-     * Toggle addtobook button between add and remove
-     */
-    updatePagetoolLink: function () {
-        //is bookcreator toolbar available
-        var addORremove = null;
-
-        var $bkcrtr = jQuery('.bookcreator__');
-        if ($bkcrtr.length) {
-            addORremove = $bkcrtr.find("#bookcreator__add").is(':visible');
-        } else {
-            //if config setting 'toolbar'==never, selection state is store at div#bookcreator__memory
-            var $bkcrtr_memory = jQuery('#bookcreator__memory');
-            if($bkcrtr_memory.length) {
-                addORremove = !$bkcrtr_memory.data('isselected');
-            }
-        }
-        if(addORremove !== null) {
-            var $addtobookbtn = jQuery('#dokuwiki__pagetools').find('ul a.action.addtobook');
-            //exist the addtobook link
-            if ($addtobookbtn.length) {
-                var text = LANG.plugins.bookcreator['btn_' + (addORremove ? 'add' : 'remove') + 'tobook'];
-                $addtobookbtn.toggleClass('remove', !addORremove)
-                    .attr('title', text)
-                    .children('span').html(text);
-            }
-        }
+        //// handle cached navigation
+        //if ('addEventListener' in window) {
+        //    window.addEventListener('pageshow', function(event) {
+        //        if (event.persisted) {
+        //            Bookcreator._load();
+        //        }
+        //    }, false);
+        //}
     }
 };
 
 
 jQuery(function () {
-    //bookcreator toolbar
-    jQuery('a.bookcreator__tglPgSelection').click(Bookcreator.togglePageSelection);
-    Bookcreator.updatePagetoolLink();
+    if(!JSINFO.bookcreator.isVisible) return;
 
-    //bookmanager
-    var $pagelist = jQuery('div.bookcreator__pagelist');
-    if ($pagelist.length) {
-        $pagelist.find('a.action').click(Bookcreator.movePage);
-        $pagelist.find('ul.pagelist.include,ul.pagelist.remove').sortable({
-            connectWith: "div.bookcreator__pagelist ul.pagelist",
-            receive: Bookcreator.droppedInOtherlist,
-            stop: Bookcreator.storePageOrder,
-            distance: 5
-        });
+    Bookcreator.init();
+    Bookcreator.setupUpdateObserver();
 
-        Bookcreator.toggleDeletelist();
-        Bookcreator.storePageOrder()
-    }
+    // bookcreator tools at wiki page
+    Bookcreator.showTools();
+    Bookcreator.updatePageTools();
+    jQuery('a.bookcreator__tglPgSelection').click(Bookcreator.clickPagetools);
+    jQuery('.plugin_bookcreator_addtobook').click(Bookcreator.clickPagetools);
 
-    //add click handlers to Selectionslist
-    jQuery('form#bookcreator__selections__list a.action').click(Bookcreator.actionList);
+
+    ////bookmanager
+    //var $pagelist = jQuery('div.bookcreator__pagelist');
+    //if ($pagelist.length) {
+    //    $pagelist.find('a.action')
+    //        .click(Bookcreator.movePage);
+    //    $pagelist.find('ul.pagelist.include,ul.pagelist.remove')
+    //        .sortable({
+    //            connectWith: "div.bookcreator__pagelist ul.pagelist",
+    //            receive: Bookcreator.droppedInOtherlist,
+    //            stop: Bookcreator.storePageOrder,
+    //            distance: 5
+    //        });
+    //
+    //    Bookcreator.toggleDeletelist();
+    //    Bookcreator.storePageOrder()
+    //}
+    //
+    ////add click handlers to Selectionslist
+    //jQuery('form#bookcreator__selections__list a.action').click(Bookcreator.actionList);
 });
+
+var BookManager  = {
+
+};

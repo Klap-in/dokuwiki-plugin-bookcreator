@@ -1,9 +1,3 @@
-/*
-<!-- http://free-script.it/ -->
-<!-- Free script - Script gratuiti per il web. Script php, script asp, script javascript, script ajax. -->
-<!-- Script ajax: Drag and drop con scriptaculous e salvataggio posizione -->
-*/
-
 
 #pagelist {
     margin-bottom: 1em;
@@ -13,7 +7,7 @@
     cursor: move;
 }
 
-div.bookcreator__ {
+div.bookcreator__bookbar {
     border: 1px solid __border__;
     background-color: __background_alt__;
     background-image: url(images/book.png);
@@ -31,6 +25,10 @@ div.bookcreator__ {
     background-repeat: no-repeat;
 }
 
+div.bookcreator__bookbar {
+    display: none; /* will be shown by JavaScript */
+}
+
 div.bookcreator__panel {
     text-align: justify;
     vertical-align: middle;
@@ -39,8 +37,8 @@ div.bookcreator__panel {
     display: block;
 }
 /* specific for dokuwiki template: place the ToC just below toolbar */
-div#dokuwiki__site div.bookcreator__ {
-    margin-bottom: 1.5em;
+div#dokuwiki__site div.bookcreator__bookbar {
+    margin-bottom: 1.6em;
 }
 
 /*
@@ -105,60 +103,44 @@ div#dokuwiki__site div.bookcreator__ {
     text-align:left;
 }
 
-
-/*
+/**
  * Page tools
+ * show add/remove icon
  */
-/* export_pdf */
-/*
-#dokuwiki__pagetools ul li a.export_pdf {
-    background-position: right 0;
-}
-#dokuwiki__pagetools ul li a.export_pdf:before {
-    content: url(images/pagetools-pdf-sprite.png);
-    margin-top: 0;
-}
-#dokuwiki__pagetools:hover ul li a.export_pdf,
-#dokuwiki__pagetools ul li a.export_pdf:focus,
-#dokuwiki__pagetools ul li a.export_pdf:active {
-    background-image: url(images/pagetools-pdf-sprite.png);
-}
-#dokuwiki__pagetools ul li a.export_pdf:hover,
-#dokuwiki__pagetools ul li a.export_pdf:active,
-#dokuwiki__pagetools ul li a.export_pdf:focus {
-    background-position: right -45px;
-}
-*/
-
-/* addtobook */
-/* show add icon */
-#dokuwiki__pagetools ul li a.addtobook {
+#dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook {
     background-position: right -90px;
 }
-#dokuwiki__pagetools ul li a.addtobook:before {
+#dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook:before {
     content: url(images/pagetools-pdf-sprite.png);
     margin-top: -90px;
 }
-#dokuwiki__pagetools:hover ul li a.addtobook,
-#dokuwiki__pagetools ul li a.addtobook:focus,
-#dokuwiki__pagetools ul li a.addtobook:active {
+#dokuwiki__pagetools:hover ul li a.plugin_bookcreator_addtobook,
+#dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook:focus,
+#dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook:active {
     background-image: url(images/pagetools-pdf-sprite.png);
 }
-#dokuwiki__pagetools ul li a.addtobook:hover,
-#dokuwiki__pagetools ul li a.addtobook:active,
-#dokuwiki__pagetools ul li a.addtobook:focus {
+#dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook:hover,
+#dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook:active,
+#dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook:focus {
     background-position: right -135px;
 }
 
 /* show remove icon */
-#dokuwiki__pagetools ul li a.addtobook.remove {
+#dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook.remove {
     background-position: right -180px;
 }
-#dokuwiki__pagetools ul li a.addtobook.remove:before {
+#dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook.remove:before {
     margin-top: -180px;
 }
-#dokuwiki__pagetools ul li a.addtobook.remove:hover,
-#dokuwiki__pagetools ul li a.addtobook.remove:active,
-#dokuwiki__pagetools ul li a.addtobook.remove:focus {
+#dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook.remove:hover,
+#dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook.remove:active,
+#dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook.remove:focus {
     background-position: right -225px;
+}
+
+/**
+ * page add/remove button
+ */
+.plugin_bookcreator_addtobook {
+    display: none; /* will be shown by JavaScript */
 }

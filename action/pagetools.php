@@ -46,7 +46,7 @@ class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
         /**
          * Display toolbar
          */
-        echo "<div class='bookcreator__' style='vertical-align:bottom;'>";
+        echo "<div class='bookcreator__bookbar' style='vertical-align:bottom;'>";
 
         //add page to selection
         echo "<div class='bookcreator__panel' id='bookcreator__add'>";
@@ -68,7 +68,7 @@ class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
         echo "<div class='bookcreator__panel' ><br>";
         echo "  <a href='" . wl($this->getConf('book_page')) . "'>";
         echo "    <img src='" . DOKU_URL . "lib/plugins/bookcreator/images/smallbook.png'>&nbsp;" . $this->getLang('showbook');
-        echo "    (<span id='bookcreator__pages'>0</span>" . $this->getLang('pages') . ")";
+        echo "    (<span id='bookcreator__pages'>0</span> " . $this->getLang('pages') . ")";
         echo "  </a>";
         echo "</div>";
 
@@ -92,12 +92,8 @@ class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
     public function _extendJSINFO(Doku_Event $event, $param) {
         global $JSINFO;
 
-        $JSINFO['isBookcreatorpagetoolVisible'] = $this->isVisible();
-
-//        $JSINFO['DOKU_COOKIE_PARAM'] = array(
-//            'path' => empty($conf['cookiedir']) ? DOKU_REL : $conf['cookiedir'],
-//            'secure' => $conf['securecookie'] && is_ssl(),
-//        );
+        $JSINFO['bookcreator']['isVisible'] = $this->isVisible();
+        $JSINFO['bookcreator']['showNoempty'] = $this->getConf('toolbar') == 'noempty';
     }
 
     /**
@@ -107,7 +103,7 @@ class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
      * @param $param
      */
     public function allowaddbutton(Doku_Event $event, $param) {
-        if($event->data['type'] != 'addtobook') {
+        if($event->data['type'] != 'plugin_bookcreator_addtobook') {
             return;
         }
 
@@ -126,11 +122,11 @@ class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
         if($this->hasAccessToBookmanager() && $event->data['view'] == 'main') {
             //store string in global lang array
             $jslocal = $this->getLang('js');
-            $lang['btn_addtobook'] = $jslocal['btn_addtobook'] ;
+            $lang['btn_plugin_bookcreator_addtobook'] = $jslocal['btn_addtobook'] ;
 
             $event->data['items'] =
                 array_slice($event->data['items'], 0, -1, true) +
-                array('addtobook' => tpl_action('addtobook', true, 'li', true)) +
+                array('plugin_bookcreator_addtobook' => tpl_action('plugin_bookcreator_addtobook', true, 'li', true, '<span>', '</span>')) +
                 array_slice($event->data['items'], -1, 1, true);
         }
     }
@@ -145,7 +141,7 @@ class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
         global $ID;
 
         // show the bookbar?
-        if($isbookbar && (($this->getConf('toolbar') == "never") || ($this->getConf('toolbar') == "noempty"))) {
+        if($isbookbar && ($this->getConf('toolbar') == "never")) {
             return false;
         }
 
