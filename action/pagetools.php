@@ -92,8 +92,8 @@ class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
     public function _extendJSINFO(Doku_Event $event, $param) {
         global $JSINFO;
 
-        $JSINFO['bookcreator']['isVisible'] = $this->isVisible();
-        $JSINFO['bookcreator']['showNoempty'] = $this->getConf('toolbar') == 'noempty';
+        $JSINFO['bookcreator']['areToolsVisible'] = $this->isVisible();
+        $JSINFO['bookcreator']['showBookbar'] = $this->getConf('toolbar');
     }
 
     /**

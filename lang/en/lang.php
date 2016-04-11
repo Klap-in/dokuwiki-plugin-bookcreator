@@ -26,7 +26,7 @@ $lang['pageremoved']     = "Page removed from selection";
 $lang['addpage']         = "Add this page to your book";
 $lang['removepage']      = "Remove this page from your book";
 $lang['showbook']        = "Show, modify book";
-$lang['sortable']        = "Drag and drop to sort/remove/add pages";
+$lang['js']['sortable']  = "Drag and drop to sort/remove/add pages";
 
 $lang['pages']           = "page/s";
 $lang['help']            = "Help";
@@ -42,7 +42,7 @@ $lang['duplicate']       = "&lt;The list with saved selections is already displa
 $lang['save']            = "Save";
 $lang['listselections']  = "Selection Lists saved";
 
-$lang['showpage']        = "Show page";
+$lang['js']['showpage']  = "Show page";
 $lang['delselection']    = "Remove saved selection";
 $lang['loadselection']   = "Load saved selection";
 

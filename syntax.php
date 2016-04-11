@@ -61,8 +61,11 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
     function handle($match, $state, $pos, Doku_Handler $handler) {
 
         $match = substr($match, 2, -2); // strip markup
-        if(substr($match, 0, 7) == 'ARCHIVE') $type = 'archive';
-        else $type = 'book';
+        if(substr($match, 0, 7) == 'ARCHIVE') {
+            $type = 'archive';
+        } else {
+            $type = 'bookmanager';
+        }
 
         $num   = 10;
         $order = 'date';
@@ -96,7 +99,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
 
         list($type, $num, $order) = $data;
 
-        if($type == "book") {
+        if($type == "bookmanager") {
             $renderer->info['cache'] = false;
 
             if($mode == 'text' && $INPUT->get->str('do') == 'export_text') {
@@ -109,52 +112,37 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
                 // verification that if the user can save / delete the selections
                 $usercansave = (auth_quickaclcheck($this->getConf('save_namespace').':*') >= AUTH_CREATE);
 
-                if($usercansave) {
-                    //save or delete selection
-                    if($INPUT->post->str('task') == "save" && checkSecurityToken()) {
-                        $this->saveSelection();
-                    } elseif($INPUT->post->str('task') == "delete" && checkSecurityToken()) {
-                        $this->deleteSelection();
-                    }
-                }
+//
+//                if($usercansave) {
+//                    //save or delete selection
+//                    if($INPUT->post->str('task') == "save" && checkSecurityToken()) {
+//                        $this->saveSelection();
+//                    } elseif($INPUT->post->str('task') == "delete" && checkSecurityToken()) {
+//                        $this->deleteSelection();
+//                    }
+//                }
 
-                $do = $INPUT->get->str('do');
-                $allowed_onscreen_exports = array(
-                    'export_html',
-                    'export_text'
-                );
-                if(in_array($do, $allowed_onscreen_exports)) {
-                    //export as xhtml or text
-                    $this->exportOnScreen($renderer);
-
-                } else {
+//                $do = $INPUT->get->str('do');
+//                $allowed_onscreen_exports = array(
+//                    'export_html',
+//                    'export_text'
+//                );
+//                if(in_array($do, $allowed_onscreen_exports)) {
+//                    //export as xhtml or text
+//                    $this->exportOnScreen($renderer);
+//
+//                } else {
                     $renderer->info['cache'] = false;
+//                            $renderer->doc .= $this->getLang('empty');
 
-                    //search for the current selection in cookie
-                    $foundlist = false;
-                    if(isset($_COOKIE['bookcreator'])) {
-                        $currentselection = $_COOKIE['bookcreator'];
-
-                        //empty?
-                        if(($currentselection == "") || (count($currentselection) == 0)) {
-                            $renderer->doc .= $this->getLang('empty');
-                        } else {
-                            $foundlist = true;
-                        }
-                    }
-
-                    //show the bookmanager when there are pages selected, otherwise a message.
-                    if($foundlist) {
-                        $this->showBookManager($renderer, $usercansave);
-                    } else {
-                        //no selection available
-                        $renderer->doc .= $this->getLang('nocookies');
-                    }
+                    //show the bookmanager
+                    $this->showBookManager($renderer, $usercansave);
+                        //$renderer->doc .= $this->getLang('nocookies');
 
                     // Displays the list of saved selections
                     $this->renderSelectionslist($renderer, $bookmanager = true, $ID, $order);
                     $renderer->doc .= "<br />";
-                }
+//                }
             }
             return false;
 
@@ -191,7 +179,10 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         } else {
             $result = $this->_getlist($order, $num);
             if(sizeof($result) > 0) {
-                $form = new Doku_Form(array('method'=> 'post', 'id'=> 'bookcreator__selections__list', 'name'=> 'bookcreator__selections__list', 'action'=> wl($bmpage)));
+                $form = new Doku_Form(array('method'=> 'post',
+                                            'id'=>     'bookcreator__selections__list',
+                                            'name'=>   'bookcreator__selections__list',
+                                            'action'=> wl($bmpage)));
                 if($bookmanager) $form->startFieldset($this->getLang('listselections'));
                 $form->addElement($this->_showlist($result, $bookmanager, $bookmanager));
                 $form->addHidden('do', '');
@@ -276,7 +267,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
 
     /**
      * Displays the Bookmanager - Let organize selections and export them
-     * Only visible when a selection is loaded from the save selections or from cookie
+     * Only visible when a selection is loaded from the save selections or from cookie FIXME
      *
      * @param Doku_renderer_xhtml $renderer
      * @param bool                $usercansave User has permissions to save the selection
@@ -287,33 +278,34 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         global $INPUT;
         $title = '';
 
-        // get a saved selection array from file
-        $list = $_COOKIE['bookcreator'];
+//        // get a saved selection array from file
+//        $list = $_COOKIE['bookcreator'];
 
-        // title
-        $bookcreator_title = $INPUT->post->str('bookcreator_title');
-        if(!empty($bookcreator_title)) {
-            $title = $bookcreator_title;
-        } elseif(isset($_COOKIE['bookcreator_title'])) {
-            $title = $_COOKIE['bookcreator_title'];
-        }
+//        // title
+//        $bookcreator_title = $INPUT->post->str('bookcreator_title');
+//        if(!empty($bookcreator_title)) {
+//            $title = $bookcreator_title;
+//        } elseif(isset($_COOKIE['bookcreator_title'])) {
+//            $title = $_COOKIE['bookcreator_title'];
+//        }
 
         //start main container - open left column
-        $renderer->doc .= "<div class='bookcreator__manager'><div class='bookcreator__pagelist' >";
-
+        $renderer->doc .= "<div class='bookcreator__manager'>";
         // Display pagelists
         // - selected pages
-        $this->showPagelist($renderer, $list, 'include');
+        $renderer->doc .= "<div class='bookcreator__pagelist' >";
+        $this->showPagelist($renderer, 'selected');
         $renderer->doc .= "<br />";
 
         // - excluded pages
         $renderer->doc .= '<div id="bookcreator__delpglst">';
-        $this->showPagelist($renderer, $list, 'remove');
+        $this->showPagelist($renderer, 'deleted');
         $renderer->doc .= '</div>';
 
         // Reset current selection
-        $form = new Doku_Form(array('method'=> 'post', 'class'=> 'clearactive'));
-        $form->addElement(form_makeButton('submit', 'clearactiveselection', $this->getLang('reset')));
+        $form = new Doku_Form(array('method'=> 'post',
+                                    'class'=> 'clearactive'));
+        $form->addElement(form_makeButton('submit', '', $this->getLang('reset')));
         $renderer->doc .= "<div align='center'>";
         $renderer->doc .= $form->getForm();
         $renderer->doc .= "</div>";
@@ -372,32 +364,19 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
      * Displays list of selected/deleted pages
      *
      * @param Doku_Renderer_xhtml $renderer
-     * @param array               $list array with pageids as key, status as value
-     * @param string              $action 'remove' or 'include'
+     * @param string              $selection 'deleted' or 'selected'
      */
-    private function showPagelist($renderer, $list, $action) {
-        $jslang = $this->getLang('js');
-        if($action == 'remove') {
+    private function showPagelist($renderer, $selection) {
+        if($selection == 'deleted') {
             $id          = 'deletedpagelist';
             $heading     = 'removed';
-            $actiontitle = $jslang['include'];
         } else {
             $id          = 'pagelist';
             $heading     = 'toprint';
-            $actiontitle = $jslang['remove'];
         }
 
         $renderer->header($this->getLang($heading), 2, 0);
-        $renderer->doc .= "<ul id=$id class='pagelist $action'>";
-        foreach($list as $pageid => $cpt) {
-            if(($action == 'remove' && $cpt == 0) || ($action == 'include' && $cpt == 1)) {
-                $renderer->doc .= "<li class='level1' id='pg__$pageid' title='{$this->getLang('sortable')}'>";
-                $renderer->doc .= "<a class='action' title='$actiontitle'></a>";
-                $renderer->doc .= '&nbsp;&nbsp;';
-                $renderer->doc .= $this->createLink($pageid);
-                $renderer->listitem_close();
-            }
-        }
+        $renderer->doc .= "<ul id=$id class='pagelist $selection'>";
         $renderer->listu_close();
     }
 
