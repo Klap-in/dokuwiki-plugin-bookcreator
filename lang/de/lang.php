@@ -5,6 +5,7 @@
  * 
  * @author ronny <el_cherone@airpost.net>
  * @author Thor Weinreich <thorweinreich@nefkom.net>
+ * @author Padhie <develop@padhie.de>
  */
 $lang['nocookies']             = 'Sie haben noch keine Seiten gewählt. Bitte überprüfen Sie, ob ihr Browser Cookies erlaubt und versuchen Sie es erneut.';
 $lang['empty']                 = 'Sie haben noch keine Seiten gewählt.';
@@ -21,6 +22,7 @@ $lang['js']['btn_removetobook'] = 'Von Buch entfernen';
 $lang['export']                = 'Ausgewählte Seiten exportieren';
 $lang['create']                = 'Exportieren';
 $lang['exportpdf']             = 'Auswahl als PDF exportieren';
+$lang['exportodt']             = 'Auswahl wird als ODT exportiert';
 $lang['exportprint']           = 'Druckversion';
 $lang['exporttext']            = 'Textversion';
 $lang['title']                 = 'Titel des Dokuments (optional)';
