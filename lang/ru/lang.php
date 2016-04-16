@@ -2,7 +2,7 @@
 
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
- * 
+ *
  * @author Aleksandr Selivanov <alexgearbox@gmail.com>
  */
 $lang['nocookies']             = 'Список выбранных страниц пуст. Проверьте, что в браузере разрешены куки (cookies) и попробуйте снова.';
@@ -22,7 +22,7 @@ $lang['create']                = 'Экспорт';
 $lang['exportpdf']             = 'Экспортировать шаблон в PDF';
 $lang['exportprint']           = 'Версия для печати';
 $lang['exporttext']            = 'Только текст';
-$lang['title']                 = 'Название документа (опционально)';
+$lang['title']                 = 'Название документа';
 $lang['pageadded']             = 'Страница добавлена в шаблон';
 $lang['pageremoved']           = 'Страница удалена из шаблона';
 $lang['addpage']               = 'Добавить страницу в книгу';
@@ -34,10 +34,11 @@ $lang['help']                  = 'Помощь';
 $lang['toolbar']               = 'Book creator';
 $lang['saveselection']         = 'Сохранить шаблон';
 $lang['needtitle']             = 'должно содержать название';
-$lang['saved']                 = 'Шаблон успешно сохранён';
-$lang['deleted']               = 'Шаблон успешно удалён';
+$lang['saved']                 = 'Шаблон успешно сохранён: %s';
+$lang['deleted']               = 'Шаблон успешно удалён: %s';
 $lang['save']                  = 'Сохранить';
 $lang['listselections']        = 'Сохранённые шаблоны';
 $lang['showpage']              = 'Показать страницу';
 $lang['delselection']          = 'Удалить сохранённый шаблон';
+$lang['showselection']         = 'Показать сохранённый шаблон';
 $lang['loadselection']         = 'Загрузить шаблон';

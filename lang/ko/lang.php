@@ -2,7 +2,7 @@
 
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
- * 
+ *
  * @author Myeongjin <aranet100@gmail.com>
  */
 $lang['nocookies']             = '아직 선택한 페이지가 없습니다. 쿠키를 허용하도록 브라우저를 확인하고 다시 시도하세요.';
@@ -23,7 +23,7 @@ $lang['exportpdf']             = 'PDF로 선택 내보내기';
 $lang['exportodt']             = 'ODT로 선택 내보내기';
 $lang['exportprint']           = '인쇄용 판';
 $lang['exporttext']            = '텍스트만';
-$lang['title']                 = '문서의 제목 (선택 사항)';
+$lang['title']                 = '문서의 제목';
 $lang['pageadded']             = '선택으로 페이지 추가';
 $lang['pageremoved']           = '선택에서 페이지 제거됨';
 $lang['addpage']               = '내 책으로 이 페이지 추가';
@@ -35,8 +35,8 @@ $lang['help']                  = '도움말';
 $lang['toolbar']               = '책 생성기';
 $lang['saveselection']         = '선택 저장';
 $lang['needtitle']             = '제목을 제공하세요';
-$lang['saved']                 = '선택을 성공적으로 저장했습니다';
-$lang['deleted']               = '선택을 성공적으로 제거했습니다.';
+$lang['saved']                 = '선택을 성공적으로 저장했습니다: %s';
+$lang['deleted']               = '선택을 성공적으로 제거했습니다.: %s';
 $lang['duplicate']             = '&lt;선택이 저장된 목록은 이미 이 문서에 보여지고 있습니다&gt;';
 $lang['save']                  = '저장';
 $lang['listselections']        = '선택 목록 저장됨';

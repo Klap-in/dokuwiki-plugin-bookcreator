@@ -20,7 +20,7 @@ $lang['exportpdf'] = "导出列表到PDF";
 $lang['exportprint'] = "可打印版本";
 $lang['exporttext'] = "仅文字";
 
-$lang['title'] = "文档标题(可选)";
+$lang['title'] = "文档标题";
 
 $lang['pageadded'] = "添加到列表的页面";
 $lang['pageremoved'] = "从列表中删除的页面";
@@ -37,8 +37,8 @@ $lang['toolbar'] = "书籍创建器";
 
 $lang['saveselection'] = "保存列表";
 $lang['needtitle'] = "需要指定标题";
-$lang['saved'] = "成功保存列表";
-$lang['deleted'] = "成功删除列表";
+$lang['saved'] = "成功保存列表: %s";
+$lang['deleted'] = "成功删除列表: %s";
 $lang['duplicate']       = "&lt;The list with saved selections is already displayed on this page&gt;";
 
 $lang['save'] = "保存";

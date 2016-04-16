@@ -145,6 +145,10 @@ class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
             return false;
         }
 
+        if(cleanID($this->getConf('book_page')) == $ID) {
+            return false;
+        }
+
         // has read permissions to bookmanager page?
         if(!$this->hasAccessToBookmanager()) {
             return false;

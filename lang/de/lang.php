@@ -2,7 +2,7 @@
 
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
- * 
+ *
  * @author ronny <el_cherone@airpost.net>
  * @author Thor Weinreich <thorweinreich@nefkom.net>
  * @author Padhie <develop@padhie.de>
@@ -25,7 +25,7 @@ $lang['exportpdf']             = 'Auswahl als PDF exportieren';
 $lang['exportodt']             = 'Auswahl wird als ODT exportiert';
 $lang['exportprint']           = 'Druckversion';
 $lang['exporttext']            = 'Textversion';
-$lang['title']                 = 'Titel des Dokuments (optional)';
+$lang['title']                 = 'Titel des Dokuments';
 $lang['pageadded']             = 'Zur Auswahl hinzugefügte Seite/n';
 $lang['pageremoved']           = 'Aus Auswahl entfernte Seite';
 $lang['addpage']               = 'Diese Seite zum Buch hinzufügen';
@@ -37,12 +37,13 @@ $lang['help']                  = 'Hilfe';
 $lang['toolbar']               = 'Buch erstellen';
 $lang['saveselection']         = 'Auswahl speichern';
 $lang['needtitle']             = 'Bitte Titel angeben!';
-$lang['saved']                 = 'Auswahl erfolgreich gespeichert';
-$lang['deleted']               = 'Auswahl erfolgreich entfernt';
+$lang['saved']                 = 'Auswahl erfolgreich gespeichert: %s';
+$lang['deleted']               = 'Auswahl erfolgreich entfernt: %s';
 $lang['duplicate']             = '&lt;Die Liste mit der gespeicherten Auswahl wird bereits auf dieser Seite angezeigt&gt;';
 $lang['save']                  = 'Speichern';
 $lang['listselections']        = 'Liste der abgespeicherten Auswahl';
 $lang['showpage']              = 'Zeige Seite';
 $lang['delselection']          = 'Entferne gespeicherte Auswahl';
+$lang['showselection']         = 'Zeige gespeicherte Auswahl';
 $lang['loadselection']         = 'Lade gespeicherte Liste mit Auswahl';
 $lang['nobookmanageraccess']   = 'Du darfst diese Auswahl nur ändern, wenn du auch Zugriff auf den Bookmanager hast.';

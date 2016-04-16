@@ -17,7 +17,7 @@ $lang['exportpdf']       = "Exportar seleção para PDF";
 $lang['exportprint']     = "Versão para impressão";
 $lang['exporttext']      = "Apenas texto";
 
-$lang['title']           = "Título do documento (opcional)";
+$lang['title']           = "Título do documento";
 
 $lang['pageadded']       = "Adicionar página à seleção";
 $lang['pageremoved']     = "Excluir página da seleção";
@@ -34,8 +34,8 @@ $lang['toolbar']         = "Criação de Livros";
 
 $lang['saveselection']   = "Salvar seleção";
 $lang['needtitle']       = "Deve indicar um título";
-$lang['saved']           = "Seleção foi salva com sucesso";
-$lang['deleted']         = "Seleção foi excluída com sucesso";
+$lang['saved']           = "Seleção foi salva com sucesso: %s";
+$lang['deleted']         = "Seleção foi excluída com sucesso: %s";
 $lang['duplicate']       = "&lt;The list with saved selections is already displayed on this page&gt;";
 
 $lang['save']            = "Salvar";
@@ -44,6 +44,7 @@ $lang['listselections']  = "Lista de seleção salva";
 $lang['delselection']    = "Remover a seleção salva";
 $lang['showpage']        = "Mostrar página";
 $lang['loadselection']   = "Carregar seleção salva";
+$lang['showselection']   = "Mostrar seleção salva";
 
 $lang['js']['confirmdel']      = "Você realmente quer excluir esta seleção do arquivo?";
 $lang['js']['confirmload']     = "Você realmente quer carregar esta seleção, substituindo todas as páginas já selecionados?";

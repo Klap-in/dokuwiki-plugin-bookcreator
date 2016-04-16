@@ -4,7 +4,7 @@
  *
  * @author  Luigi Micco <l.micco@tiscali.it>
  */
- 
+
 $lang['nocookies']       = "La lista &egrave; vuota. Verifica che il tuo browser accetti i cookies e riprova a selezionare le pagine.";
 $lang['empty']           = "La lista &egrave; vuota. Non &egrave; stata selezionata nessuna pagina.";
 $lang['toprint']         = "Voci selezionate";
@@ -22,7 +22,7 @@ $lang['exportpdf']       = "Esporta in formato PDF";
 $lang['exportprint']     = "Versione stampabile";
 $lang['exporttext']      = "Versione solo testo";
 
-$lang['title']           = "Titolo del documento (opzionale)";
+$lang['title']           = "Titolo del documento";
 
 $lang['pageadded']       = "Pagina aggiunta alla selezione";
 $lang['pageremoved']     = "Pagina rimossa dalla selezione";
@@ -39,8 +39,8 @@ $lang['toolbar']         = "Creatore di libri";
 
 $lang['saveselection']   = "Salva selezione";
 $lang['needtitle']       = "Occorre indicare un titolo";
-$lang['saved']           = "Selezione salvata con successo";
-$lang['deleted']         = "Selezione rimossa con successo";
+$lang['saved']           = "Selezione salvata con successo: %s";
+$lang['deleted']         = "Selezione rimossa con successo: %s";
 $lang['duplicate']       = "&lt;The list with saved selections is already displayed on this page&gt;";
 
 $lang['save']            = "Salva";
@@ -49,6 +49,7 @@ $lang['listselections']  = "Elenco selezioni salvate";
 $lang['delselection']    = "Rimuovi selezione salvata";
 $lang['showpage']        = "Mostra pagina";
 $lang['loadselection']   = "Carica la selezione salvata";
+$lang['showselection']   = "Mostra selezione salvata";
 
 $lang['js']['confirmdel']      = "Vuoi realmente eliminare questa selezione dall'archivio ?";
 $lang['js']['confirmload']     = "Vuoi realmente caricare questa selezione, sostituendo le eventuali pagine gia' selezionate ?";

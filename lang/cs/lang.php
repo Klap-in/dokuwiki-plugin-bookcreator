@@ -22,7 +22,7 @@ $lang['exportpdf']       = "PDF";
 $lang['exportprint']     = "Tisknutelná verze";
 $lang['exporttext']      = "Pouze text";
 
-$lang['title']           = "Název dokumentu (nepovinný)";
+$lang['title']           = "Název dokumentu";
 
 $lang['pageadded']       = "Stránka byla přidána do výběru";
 $lang['pageremoved']     = "Stránka byla odebrána z výběru";
@@ -38,8 +38,8 @@ $lang['toolbar']         = "Knihař";
 
 $lang['saveselection']   = "Uložení výběru";
 $lang['needtitle']       = "by měl mít název";
-$lang['saved']           = "Výběr byl úspěšně uložen";
-$lang['deleted']         = "Výběr byl úspěšně odebrán";
+$lang['saved']           = "Výběr byl úspěšně uložen: %s";
+$lang['deleted']         = "Výběr byl úspěšně odebrán: %s";
 $lang['duplicate']       = "&lt;The list with saved selections is already displayed on this page&gt;"; //FIXME
 
 $lang['save']            = "Uložit";
@@ -48,6 +48,7 @@ $lang['listselections']  = "Uložené výběry";
 $lang['delselection']    = "Odstranit uložený výběr";
 $lang['showpage']        = "Zobrazit stránku";
 $lang['loadselection']   = "Načíst uložený výběr";
+$lang['showselection']   = "Zobrazit uložený výběr";
 
 $lang['js']['confirmdel']      = "Opravdu chcete odstranit tento výběr?";
 $lang['js']['confirmload']     = "Opravdu chcete načíst tento výběr a nahradit všechny aktuálně vybrané stránky?";

@@ -130,6 +130,24 @@ Storage.prototype.load = function() {
 };
 
 /**
+ * Storage object for an property in browser's localStorage
+ *
+ * @param key
+ * @constructor
+ */
+function CachedProperty(key) {
+    this.localStorageKey = key;
+}
+
+CachedProperty.prototype.set = function(value) {
+    window.localStorage.setItem(this.localStorageKey, value);
+};
+
+CachedProperty.prototype.get = function() {
+    return window.localStorage.getItem(this.localStorageKey);
+};
+
+/**
  * Performs bookcreator functionality at wiki pages
  */
 var Bookcreator = {
@@ -196,7 +214,7 @@ var Bookcreator = {
             $bookbar = jQuery('.bookcreator__bookbar');
 
         //pagetool add/remove button
-        $addtobookBtn.show();
+        $addtobookBtn.css( "display", "block");
         if ($addtobookBtn.length) { //exists the addtobook link
             var text = LANG.plugins.bookcreator['btn_' + (this.isCurrentPageSelected ? 'remove' : 'add') + 'tobook'];
 
@@ -241,6 +259,7 @@ var Bookcreator = {
 
 var BookManager  = {
     cache: {},
+    booktitle: new CachedProperty('bookcreator_booktitle'),
     deletedpages: new Storage('bookcreator_deletedpages'),
 
 
@@ -250,9 +269,14 @@ var BookManager  = {
     },
 
     setupUpdateObserver: function(){
-        jQuery(window).on('storage', function() {
-            BookManager.init();
-            BookManager.updateListsFromStorage();
+        jQuery(window).on('storage', function(event) {
+            if(event.key == Bookcreator.selectedpages.localStorageKey) {
+                BookManager.init();
+                BookManager.updateListsFromStorage();
+            }
+            if(event.key == BookManager.booktitle.localStorageKey) {
+                BookManager.fillTitle();
+            }
         })
     },
 
@@ -477,16 +501,139 @@ var BookManager  = {
     },
 
     /**
-     * Delete all selections of selected and deleted pages
+     * click handler: Delete all selections of selected and deleted pages
      */
-    clearSelections: function(event) {
-        event.preventDefault();
-
+    clearSelections: function() {
         BookManager.deletedpages.clearAll();
         jQuery('ul.pagelist.deleted').empty();
 
         Bookcreator.selectedpages.clearAll();
         jQuery('ul.pagelist.selected').empty();
+    },
+
+    /**
+     * click handler: load or delete saved selections
+     */
+    handleSavedselectionAction: function() {
+        var $this = jQuery(this),
+            action = ($this.hasClass('delete') ? 'delete' : 'load'),
+            pageid = $this.parent().attr('id').substr(5);
+
+        //confirm dialog
+        var msg,
+            comfirmed = false;
+        if (action == "delete") {
+            msg = LANG.plugins.bookcreator.confirmdel;
+        } else {
+            if (Bookcreator.selectedpages.count() == 0) {
+                comfirmed = true;
+            }
+            msg = LANG.plugins.bookcreator.confirmload;
+        }
+        if (!comfirmed) {
+            comfirmed = confirm(msg);
+        }
+
+        if (comfirmed) {
+            function processResponse(data) {
+                //action: loadSavedSelection
+                if (data.hasOwnProperty('selection')) {
+                    BookManager.clearSelections();
+                    Bookcreator.selectedpages.setSelection(data.selection);
+                    BookManager.updateListsFromStorage();
+                    jQuery('input[name="book_title"]').val(data.title).trigger('change');
+                }
+                //action: deleteSavedSelection
+                if (data.hasOwnProperty('deletedpage')) {
+                    jQuery('#sel__' + data.deletedpage).remove();
+                }
+
+                var $msg = jQuery('#bookcreator__selections__list').find('.message');
+                BookManager.setMessage($msg, data);
+            }
+
+            jQuery.post(
+                DOKU_BASE + 'lib/exe/ajax.php',
+                {
+                    call: 'plugin_bookcreator_call',
+                    action: (action == 'load' ? 'loadSavedSelection' : 'deleteSavedSelection'),
+                    savedselectionname: pageid
+                },
+                processResponse,
+                'json'
+            );
+        }
+    },
+
+    /**
+     * Save selection at a wiki page
+     */
+    saveSelection: function($this) {
+        var $fieldset = $this.parent(),
+            $title = $fieldset.find('input[name="bookcreator_title"]'),
+            title = $title.val();
+
+        function processResponse(data) {
+            if (data.hasOwnProperty('item')) {
+                jQuery('#bookcreator__selections__list').find('ul').prepend(data.item);
+                $title.val('');
+            }
+
+            var $msg = $fieldset.find('.message');
+            BookManager.setMessage($msg, data);
+        }
+
+        jQuery.post(
+            DOKU_BASE + 'lib/exe/ajax.php',
+            {
+                call: 'plugin_bookcreator_call',
+                action: 'saveSelection',
+                savedselectionname: title,
+                selection: JSON.stringify(Bookcreator.selectedpages.getSelection())
+            },
+            processResponse,
+            'json'
+        );
+    },
+
+    /**
+     * Show temporary the succes or error message
+     *
+     * @param {jQuery} $msg
+     * @param {Object} data
+     */
+    setMessage: function($msg, data) {
+        var msg = false,
+            state;
+
+        function setMsg($msg, msg, state) {
+            $msg.html(msg)
+                .toggleClass('error', state == -1)
+                .toggleClass('success', state == 1);
+        }
+
+        if(data.hasOwnProperty('error')) {
+            msg = data.error;
+            state = -1;
+        } else if(data.hasOwnProperty('success')) {
+            msg = data.success;
+            state = 1;
+        }
+
+        if (msg) {
+            setMsg($msg, msg, state);
+            setTimeout(function () {
+                setMsg($msg, '', 0);
+            }, 1000 * 10);
+        }
+    },
+
+    /**
+     *
+     */
+    fillTitle: function() {
+        var title = BookManager.booktitle.get();
+        jQuery('input[name="book_title"]').val(title);
     }
 };
 
@@ -512,12 +659,12 @@ jQuery(function () {
     if ($pagelist.length) {
         BookManager.init();
 
-        //buttons at list
+        //buttons at page lists
         $pagelist.find('ul')
             .on('click', 'a.action', BookManager.movePage);
 
         //sorting and drag-and-drop
-        isItemSortedWithinList = false; //use in closure
+        isItemSortedWithinList = false; //use in closure in stop and update handler
         $pagelist.find('ul.pagelist.selected,ul.pagelist.deleted')
             .sortable({
                 connectWith: "div.bookcreator__pagelist ul.pagelist",
@@ -529,15 +676,28 @@ jQuery(function () {
             });
 
         //clear selection button
-        jQuery('form.clearactive button').on('click', BookManager.clearSelections);
-
+        jQuery('form.clearactive button').on('click', function(event) {
+            event.preventDefault();
+            BookManager.clearSelections();
+        });
 
         BookManager.updateListsFromStorage();
+        BookManager.fillTitle();
         BookManager.setupUpdateObserver();
+
+        //save selection
+        jQuery('form.saveselection button').on('click', function(event) {
+            event.preventDefault();
+            BookManager.saveSelection(jQuery(this));
+        });
+
+        jQuery('input[name="book_title"]').on('change', function() {
+            var value = jQuery(this).val();
+            BookManager.booktitle.set(value);
+        })
     }
 
-    ////add click handlers to Selectionslist
-    //jQuery('form#bookcreator__selections__list a.action').click(Bookcreator.actionList); // stored selections
-
-
+    //saved selection list
+    jQuery('#bookcreator__selections__list').find('ul')
+        .on('click', 'a.action', BookManager.handleSavedselectionAction);
 });

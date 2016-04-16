@@ -37,61 +37,61 @@ div.bookcreator__panel {
     display: block;
 }
 /* specific for dokuwiki template: place the ToC just below toolbar */
-div#dokuwiki__site div.bookcreator__bookbar {
+.tpl_dokuwiki div.bookcreator__bookbar {
     margin-bottom: 1.6em;
 }
 
 /*
  * Book manager
  */
-.bookcreator__manager {
+.dokuwiki .bookcreator__manager {
 
 }
-.bookcreator__pagelist {
+.dokuwiki .bookcreator__pagelist {
     width:50%;
     float:left;
     border: 1px solid __border__;
     padding: 0.5em;
 }
-.bookcreator__pagelist ul{
+.dokuwiki .bookcreator__pagelist ul{
     padding-top:0.5em;
     padding-bottom:0.5em;
 }
-.bookcreator__pagelist ul.pagelist:empty {
+.dokuwiki .bookcreator__pagelist ul.pagelist:empty {
     border: 1px solid #eee;
 }
-.bookcreator__pagelist li{
+.dokuwiki .bookcreator__pagelist li{
     margin: 0;
 }
 /* delete and include bottons */
-.bookcreator__pagelist ul li a.action{
+.dokuwiki .bookcreator__pagelist ul li a.action{
     width: 14px;
     height:14px;
     display: inline-block;
     background:transparent url('images/remove.png') center bottom no-repeat;
     cursor: pointer;
 }
-.bookcreator__pagelist ul.selected li a.action{
+.dokuwiki .bookcreator__pagelist ul.selected li a.action{
     background-image: url('images/remove.png');
     content: attr(data-titlerem);
 }
-.bookcreator__pagelist ul.deleted li a.action{
+.dokuwiki .bookcreator__pagelist ul.deleted li a.action{
     background-image: url('images/include.png');
     content: attr(data-titleadd);
 }
 
-.bookcreator__manager div.bookcreator__actions {
+.dokuwiki .bookcreator__manager div.bookcreator__actions {
     width:40%;
     float:left;
     padding: 1em;
 }
 
-.bookcreator__manager fieldset {
+.dokuwiki .bookcreator__manager fieldset {
     width: 100%;
     text-align:left;
     margin-bottom: 1em;
 }
-.bookcreator__manager fieldset legend,
+.dokuwiki .bookcreator__manager fieldset legend,
 .dokuwiki #bookcreator__selections__list fieldset legend {
     font-weight: bold;
 }
@@ -140,14 +140,14 @@ div#dokuwiki__site div.bookcreator__bookbar {
 /*Keep icons on left side on hover for rtl languages*/
 /*add to book icon*/
 [dir=rtl] #dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook:hover,
-#dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook:active,
-#dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook:focus {
+[dir=rtl] #dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook:active,
+[dir=rtl] #dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook:focus {
     background-position: left -135px;
 }
 /*remove from book icon*/
 [dir=rtl] #dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook.remove:hover,
-#dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook.remove:active,
-#dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook.remove:focus {
+[dir=rtl] #dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook.remove:active,
+[dir=rtl] #dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook.remove:focus {
     background-position: left -225px;
 }
 [dir=rtl] #dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook.remove {
@@ -156,6 +156,6 @@ div#dokuwiki__site div.bookcreator__bookbar {
 /**
  * page add/remove button
  */
-.plugin_bookcreator_addtobook {
+#dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook {
     display: none; /* will be shown by JavaScript */
 }
