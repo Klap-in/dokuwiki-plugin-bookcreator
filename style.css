@@ -103,6 +103,13 @@ div.bookcreator__panel {
     text-align:left;
 }
 
+/*
+ * download dialoog
+ */
+.downloadresponse {
+    margin-top: 1em;
+}
+
 /**
  * Page tools
  * show add/remove icon

@@ -9,8 +9,6 @@
 // must be run within Dokuwiki
 if(!defined('DOKU_INC')) die();
 
-require_once(DOKU_INC.'inc/search.php');
-
 /**
  * All DokuWiki plugins to extend the parser/rendering mechanism
  * need to inherit from this class
@@ -109,49 +107,35 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         list($type, $num, $order) = $data;
 
         if($type == "bookmanager") {
-            $renderer->info['cache'] = false;
-
-            if($mode == 'text' && $INPUT->get->str('do') == 'export_text') {
+            if($mode == 'text' && $INPUT->str('do') == 'export_text') {
                 $mode = 'xhtml';
             }
 
             if($mode == 'xhtml') {
                 /** @var $renderer Doku_Renderer_xhtml */
+                $renderer->info['cache'] = false;
 
                 // verification that if the user can save / delete the selections
                 $usercansave = (auth_quickaclcheck($this->getConf('save_namespace').':*') >= AUTH_CREATE);
 
-//
-//                if($usercansave) {
-//                    //save or delete selection
-//                    if($INPUT->post->str('task') == "save" && checkSecurityToken()) {
-//                        $this->saveSelection();
-//                    } elseif($INPUT->post->str('task') == "delete" && checkSecurityToken()) {
-//                        $this->deleteSelection();
-//                    }
-//                }
+                //intervents the normal export_* handling
+                $do = $INPUT->str('do');
+                $allowed_onscreen_exports = array(
+                    'export_html',
+                    'export_text'
+                );
+                if(in_array($do, $allowed_onscreen_exports)) {
+                    //export as xhtml or text
+                    $this->exportOnScreen($renderer);
 
-//                $do = $INPUT->get->str('do');
-//                $allowed_onscreen_exports = array(
-//                    'export_html',
-//                    'export_text'
-//                );
-//                if(in_array($do, $allowed_onscreen_exports)) {
-//                    //export as xhtml or text
-//                    $this->exportOnScreen($renderer);
-//
-//                } else {
-                    $renderer->info['cache'] = false;
-//                            $renderer->doc .= $this->getLang('empty');
-
+                } else {
                     //show the bookmanager
                     $this->showBookManager($renderer, $usercansave);
-                        //$renderer->doc .= $this->getLang('nocookies');
 
                     // Displays the list of saved selections
                     $this->renderSelectionslist($renderer, $bookmanager = true, $ID, $order);
                     $renderer->doc .= "<br />";
-//                }
+                }
             }
             return false;
 
@@ -263,19 +247,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
      */
     private function showBookManager($renderer, $usercansave) {
         global $ID;
-        global $INPUT;
         $title = '';
-
-//        // get a saved selection array from file
-//        $list = $_COOKIE['bookcreator'];
-
-//        // title
-//        $bookcreator_title = $INPUT->post->str('bookcreator_title');
-//        if(!empty($bookcreator_title)) {
-//            $title = $bookcreator_title;
-//        } elseif(isset($_COOKIE['bookcreator_title'])) {
-//            $title = $_COOKIE['bookcreator_title'];
-//        }
 
         //start main container - open left column
         $renderer->doc .= "<div class='bookcreator__manager'>";
@@ -302,6 +274,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         $renderer->doc .= "</div>";
         $renderer->doc .= "<div class='bookcreator__actions'>";
 
+
         // PDF Export
         $values   = array('export_html'=> $this->getLang('exportprint'));
         $selected = 'export_html';
@@ -317,7 +290,8 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
             $selected                 = 'export_pdfbook';
         }
 
-        $form = new Doku_Form(array('method'=> 'get'));
+        $form = new Doku_Form(array('method'=> 'post',
+                                    'class'=> 'downloadselection'));
         $form->startFieldset($this->getLang('export'));
         $form->addElement($this->getLang('title')." ");
         $form->addElement(form_makeTextField('book_title', $title, '', '', 'edit', array('size'=> 40)));
@@ -327,6 +301,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         $form->endFieldset();
 
         $renderer->doc .= $form->getForm();
+
 
         // Save current selection to a wikipage
         if($usercansave) {
@@ -346,6 +321,16 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         $renderer->doc .= '</div>';
         $renderer->doc .= "</div><div class='clearer'></div>";
         $renderer->doc .= "<br />";
+
+        $renderer->doc .= "<div id='preparing-file-modal' title='{$this->getLang("titlepreparedownload")}' style='display: none;'>";
+        $renderer->doc .=   $this->getLang('preparingdownload');
+        $renderer->doc .= '    <div class="ui-progressbar-value ui-corner-left ui-corner-right" style="width: 100%; height:22px; margin-top: 20px;"></div>';
+        $renderer->doc .= '</div>';
+
+        $renderer->doc .= "<div id='error-modal' title='{$this->getLang("titleerrordownload")}' style='display: none;'>";
+        $renderer->doc .= $this->getLang('faileddownload');
+        $renderer->doc .= '<div class="downloadresponse"></div>';
+        $renderer->doc .= '</div>';
 
         return true;
     }
@@ -445,27 +430,4 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         $output .= '</ul>'.DOKU_LF;
         return $output;
     }
-
-
-//
-//    /**
-//     * Returns html for link to given page, performs a lookup for header
-//     *
-//     * @param        $page
-//     * @return string html of referer
-//     */
-//    private function createLink($page) {
-//        $pos      = strrpos(utf8_decode($page), ':');
-//        $pageName = p_get_first_heading($page);
-//        if($pageName == NULL) {
-//            if($pos != false) {
-//                $pageName = utf8_substr($page, $pos + 1, utf8_strlen($page));
-//            } else {
-//                $pageName = $page;
-//            }
-//            $pageName = str_replace('_', ' ', $pageName);
-//        }
-//        return "<a href='".wl($page, false, true, "&")."' title='{$this->getLang('showpage')}'>".$pageName."</a>";
-//    }
-
 }

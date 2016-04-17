@@ -46,3 +46,7 @@ $lang['delselection']          = 'Verwijder opgeslagen selectie';
 $lang['showselection']         = 'Toon opgeslagen selectie';
 $lang['loadselection']         = 'Laad opgeslagen selectie';
 $lang['nobookmanageraccess']   = 'Je mag de selectie niet wijzigen. Wijzigen is alleen toegestaan als je toegang tot de boekmanager.';
+$lang['titlepreparedownload']  = "Download Voorbereiden...";
+$lang['preparingdownload']     = "We zijn uw download aan het voorbereiden, even geduld alstublieft...";
+$lang['titleerrordownload']    = "Fout";
+$lang['faileddownload']        = "Er was een probleem bij het genereren van uw download.";

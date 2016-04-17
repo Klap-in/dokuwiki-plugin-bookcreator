@@ -1,4 +1,4 @@
-
+/* DOKUWIKI:include script/jquery.fileDownload.js */
 
 /**
  * Storage object for an array with a selection of pages
@@ -290,9 +290,12 @@ var BookManager  = {
 
         //add to list at page and to cache
         function processRetrievedPages(pages) {
-            jQuery.extend(BookManager.cache, pages);
+            if(pages.hasOwnProperty('selection')) {
+                jQuery.extend(BookManager.cache, pages.selection);
 
-            BookManager.updateLists();
+                BookManager.updateLists();
+            }
+
         }
 
         //retrieve data
@@ -302,7 +305,8 @@ var BookManager  = {
                 {
                     call: 'plugin_bookcreator_call',
                     action: 'retrievePageinfo',
-                    selection: JSON.stringify(notcachedpages)
+                    selection: JSON.stringify(notcachedpages),
+                    sectok: jQuery('input[name="sectok"]').val()
                 },
                 processRetrievedPages,
                 'json'
@@ -557,7 +561,8 @@ var BookManager  = {
                 {
                     call: 'plugin_bookcreator_call',
                     action: (action == 'load' ? 'loadSavedSelection' : 'deleteSavedSelection'),
-                    savedselectionname: pageid
+                    savedselectionname: pageid,
+                    sectok: jQuery('input[name="sectok"]').val()
                 },
                 processResponse,
                 'json'
@@ -589,7 +594,8 @@ var BookManager  = {
                 call: 'plugin_bookcreator_call',
                 action: 'saveSelection',
                 savedselectionname: title,
-                selection: JSON.stringify(Bookcreator.selectedpages.getSelection())
+                selection: JSON.stringify(Bookcreator.selectedpages.getSelection()),
+                sectok: jQuery('input[name="sectok"]').val()
             },
             processResponse,
             'json'
@@ -634,7 +640,73 @@ var BookManager  = {
     fillTitle: function() {
         var title = BookManager.booktitle.get();
         jQuery('input[name="book_title"]').val(title);
+    },
+
+    /**
+     * Download the requested file
+     *
+     * @param event
+     */
+    downloadSelection: function(event) {
+        var $this = jQuery(this),
+            do_action = $this.find('select[name="do"]').val();
+
+        if(do_action == 'export_html' || do_action == 'export_text') {
+            //just extend the form
+            $this.append(
+                '<input type="hidden" name="selection" value="'
+                + BookManager.htmlSpecialCharsEntityEncode(JSON.stringify(Bookcreator.selectedpages.getSelection()))
+                + '" />'
+            );
+        } else {
+            //download in background and shows dialog
+            var formdata = $this.serializeArray();
+            formdata.push({
+                name: 'selection',
+                value: JSON.stringify(Bookcreator.selectedpages.getSelection())
+            });
+
+            var $preparingFileModal = jQuery("#preparing-file-modal");
+            $preparingFileModal.dialog({ modal: true });
+
+            jQuery.fileDownload(
+                window.location.href,
+                {
+                    successCallback: function (url) {
+                        $preparingFileModal.dialog('close');
+                    },
+                    failCallback: function (responseHtml, url) {
+                        $preparingFileModal.dialog('close');
+                        jQuery("#error-modal")
+                            .dialog({ modal: true })
+                            .find('.downloadresponse').html(responseHtml);
+                    },
+                    httpMethod: "POST",
+                    data: formdata
+                }
+            );
+
+            event.preventDefault(); //otherwise a normal form submit would occur
+        }
+
+    },
+
+    htmlSpecialCharsEntityEncode: function (str) {
+        var htmlSpecialCharsRegEx = /[<>&\r\n"']/gm;
+        var htmlSpecialCharsPlaceHolders = {
+            '<': 'lt;',
+            '>': 'gt;',
+            '&': 'amp;',
+            '\r': "#13;",
+            '\n': "#10;",
+            '"': 'quot;',
+            "'": '#39;' /*single quotes just to be safe, IE8 doesn't support &apos;, so use &#39; instead */
+        };
+        return str.replace(htmlSpecialCharsRegEx, function(match) {
+            return '&' + htmlSpecialCharsPlaceHolders[match];
+        });
     }
+
 };
 
 
@@ -652,7 +724,6 @@ jQuery(function () {
         //gui
         Bookcreator.updatePage();
     }
-
 
     //bookmanager
     var $pagelist = jQuery('div.bookcreator__pagelist');
@@ -694,7 +765,9 @@ jQuery(function () {
         jQuery('input[name="book_title"]').on('change', function() {
             var value = jQuery(this).val();
             BookManager.booktitle.set(value);
-        })
+        });
+
+        jQuery('form.downloadselection').on('submit', BookManager.downloadSelection);
     }
 
     //saved selection list

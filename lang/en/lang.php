@@ -48,14 +48,19 @@ $lang['showselection']   = "Show saved selection";
 $lang['delselection']    = "Remove saved selection";
 $lang['loadselection']   = "Load saved selection";
 
-$lang['nobookmanageraccess'] = "You may not change the selection. Only allowed when you have access to the bookmanager as well.";
+$lang['nobookmanageraccess']    = "You may not change the selection. Only allowed when you have access to the bookmanager as well.";
 
-$lang['js']['confirmdel']  = "Do you really want to delete this selection from the archive?";
-$lang['js']['confirmload'] = "Do you really want to load this selection, replacing any pages already selected?";
+$lang['js']['confirmdel']       = "Do you really want to delete this selection from the archive?";
+$lang['js']['confirmload']      = "Do you really want to load this selection, replacing any pages already selected?";
 
 $lang['js']['btn_addtobook']    = "Add to book";
 $lang['js']['btn_removetobook'] = "Remove from book";
 
-$lang['selectionstored'] = "Selection stored";
-$lang['selectiondeleted'] = "Selection deleted";
-$lang['selectiondontexist'] = "Selection doesn't exist at page '%s'";
+$lang['selectionstored']        = "Selection stored";
+$lang['selectiondeleted']       = "Selection deleted";
+$lang['selectiondontexist']     = "Selection doesn't exist at page '%s'";
+
+$lang['titlepreparedownload']   = "Preparing Download...";
+$lang['preparingdownload']      = "We are preparing your download, please wait...";
+$lang['titleerrordownload']     = "Error";
+$lang['faileddownload']         = "There was a problem generating your download.";

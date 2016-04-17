@@ -14,6 +14,7 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
 
     /** @var helper_plugin_bookcreator */
     protected $hlp;
+    protected $response;
 
     /**
      * Constructor
@@ -46,27 +47,37 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
 
         global $INPUT;
 
-        $action = $INPUT->post->str('action', '', true);
-        switch($action) {
-            case 'retrievePageinfo':
-                $this->retrievePageInfo($this->getPOSTedSelection());
-                break;
-            case 'saveSelection':
-                $title =  $INPUT->post->str('savedselectionname');
-                $this->saveSelection($title, $this->getPOSTedSelection());
-                break;
-            case 'loadSavedSelection':
-                $page =  $INPUT->post->str('savedselectionname');
-                $this->loadSavedSelection($page);
-                break;
-            case 'deleteSavedSelection':
-                $page =  $INPUT->post->str('savedselectionname');
-                $this->deleteSavedSelection($page);
-                break;
-            default:
+        $this->response['error'] = '';
 
-                //failed
+        if(!checkSecurityToken()) {
+            $this->response['error'] .= 'Security Token did not match. Possible CSRF attack.';
+        } else {
+
+            $action = $INPUT->post->str('action', '', true);
+            switch($action) {
+                case 'retrievePageinfo':
+                    $this->retrievePageInfo($this->getPOSTedSelection());
+                    break;
+                case 'saveSelection':
+                    $title =  $INPUT->post->str('savedselectionname');
+                    $this->saveSelection($title, $this->getPOSTedSelection());
+                    break;
+                case 'loadSavedSelection':
+                    $page =  $INPUT->post->str('savedselectionname');
+                    $this->loadSavedSelection($page);
+                    break;
+                case 'deleteSavedSelection':
+                    $page =  $INPUT->post->str('savedselectionname');
+                    $this->deleteSavedSelection($page);
+                    break;
+                default:
+                    $this->response['error'] .= 'unknown action';
+            }
         }
+
+        $json = new JSON();
+        header('Content-Type: application/json');
+        echo $json->encode($this->response);
     }
 
     /**
@@ -91,17 +102,11 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
      * @param array[] $selection
      */
     private function retrievePageInfo($selection) {
-        $result = array();
-
         foreach($selection as $pageid) {
             $page = cleanID($pageid);
 
-            $result[$page] = array(wl($page, false, true, "&"), $this->getTitle($page));
+            $this->response['selection'][$page] = array(wl($page, false, true, "&"), $this->getTitle($page));
         }
-
-        $json = new JSON();
-        header('Content-Type: application/json');
-        echo $json->encode($result);
     }
 
     /**
@@ -154,18 +159,20 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
      * @param array[] $selection
      */
     private function saveSelection($savedSelectionName, $selection) {
-        $result['error'] = '';
+        if(auth_quickaclcheck($this->getConf('save_namespace').':*') < AUTH_CREATE) {
+            $this->response['error'] .= 'no access to namespace: ' . $this->getConf('save_namespace');
+        }
 
         if(empty($selection)) {
-            $result['error'] .= $this->getLang('empty');
+            $this->response['error'] .= $this->getLang('empty');
         }
 
         if(empty($savedSelectionName)){
-            $result['error'] .= $this->getLang('needtitle');
+            $this->response['error'] .= $this->getLang('needtitle');
         }
 
 
-        if(empty($result['error'])) {
+        if(empty($this->response['error'])) {
             //generate content
             $content = "====== ".$savedSelectionName." ======".DOKU_LF;
 
@@ -176,16 +183,14 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
             $save_pageid = cleanID($this->getConf('save_namespace') . ":" . $savedSelectionName);
             saveWikiText($save_pageid, $content, $this->getLang('selectionstored'));
 
-            $result['succes'] = sprintf($this->getLang('saved'), $save_pageid);
+            $this->response['succes'] = sprintf($this->getLang('saved'), $save_pageid);
 
-            $item = array('id' => $save_pageid,
-                          'mtime' => filemtime(wikiFN($save_pageid)));
-            $result['item'] = $this->hlp->createListitem($item, true);
+            $item = array(
+                'id' => $save_pageid,
+                'mtime' => filemtime(wikiFN($save_pageid))
+            );
+            $this->response['item'] = $this->hlp->createListitem($item, true);
         }
-
-        $json = new JSON();
-        header('Content-Type: application/json');
-        echo $json->encode($result);
     }
 
     /**
@@ -194,23 +199,21 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
      * @param string $page with saved selection
      */
     private function deleteSavedSelection($page) {
-        $result = array();
+        if(auth_quickaclcheck($this->getConf('save_namespace').':*') < AUTH_CREATE) {
+            $this->response['error'] .= 'no access to namespace: ' . $this->getConf('save_namespace');
+        }
 
         $pageid = cleanID($this->getConf('save_namespace') . ":" . $page);
 
         if(!file_exists(wikiFN($pageid))){
-            $result['error'] = sprintf($this->getLang('selectiondontexist'), $pageid);
+            $this->response['error'] .= sprintf($this->getLang('selectiondontexist'), $pageid);
         }
 
-        if(empty($result['error'])) {
+        if(empty($this->response['error'])) {
             saveWikiText($pageid, '', $this->getLang('selectiondeleted'));
-            $result['success'] = sprintf($this->getLang('deleted'), $pageid);
-            $result['deletedpage'] = noNS($pageid);
+            $this->response['success'] = sprintf($this->getLang('deleted'), $pageid);
+            $this->response['deletedpage'] = noNS($pageid);
         }
-
-        $json = new JSON();
-        header('Content-Type: application/json');
-        echo $json->encode($result);
     }
 
     /**
@@ -219,25 +222,19 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
      * @param string $page with saved selection
      */
     protected function loadSavedSelection($page) {
-        $result = array();
-
         $pageid = cleanID($this->getConf('save_namespace') . ":" . $page);
 
         if(!file_exists(wikiFN($pageid))) {
-            $result['error'] = sprintf($this->getLang('selectiondontexist'), $pageid);
+            $this->response['error'] .= sprintf($this->getLang('selectiondontexist'), $pageid);
         }
 
-        if(empty($result['error'])) {
+        if(empty($this->response['error'])) {
             list($title, $list) = $this->getSavedSelection($pageid);
-            $result = array(
+            $this->response = array(
                 'title' => $title,
                 'selection' => $list
             );
         }
-
-        $json = new JSON();
-        header('Content-Type: application/json');
-        echo $json->encode($result);
     }
 
     /**
