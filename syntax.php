@@ -214,7 +214,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
 
 
     /**
-     * Handle export request for exporting the selection as pdf or text
+     * Handle export request for exporting the selection as html or text
      *
      * @param Doku_renderer_xhtml $renderer
      */
@@ -222,24 +222,34 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         global $ID;
         global $INPUT;
 
-        $list = array();
-        if(isset($_COOKIE['list-pagelist'])) {
-            $renderer->doc = '';
-            $list          = explode("|", $_COOKIE['list-pagelist']);
+        $json = new JSON(JSON_LOOSE_TYPE);
+        $list = $json->decode($INPUT->str('selection', '', true));
+        if(!is_array($list) || empty($list)) {
+            http_status(400);
+            print $this->getLang('empty');
+            exit();
         }
 
+        //remove first part of bookmanager page
+        $renderer->doc = '';
+
         $render_mode = 'xhtml';
-        $lf_subst    = '';
-        if($INPUT->get->str('do') == 'export_text') {
+//        $lf_subst    = '';
+        if($INPUT->str('do') == 'export_text') {
             $render_mode = 'text';
-            $lf_subst    = '<br>';
+//            $lf_subst    = DOKU_LF;//'<br>';   //TODO: strange choice to replace by br
         }
 
         $keep = $ID;
         foreach($list as $page) {
             $ID = $page;
-            $renderer->doc .= str_replace(DOKU_LF, $lf_subst, p_cached_output(wikiFN($page), $render_mode, $page)); //p_wiki_xhtml($page,$REV,false);
+//            $renderer->doc .= str_replace(DOKU_LF, $lf_subst, p_cached_output(wikiFN($page), $render_mode, $page)); //p_wiki_xhtml($page,$REV,false);
+            $renderer->doc .= p_cached_output(wikiFN($page), $render_mode, $page); //p_wiki_xhtml($page,$REV,false);
+
         }
+
+        //add mark for removing everything after these rendered pages, see action component 'export'
+        $renderer->doc .= '<!-- END EXPORTED PAGES -->';
         $ID = $keep;
     }
 
