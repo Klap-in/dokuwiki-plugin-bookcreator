@@ -294,7 +294,8 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
                                     'class'=> 'downloadselection'));
         $form->startFieldset($this->getLang('export'));
         $form->addElement($this->getLang('title')." ");
-        $form->addElement(form_makeTextField('book_title', $title, '', '', 'edit', array('size'=> 40)));
+        $form->addElement(form_makeTextField('book_title', $title, '', '', 'edit', array('size'=> 30)));
+        $form->addElement(form_makeCheckboxField('book_skipforbiddenpages', '1', 'Skip Forbidden Pages','','book_skipforbiddenpages'));
         $form->addElement(form_makeListboxField('do', $values, $selected, '', '', '', array('size'=> 1)));
         $form->addHidden('id', $ID);
         $form->addElement(form_makeButton('submit', '', $this->getLang('create')));
@@ -401,7 +402,9 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         );
         $ns      = cleanID($this->getConf('save_namespace'));
         $tt      = utf8_encodeFN(str_replace(':', '/', $ns));
+
         search($result, $conf['datadir'], 'search_allpages', $opts, $tt);
+
         if(sizeof($result) > 0) {
 
             if($order == 'date') {

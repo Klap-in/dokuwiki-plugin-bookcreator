@@ -59,6 +59,7 @@ $lang['js']['btn_removetobook'] = "Remove from book";
 $lang['selectionstored']        = "Selection stored";
 $lang['selectiondeleted']       = "Selection deleted";
 $lang['selectiondontexist']     = "Selection doesn't exist at page '%s'";
+$lang['selectionforbidden']     = "You have no access to selection at page '%s'";
 
 $lang['titlepreparedownload']   = "Preparing Download...";
 $lang['preparingdownload']      = "We are preparing your download, please wait...";

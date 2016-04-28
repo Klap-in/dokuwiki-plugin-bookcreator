@@ -104,7 +104,9 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
     private function retrievePageInfo($selection) {
         foreach($selection as $pageid) {
             $page = cleanID($pageid);
-
+            if(auth_quickaclcheck($pageid) < AUTH_READ) {
+                continue;
+            }
             $this->response['selection'][$page] = array(wl($page, false, true, "&"), $this->getTitle($page));
         }
     }
@@ -223,6 +225,10 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
      */
     protected function loadSavedSelection($page) {
         $pageid = cleanID($this->getConf('save_namespace') . ":" . $page);
+
+        if(auth_quickaclcheck($pageid) < AUTH_READ) {
+            $this->response['error'] .= sprintf($this->getLang('selectionforbidden'), $pageid);
+        }
 
         if(!file_exists(wikiFN($pageid))) {
             $this->response['error'] .= sprintf($this->getLang('selectiondontexist'), $pageid);
