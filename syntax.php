@@ -329,8 +329,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         $renderer->doc .= '</div>';
 
         $renderer->doc .= "<div id='error-modal' title='{$this->getLang("titleerrordownload")}' style='display: none;'>";
-        $renderer->doc .= $this->getLang('faileddownload');
-        $renderer->doc .= '<div class="downloadresponse"></div>';
+        $renderer->doc .= '<div class="downloadresponse">$this->getLang(\'faileddownload\')</div>';
         $renderer->doc .= '</div>';
 
         return true;
