@@ -8,11 +8,9 @@
  * @author Henrique <henrifc@gmail.com>
  * @author Mario <mariodiaz69@gmail.com>
  */
-$lang['nocookies']             = 'La lista está vacía. Verifique que su explorador permite el uso de cookies y vuelva a intentarlo.';
 $lang['empty']                 = 'La lista está vacía.';
 $lang['toprint']               = 'Páginas seleccionadas';
 $lang['removed']               = 'Páginas eliminadas de la selección';
-$lang['reserconfirm']          = '¿Realmente quiere eliminar la selección?';
 $lang['reset']                 = 'Quitar selección';
 $lang['js']['include']         = 'Añadir a la selección';
 $lang['js']['remove']          = 'Quitar página de la selección';
@@ -27,12 +25,10 @@ $lang['exportodt']             = 'Esportar la selección a ODT';
 $lang['exportprint']           = 'Versión imprimible';
 $lang['exporttext']            = 'Sólo texto';
 $lang['title']                 = 'Título del documento';
-$lang['pageadded']             = 'Página añadida a la selección';
-$lang['pageremoved']           = 'Página eliminada de la selección';
 $lang['addpage']               = 'Añadir esta página al libro';
 $lang['removepage']            = 'Eliminar esta página del libro';
 $lang['showbook']              = 'Mostrar, modificar libro';
-$lang['sortable']              = 'Arrastrar y soltar para ordenar / quitar / añadir páginas';
+$lang['js']['sortable']              = 'Arrastrar y soltar para ordenar / quitar / añadir páginas';
 $lang['pages']                 = 'página/s';
 $lang['help']                  = 'Ayuda';
 $lang['toolbar']               = 'Creador de libros';
@@ -43,8 +39,7 @@ $lang['deleted']               = 'Selecciones eliminadas correctamente: %s';
 $lang['duplicate']             = '&lt;La lista con la selección guardada ya se muestra en esta página&gt;';
 $lang['save']                  = 'Guardar';
 $lang['listselections']        = 'Lista de selección guardada';
-$lang['showpage']              = 'Mostrar página';
+$lang['js']['showpage']              = 'Mostrar página';
 $lang['delselection']          = 'Eliminar selección guardada';
 $lang['showselection']         = 'Mostrar selección guardada';
 $lang['loadselection']         = 'Cargar selección guardada';
-$lang['nobookmanageraccess']   = 'No puedes cambiar tu selección. Sólo se permite cuando tienes acceso al gestor de libros.';

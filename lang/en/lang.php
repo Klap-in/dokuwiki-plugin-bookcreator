@@ -1,11 +1,9 @@
 <?php
 
-$lang['nocookies']       = "You don't have any pages selected yet. Check your browser to allow cookies and try again.";
 $lang['empty']           = "You don't have any pages selected yet.";
 $lang['toprint']         = "Selected Pages";
 $lang['removed']         = "Pages Removed from Selection";
 
-$lang['reserconfirm']    = "Do you really want to clear the selection?";
 $lang['reset']           = "Clear Selection";
 
 $lang['js']['include']   = "Add to selection";
@@ -19,9 +17,6 @@ $lang['exportprint']     = "Printable version";
 $lang['exporttext']      = "Text only";
 
 $lang['title']           = "Document's Title";
-
-$lang['pageadded']       = "Page added to selection";
-$lang['pageremoved']     = "Page removed from selection";
 
 $lang['addpage']         = "Add this page to your book";
 $lang['removepage']      = "Remove this page from your book";
@@ -47,8 +42,6 @@ $lang['js']['showpage']  = "Show page";
 $lang['showselection']   = "Show saved selection";
 $lang['delselection']    = "Remove saved selection";
 $lang['loadselection']   = "Load saved selection";
-
-$lang['nobookmanageraccess']    = "You may not change the selection. Only allowed when you have access to the bookmanager as well.";
 
 $lang['js']['confirmdel']       = "Do you really want to delete this selection from the archive?";
 $lang['js']['confirmload']      = "Do you really want to load this selection, replacing any pages already selected?";

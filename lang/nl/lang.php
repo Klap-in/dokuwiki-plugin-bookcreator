@@ -6,11 +6,9 @@
  * @author Rene <wllywlnt@yahoo.com>
  * @author Peter van Diest <peter.van.diest@xs4all.nl>
  */
-$lang['nocookies']             = 'Er zijn nog geen pagina\'s geselecteerd. Controleer of je browser cookies accepteerd en probeer het opnieuw.';
 $lang['empty']                 = 'Er zijn nog geen pagina\'s geselecteerd.';
 $lang['toprint']               = 'Geselecteerde pagina\'s';
 $lang['removed']               = 'Pagina\'s verwijderd uit de selectie';
-$lang['reserconfirm']          = 'Wilt u inderdaad de selectie verwijderen ?';
 $lang['reset']                 = 'Verwijder selectie';
 $lang['js']['include']         = 'Toevoegen aan selectie';
 $lang['js']['remove']          = 'Verwijder pagina uit selectie';
@@ -25,12 +23,10 @@ $lang['exportodt']             = 'Exporteer selectie naar ODT';
 $lang['exportprint']           = 'Printbare versie';
 $lang['exporttext']            = 'Alleen tekst';
 $lang['title']                 = 'Titel van het document';
-$lang['pageadded']             = 'Pagina toevoegen aan selectie';
-$lang['pageremoved']           = 'Pagina verwijderen uit selectie';
 $lang['addpage']               = 'Pagina toevoegen';
 $lang['removepage']            = 'Verwijder pagina';
 $lang['showbook']              = 'Toon boek ';
-$lang['sortable']              = 'Versleep de pagina\'s om ze te sorteren, verwijderen en weer toe te voegen';
+$lang['js']['sortable']              = 'Versleep de pagina\'s om ze te sorteren, verwijderen en weer toe te voegen';
 $lang['pages']                 = 'pagina/s';
 $lang['help']                  = 'Help';
 $lang['toolbar']               = 'Book creator';
@@ -41,11 +37,10 @@ $lang['deleted']               = 'Succesvol verwijderd: %s';
 $lang['duplicate']             = '&lt;De lijst met opgeslagen selecties is al weergegeven op deze pagina&gt;';
 $lang['save']                  = 'Opslaan';
 $lang['listselections']        = 'Opgeslagen Selecties';
-$lang['showpage']              = 'Toon pagina';
+$lang['js']['showpage']              = 'Toon pagina';
 $lang['delselection']          = 'Verwijder opgeslagen selectie';
 $lang['showselection']         = 'Toon opgeslagen selectie';
 $lang['loadselection']         = 'Laad opgeslagen selectie';
-$lang['nobookmanageraccess']   = 'Je mag de selectie niet wijzigen. Wijzigen is alleen toegestaan als je toegang tot de boekmanager.';
 $lang['titlepreparedownload']  = "Download Voorbereiden...";
 $lang['preparingdownload']     = "We zijn uw download aan het voorbereiden, even geduld alstublieft...";
 $lang['titleerrordownload']    = "Fout";

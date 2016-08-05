@@ -5,12 +5,10 @@
  * @author  Jakub Jirutka <jakub@jirutka.cz>
  */
 
-$lang['nocookies']       = "Nemáte vybrané žádné stránky. Zkontrolujte, zda máte ve svém prohlížeči povolené cookies a zkute to znovu.";
 $lang['empty']           = "Nemáte vybrané žádné stránky.";
 $lang['toprint']         = "Vybrané stránky";
 $lang['removed']         = "Stránky odebrané z výběru";
 
-$lang['reserconfirm']    = "Opravdu chcete smazat výběr?";
 $lang['reset']           = "Smazat výběr";
 
 $lang['js']['include']         = "Přidat do výběru";
@@ -23,9 +21,6 @@ $lang['exportprint']     = "Tisknutelná verze";
 $lang['exporttext']      = "Pouze text";
 
 $lang['title']           = "Název dokumentu";
-
-$lang['pageadded']       = "Stránka byla přidána do výběru";
-$lang['pageremoved']     = "Stránka byla odebrána z výběru";
 
 $lang['addpage']         = "Přidat stránku do knihy";
 $lang['removepage']      = "Odebrat stránku z knihy";
@@ -40,13 +35,13 @@ $lang['saveselection']   = "Uložení výběru";
 $lang['needtitle']       = "by měl mít název";
 $lang['saved']           = "Výběr byl úspěšně uložen: %s";
 $lang['deleted']         = "Výběr byl úspěšně odebrán: %s";
-$lang['duplicate']       = "&lt;The list with saved selections is already displayed on this page&gt;"; //FIXME
+
 
 $lang['save']            = "Uložit";
 $lang['listselections']  = "Uložené výběry";
 
 $lang['delselection']    = "Odstranit uložený výběr";
-$lang['showpage']        = "Zobrazit stránku";
+$lang['js']['showpage']        = "Zobrazit stránku";
 $lang['loadselection']   = "Načíst uložený výběr";
 $lang['showselection']   = "Zobrazit uložený výběr";
 
