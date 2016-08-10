@@ -2,14 +2,12 @@
 
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
- * 
+ *
  * @author Davor Turkalj <turki.bsc@gmail.com>
  */
-$lang['nocookies']             = 'Nemate još odabranih stranica. Provjerite da li su dopušteni kolačići u vašem pregledniku.';
 $lang['empty']                 = 'Nemate još odabranih stranica.';
 $lang['toprint']               = 'Odabrane stranice';
 $lang['removed']               = 'Stranice uklonjene iz odabira';
-$lang['reserconfirm']          = 'Zaista želite obrisati odabir ?';
 $lang['reset']                 = 'Obriši odabir';
 $lang['js']['include']         = 'Dodaj u odabir';
 $lang['js']['remove']          = 'Ukloni iz odabira';
@@ -23,24 +21,22 @@ $lang['exportpdf']             = 'Izvoz odabira u PDF';
 $lang['exportodt']             = 'Izvoz odabira u ODT';
 $lang['exportprint']           = 'Verzija za ispis';
 $lang['exporttext']            = 'Samo tekst';
-$lang['title']                 = 'Naziv dokumenta (opcionalno)';
-$lang['pageadded']             = 'Stranica dodana u odabir';
-$lang['pageremoved']           = 'Stranica uklonjena iz odabira';
+$lang['title']                 = 'Naziv dokumenta';
 $lang['addpage']               = 'Dodaj ovu stranu u knjigu';
 $lang['removepage']            = 'Ukloni ovu stranicu iz knjige';
 $lang['showbook']              = 'Prikaži, izmjeni knjigu';
-$lang['sortable']              = 'Povuci i spusti za redosljed/ukloni/dodaj stranice';
+$lang['js']['sortable']              = 'Povuci i spusti za redosljed/ukloni/dodaj stranice';
 $lang['pages']                 = 'Stranica/e';
 $lang['help']                  = 'Pomoć';
 $lang['toolbar']               = 'Upravitelj odabira stranica';
 $lang['saveselection']         = 'Snimi odabir';
 $lang['needtitle']             = 'Molim unesite naslov';
-$lang['saved']                 = 'Odabir uspješno snimljen';
-$lang['deleted']               = 'Odabir uspješno uklonjen';
+$lang['saved']                 = 'Odabir uspješno snimljen: %s';
+$lang['deleted']               = 'Odabir uspješno uklonjen: %s';
 $lang['duplicate']             = '&lt;Lista s snimljenim odabirom je već prikazana na ovoj strani&gt;';
 $lang['save']                  = 'Snimi';
 $lang['listselections']        = 'Lista odabira snimljena';
-$lang['showpage']              = 'Prikaži stranu';
+$lang['js']['showpage']              = 'Prikaži stranu';
 $lang['delselection']          = 'Ukloni snimljeni odabir';
+$lang['showselection']         = 'Prikaži snimljeni odabir';
 $lang['loadselection']         = 'Učitaj snimljeni odabir';
-$lang['nobookmanageraccess']   = 'Nemožete promijeniti odabir. Dopušteno samo ako imate pristup i knjižnom upravitelju.';

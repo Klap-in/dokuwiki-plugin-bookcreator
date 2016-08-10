@@ -1,11 +1,9 @@
 <?php
 
-$lang['nocookies']       = "You don't have any pages selected yet. Check your browser to allow cookies and try again.";
 $lang['empty']           = "You don't have any pages selected yet.";
 $lang['toprint']         = "Selected Pages";
 $lang['removed']         = "Pages Removed from Selection";
 
-$lang['reserconfirm']    = "Do you really want to clear the selection?";
 $lang['reset']           = "Clear Selection";
 
 $lang['js']['include']   = "Add to selection";
@@ -18,15 +16,13 @@ $lang['exportodt']       = "Export selection to ODT";
 $lang['exportprint']     = "Printable version";
 $lang['exporttext']      = "Text only";
 
-$lang['title']           = "Document's Title (optional)";
-
-$lang['pageadded']       = "Page added to selection";
-$lang['pageremoved']     = "Page removed from selection";
+$lang['title']           = "Document's Title";
 
 $lang['addpage']         = "Add this page to your book";
 $lang['removepage']      = "Remove this page from your book";
+
 $lang['showbook']        = "Manage book";
-$lang['sortable']        = "Drag and drop to sort/remove/add pages";
+$lang['js']['sortable']  = "Drag and drop to sort/remove/add pages";
 
 $lang['pages']           = "page(s)";
 $lang['help']            = "Help";
@@ -35,21 +31,30 @@ $lang['toolbar']         = "Book Creator";
 
 $lang['saveselection']   = "Save Selection";
 $lang['needtitle']       = "Please provide a title";
-$lang['saved']           = "Selection saved successfully";
-$lang['deleted']         = "Selection successfully removed";
+$lang['saved']           = "Selection saved successfully: %s";
+$lang['deleted']         = "Selection successfully removed: %s";
 $lang['duplicate']       = "&lt;The list with saved selections is already displayed on this page&gt;";
 
 $lang['save']            = "Save";
 $lang['listselections']  = "Saved Selection Lists";
 
-$lang['showpage']        = "Show page";
+$lang['js']['showpage']  = "Show page";
+$lang['showselection']   = "Show saved selection";
 $lang['delselection']    = "Remove saved selection";
 $lang['loadselection']   = "Load saved selection";
 
-$lang['nobookmanageraccess'] = "You may not change the selection. Only allowed when you have access to the bookmanager as well.";
-
-$lang['js']['confirmdel']  = "Do you really want to delete this selection from the archive?";
-$lang['js']['confirmload'] = "Do you really want to load this selection, replacing any pages already selected?";
+$lang['js']['confirmdel']       = "Do you really want to delete this selection from the archive?";
+$lang['js']['confirmload']      = "Do you really want to load this selection, replacing any pages already selected?";
 
 $lang['js']['btn_addtobook']    = "Add to book";
 $lang['js']['btn_removetobook'] = "Remove from book";
+
+$lang['selectionstored']        = "Selection stored";
+$lang['selectiondeleted']       = "Selection deleted";
+$lang['selectiondontexist']     = "Selection doesn't exist at page '%s'";
+$lang['selectionforbidden']     = "You have no access to selection at page '%s'";
+
+$lang['titlepreparedownload']   = "Preparing Download...";
+$lang['preparingdownload']      = "We are preparing your download, please wait...";
+$lang['titleerrordownload']     = "Error";
+$lang['faileddownload']         = "There was a problem generating your download.";
