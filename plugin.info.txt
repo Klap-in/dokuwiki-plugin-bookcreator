@@ -1,7 +1,7 @@
 base   bookcreator
 author Gerrit Uitslag (previous: Luigi Micco)
 email  klapinklapin@gmail.com
-date   2015-06-11
+date   2016-08-11
 name   Bookcreator Plugin
 desc   Allow to make a book (PDF or text) from selected pages
 url    https://www.dokuwiki.org/plugin:bookcreator
