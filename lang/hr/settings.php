@@ -2,7 +2,7 @@
 
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
- * 
+ *
  */
 $lang['toolbar']               = 'Prikaži info traku';
 $lang['toolbar_o_never']       = 'Nikad';
