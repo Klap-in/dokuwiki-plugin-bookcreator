@@ -6,6 +6,7 @@
  * @author ronny <el_cherone@airpost.net>
  * @author Thor Weinreich <thorweinreich@nefkom.net>
  * @author Padhie <develop@padhie.de>
+ * @author Carsten Perthel <carsten@cpesoft.com>
  */
 $lang['empty']                 = 'Sie haben noch keine Seiten gewählt.';
 $lang['toprint']               = 'Ausgewählte Seiten';
@@ -42,3 +43,11 @@ $lang['js']['showpage']              = 'Zeige Seite';
 $lang['delselection']          = 'Entferne gespeicherte Auswahl';
 $lang['showselection']         = 'Zeige gespeicherte Auswahl';
 $lang['loadselection']         = 'Lade gespeicherte Liste mit Auswahl';
+$lang['selectionstored']        = "Auswahl gespeichert";
+$lang['selectiondeleted']       = "Auswahl gelöscht";
+$lang['selectiondontexist']     = "Auswahl existiert nicht auf Seite '%s'";
+$lang['selectionforbidden']     = "Sie haben keine Zugriff auf die Auswahl auf Seite '%s'";
+$lang['titlepreparedownload']   = "Download wird vorbereitet...";
+$lang['preparingdownload']      = "Wir bereiten Ihren Download vor, bitte warten...";
+$lang['titleerrordownload']     = "Fehler";
+$lang['faileddownload']         = "Beim Generieren des Downloads ist ein Fehler aufgetreten.";
