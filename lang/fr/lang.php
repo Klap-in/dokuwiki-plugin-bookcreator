@@ -5,6 +5,7 @@
  *
  * @author Schplurtz le Déboulonné <schplurtz@laposte.net>
  * @author lerdt <pro@nicolas-hemard.eu>
+ * @author Nicolas Friedli <nicolas@theologique.ch>
  */
 $lang['empty']                 = 'Vous n\'avez pas encore sélectionné de pages.';
 $lang['toprint']               = 'Pages sélectionnées';
@@ -41,6 +42,7 @@ $lang['listselections']        = 'Liste des sélections enregistrées';
 $lang['showselection']         = 'Afficher cette sélection enregistrée.';
 $lang['delselection']          = 'Supprimer cette sélection enregistrée.';
 $lang['loadselection']         = 'Charger cette sélection enregistrée.';
+$lang['selectionstored']       = 'Sélection enregistrée';
 $lang['selectiondeleted']      = 'La sélection a été effacée';
 $lang['selectiondontexist']    = 'La sélection est inexistante à la page \'%s\'';
 $lang['selectionforbidden']    = 'Vous n\'avez pas d\'accès à la sélection à la page \'%s\'';
