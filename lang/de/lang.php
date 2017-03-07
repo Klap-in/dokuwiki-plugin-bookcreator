@@ -51,3 +51,7 @@ $lang['titlepreparedownload']   = "Download wird vorbereitet...";
 $lang['preparingdownload']      = "Wir bereiten Ihren Download vor, bitte warten...";
 $lang['titleerrordownload']     = "Fehler";
 $lang['faileddownload']         = "Beim Generieren des Downloads ist ein Fehler aufgetreten.";
+$lang['select_namespace']       = "Namespace zur Auswahl hinzufügen";
+$lang['js']['namespace_picker'] = "Namespace picker";
+$lang['js']['select_namespace'] = "Namespace auswählen:";
+$lang['js']['added_pages']      = "Diese Seiten wurden hinzugefügt:";

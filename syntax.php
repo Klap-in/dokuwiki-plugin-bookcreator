@@ -270,6 +270,14 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         $renderer->doc .= $form->getForm();
         $renderer->doc .= "</div>";
 
+        // Add namespace to selection
+        $form = new Doku_Form(array('method'=> 'post',
+                                    'class'=> 'selectnamespace'));
+        $form->addElement(form_makeButton('submit', '', $this->getLang('select_namespace')));
+        $renderer->doc .= "<div align='center'>";
+        $renderer->doc .= $form->getForm();
+        $renderer->doc .= "</div>";
+
         //close left column - open right column
         $renderer->doc .= "</div>";
         $renderer->doc .= "<div class='bookcreator__actions'>";

@@ -169,3 +169,73 @@ div.bookcreator__panel {
 #dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook {
     display: none; /* will be shown by JavaScript */
 }
+
+/* Namespace picker (opens by clicking on button "Add Namespace to Selection")
+******************************************************************************/
+#bc__nspicker {
+}
+
+[dir=rtl] #bc__nspicker_close {
+    float: left;
+}
+
+#bc__nspicker_select {
+    margin-left: 1em;
+}
+
+#bc__nspicker_cancel {
+    margin-left: 0.5em;
+}
+
+#bc__nspicker_result {
+    background-color: @ini_background;
+    width:  40vw;
+    height: 50vh;
+    overflow: auto;
+    border: 1px solid @ini_border;
+    margin: 3px auto;
+    text-align: left;
+    line-height: 1;
+}
+[dir=rtl] #bc__nspicker_result {
+    text-align: right;
+}
+
+#bc__nspicker_result div {
+    padding: 3px 3px 3px 0;
+}
+
+#bc__nspicker_result div a {
+    display: block;
+    padding-left: 22px;
+    min-height: 16px;
+    background: transparent 3px center no-repeat;
+}
+[dir=rtl] #bc__nspicker_result div a {
+    padding: 3px 22px 3px 3px;
+    background-position: 257px 3px;
+}
+
+#bc__nspicker_result div.type_u a {
+    background-image: url(../../images/up.png);
+}
+#bc__nspicker_result div.type_f a {
+    background-image: url(../../images/page.png);
+}
+#bc__nspicker_result div.type_d a {
+    background-image: url(../../images/ns.png);
+}
+
+#bc__nspicker_result div.even {
+    background-color: @ini_background_neu;
+}
+
+#bc__nspicker_result div.selected {
+    background-color: @ini_background_alt;
+}
+
+#bc__nspicker_result span {
+    display: block;
+    color: @ini_text_neu;
+    margin-left: 22px;
+}
