@@ -55,3 +55,4 @@ $lang['select_namespace']       = "Namespace zur Auswahl hinzufügen";
 $lang['js']['namespace_picker'] = "Namespace picker";
 $lang['js']['select_namespace'] = "Namespace auswählen:";
 $lang['js']['added_pages']      = "Diese Seiten wurden hinzugefügt:";
+$lang['js']['no_pages_selected'] = "Keine. \n(Es gibt keine Seiten in diesem Namespace.\nSeiten in Sub-Namespaces werden nicht mit hinzugefügt!)";

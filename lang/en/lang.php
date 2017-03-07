@@ -59,7 +59,8 @@ $lang['preparingdownload']      = "We are preparing your download, please wait..
 $lang['titleerrordownload']     = "Error";
 $lang['faileddownload']         = "There was a problem generating your download.";
 
-$lang['select_namespace']       = "Add Namespace to Selection";
-$lang['js']['namespace_picker'] = "Namespace picker";
-$lang['js']['select_namespace'] = "Select Namespace:";
-$lang['js']['added_pages']      = "This pages have been added:";
+$lang['select_namespace']        = "Add Namespace to Selection";
+$lang['js']['namespace_picker']  = "Namespace picker";
+$lang['js']['select_namespace']  = "Select Namespace:";
+$lang['js']['added_pages']       = "This pages have been added:";
+$lang['js']['no_pages_selected'] = "None. \n(There are no pages in this namespace.\nPages in sub-namespaces will not be included!)";

@@ -278,6 +278,7 @@ var bc_nspicker = {
         $content = LANG.plugins.bookcreator.added_pages+"\n\n";
 
         // Intentionally skip index 0
+        $pages = 0;
         for ($index = 1 ; $index < $max ; $index++) {
             $element = jQuery($res[$index]);
             $name = $element.html();
@@ -285,8 +286,12 @@ var bc_nspicker = {
             // Only add pages, not namespaces
             if ($name.charAt($name.length-1) != ':') {
                 $content += $name+"\n";
+                $pages++;
                 Bookcreator.selectedpages.addPage($name);
             }
+        }
+        if ($pages == 0) {
+            $content += LANG.plugins.bookcreator.no_pages_selected+"\n";
         }
         BookManager.updateListsFromStorage();
         window.alert($content);
