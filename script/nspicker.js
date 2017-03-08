@@ -271,30 +271,29 @@ var bc_nspicker = {
      * picker.
      */
     selectNamespace: function(){
-        var $res = jQuery('#bc__nspicker_result a');
-        var $max = $res.length;
-        var $index;
+        var $resultlinks = jQuery('#bc__nspicker_result a');
 
-        $content = LANG.plugins.bookcreator.added_pages+"\n\n";
+        content = LANG.plugins.bookcreator.added_pages+"\n\n";
 
         // Intentionally skip index 0
-        $pages = 0;
-        for ($index = 1 ; $index < $max ; $index++) {
-            $element = jQuery($res[$index]);
-            $name = $element.html();
+        pages = 0;
+        $resultlinks.each (function(index) {
+            if (index > 0) {
+                name = jQuery(this).html();
 
-            // Only add pages, not namespaces
-            if ($name.charAt($name.length-1) != ':') {
-                $content += $name+"\n";
-                $pages++;
-                Bookcreator.selectedpages.addPage($name);
+                // Only add pages, not namespaces
+                if (name.charAt(name.length-1) != ':') {
+                    content += name+"\n";
+                    pages++;
+                    Bookcreator.selectedpages.addPage(name);
+                }
             }
-        }
-        if ($pages == 0) {
-            $content += LANG.plugins.bookcreator.no_pages_selected+"\n";
+        });
+        if (pages == 0) {
+            content += LANG.plugins.bookcreator.no_pages_selected+"\n";
         }
         BookManager.updateListsFromStorage();
-        window.alert($content);
+        window.alert(content);
         bc_nspicker.hide();
     },
 };
