@@ -104,7 +104,7 @@ var bc_nspicker = {
                     bc_nspicker.resultClick($obj.find('a')[0]);
                 }
             } else if (bc_nspicker.$entry.val()) {
-                bc_nspicker.insertLink(bc_nspicker.$entry.val());
+                bc_nspicker.selectNamespace();
             }
 
             e.preventDefault();
@@ -179,12 +179,12 @@ var bc_nspicker = {
      */
     onResultClick: function (e) {
         "use strict";
-        if (!jQuery(bc_nspicker).is('a')) {
+        if (!jQuery(this).is('a')) {
             return;
         }
         e.stopPropagation();
         e.preventDefault();
-        bc_nspicker.resultClick(bc_nspicker);
+        bc_nspicker.resultClick(this);
         return false;
     },
 
@@ -196,12 +196,6 @@ var bc_nspicker = {
         if (a.title === '' || a.title.substr(a.title.length - 1) === ':') {
             bc_nspicker.$entry.val(a.title);
             bc_nspicker.autocomplete_exec();
-        } else {
-            if (jQuery(a.nextSibling).is('span')) {
-                bc_nspicker.insertLink(a.nextSibling.innerHTML);
-            } else {
-                bc_nspicker.insertLink('');
-            }
         }
     },
 
