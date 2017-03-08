@@ -1,9 +1,9 @@
 /**
  * The Namespace picker dialog
- * 
+ *
  * Based on the code from "The Link Wizard"/linkwiz.js
  * from Andreas Gohr <gohr@cosmocode.de> and Pierre Spring <pierre.spring@caillou.ch>
- * 
+ *
  * @author LarsDW223
  */
 var bc_nspicker = {
@@ -19,36 +19,38 @@ var bc_nspicker = {
      * Initialize the bc_nspicker by creating the needed HTML
      * and attaching the eventhandlers
      */
-    init: function($editor){
+    init: function ($editor) {
+        "use strict";
         // position relative to the text area
         var pos = $editor.position();
 
         // create HTML Structure
-        if(bc_nspicker.$picker)
+        if (bc_nspicker.$picker) {
             return;
+        }
         bc_nspicker.$picker = jQuery(document.createElement('div'))
-               .dialog({
-                   autoOpen: false,
-                   draggable: true,
-                   title: LANG.plugins.bookcreator.namespace_picker,
-                   resizable: false
-               })
-               .html(
-                    '<div>'+LANG.plugins.bookcreator.select_namespace+' <input type="text" class="edit" id="bc__nspicker_entry" autocomplete="off" />'+
-                        '<input type="button" value="Select" id="bc__nspicker_select">'+
-                        '<input type="button" value="Cancel" id="bc__nspicker_cancel">'+
-                    '</div>'+
+            .dialog({
+                autoOpen: false,
+                draggable: true,
+                title: LANG.plugins.bookcreator.namespace_picker,
+                resizable: false
+            })
+            .html(
+                '<div>' + LANG.plugins.bookcreator.select_namespace + ' <input type="text" class="edit" id="bc__nspicker_entry" autocomplete="off" />' +
+                        '<input type="button" value="Select" id="bc__nspicker_select">' +
+                        '<input type="button" value="Cancel" id="bc__nspicker_cancel">' +
+                    '</div>' +
                     '<div id="bc__nspicker_result"></div>'
-                    )
-               .parent()
-               .attr('id','bc__nspicker')
-               .css({
-                    'position':    'absolute',
-                    'top':         (pos.top+20)+'px',
-                    'left':        (pos.left+80)+'px'
-                   })
-               .hide()
-               .appendTo('.dokuwiki:first');
+            )
+            .parent()
+            .attr('id', 'bc__nspicker')
+            .css({
+                'position': 'absolute',
+                'top': (pos.top + 20) + 'px',
+                'left': (pos.left + 80) + 'px'
+            })
+            .hide()
+            .appendTo('.dokuwiki:first');
 
         bc_nspicker.textArea = $editor[0];
         bc_nspicker.result = jQuery('#bc__nspicker_result')[0];
@@ -57,8 +59,8 @@ var bc_nspicker = {
         jQuery(bc_nspicker.result).css('position', 'relative');
 
         bc_nspicker.$entry = jQuery('#bc__nspicker_entry');
-        if(JSINFO.namespace){
-            bc_nspicker.$entry.val(JSINFO.namespace+':');
+        if (JSINFO.namespace) {
+            bc_nspicker.$entry.val(JSINFO.namespace + ':');
         }
 
         // attach event handlers
@@ -72,35 +74,36 @@ var bc_nspicker = {
     /**
      * handle all keyup events in the entry field
      */
-    onEntry: function(e){
-        if(e.keyCode == 37 || e.keyCode == 39){ //left/right
+    onEntry: function (e) {
+        "use strict";
+        if (e.keyCode === 37 || e.keyCode === 39) { //left/right
             return true; //ignore
         }
-        if(e.keyCode == 27){ //Escape
+        if (e.keyCode === 27) { //Escape
             bc_nspicker.hide();
             e.preventDefault();
             e.stopPropagation();
             return false;
         }
-        if(e.keyCode == 38){ //Up
-            bc_nspicker.select(bc_nspicker.selected -1);
+        if (e.keyCode === 38) { //Up
+            bc_nspicker.select(bc_nspicker.selected - 1);
             e.preventDefault();
             e.stopPropagation();
             return false;
         }
-        if(e.keyCode == 40){ //Down
-            bc_nspicker.select(bc_nspicker.selected +1);
+        if (e.keyCode === 40) { //Down
+            bc_nspicker.select(bc_nspicker.selected + 1);
             e.preventDefault();
             e.stopPropagation();
             return false;
         }
-        if(e.keyCode == 13){ //Enter
-            if(bc_nspicker.selected > -1){
+        if (e.keyCode === 13) { //Enter
+            if (bc_nspicker.selected > -1) {
                 var $obj = bc_nspicker.$getResult(bc_nspicker.selected);
-                if($obj.length > 0){
+                if ($obj.length > 0) {
                     bc_nspicker.resultClick($obj.find('a')[0]);
                 }
-            }else if(bc_nspicker.$entry.val()){
+            } else if (bc_nspicker.$entry.val()) {
                 bc_nspicker.insertLink(bc_nspicker.$entry.val());
             }
 
@@ -117,15 +120,17 @@ var bc_nspicker = {
      * @param   num int result div to return
      * @returns jQuery object
      */
-    $getResult: function(num) {
+    $getResult: function (num) {
+        "use strict";
         return jQuery(bc_nspicker.result).find('div').eq(num);
     },
 
     /**
      * Select the given result
      */
-    select: function(num){
-        if(num < 0){
+    select: function (num) {
+        "use strict";
+        if (num < 0) {
             bc_nspicker.deselect();
             return;
         }
@@ -148,7 +153,7 @@ var bc_nspicker = {
         if (childPos < 0) {
             //if childPos is above viewable area (that's why it goes negative)
             jQuery(bc_nspicker.result)[0].scrollTop += childPos;
-        } else if(yDiff > 0) {
+        } else if (yDiff > 0) {
             // if difference between childs top and parents viewable area is
             // greater than the height of a childDiv
             jQuery(bc_nspicker.result)[0].scrollTop += yDiff;
@@ -160,8 +165,9 @@ var bc_nspicker = {
     /**
      * deselect a result if any is selected
      */
-    deselect: function(){
-        if(bc_nspicker.selected > -1){
+    deselect: function () {
+        "use strict";
+        if (bc_nspicker.selected > -1) {
             bc_nspicker.$getResult(bc_nspicker.selected).removeClass('selected');
         }
         bc_nspicker.selected = -1;
@@ -171,30 +177,29 @@ var bc_nspicker = {
      * Handle clicks in the result set an dispatch them to
      * resultClick()
      */
-    onResultClick: function(e){
-        if(!jQuery(this).is('a')) {
+    onResultClick: function (e) {
+        "use strict";
+        if (!jQuery(bc_nspicker).is('a')) {
             return;
         }
         e.stopPropagation();
         e.preventDefault();
-        bc_nspicker.resultClick(this);
+        bc_nspicker.resultClick(bc_nspicker);
         return false;
     },
 
     /**
      * Handles the "click" on a given result anchor
      */
-    resultClick: function(a){
-        //bc_nspicker.$entry.val(a.title);
-        //if(a.title == '' || a.title.substr(a.title.length-1) == ':'){
-        if(a.title == '' || a.title.substr(a.title.length-1) == ':'){
+    resultClick: function (a) {
+        "use strict";
+        if (a.title === '' || a.title.substr(a.title.length - 1) === ':') {
             bc_nspicker.$entry.val(a.title);
             bc_nspicker.autocomplete_exec();
-        }
-        else{
+        } else {
             if (jQuery(a.nextSibling).is('span')) {
                 bc_nspicker.insertLink(a.nextSibling.innerHTML);
-            }else{
+            } else {
                 bc_nspicker.insertLink('');
             }
         }
@@ -205,36 +210,39 @@ var bc_nspicker = {
      *
      * Calls autocomplete_exec when the timer runs out
      */
-    autocomplete: function(){
-        if(bc_nspicker.timer !== null){
+    autocomplete: function () {
+        "use strict";
+        if (bc_nspicker.timer !== null) {
             window.clearTimeout(bc_nspicker.timer);
             bc_nspicker.timer = null;
         }
 
-        bc_nspicker.timer = window.setTimeout(bc_nspicker.autocomplete_exec,350);
+        bc_nspicker.timer = window.setTimeout(bc_nspicker.autocomplete_exec, 350);
     },
 
     /**
      * Executes the AJAX call for the page/namespace lookup
      */
-    autocomplete_exec: function(){
+    autocomplete_exec: function () {
+        "use strict";
         var $res = jQuery(bc_nspicker.result);
         bc_nspicker.deselect();
-        $res.html('<img src="'+DOKU_BASE+'lib/images/throbber.gif" alt="" width="16" height="16" />')
+        $res.html('<img src="' + DOKU_BASE + 'lib/images/throbber.gif" alt="" width="16" height="16" />')
             .load(
-            DOKU_BASE + 'lib/exe/ajax.php',
-            {
-                call: 'linkwiz',
-                q: bc_nspicker.$entry.val()
-            }
-        );
+                DOKU_BASE + 'lib/exe/ajax.php',
+                {
+                    call: 'linkwiz',
+                    q: bc_nspicker.$entry.val()
+                }
+            );
     },
 
     /**
      * Show the link wizard
      */
-    show: function(){
-        bc_nspicker.selection  = DWgetSelection(bc_nspicker.textArea);
+    show: function () {
+        "use strict";
+        bc_nspicker.selection = DWgetSelection(bc_nspicker.textArea);
         bc_nspicker.$picker.show();
         bc_nspicker.$entry.focus();
         bc_nspicker.autocomplete();
@@ -248,7 +256,8 @@ var bc_nspicker = {
     /**
      * Hide the link wizard
      */
-    hide: function(){
+    hide: function () {
+        "use strict";
         bc_nspicker.$picker.hide();
         bc_nspicker.textArea.focus();
     },
@@ -256,10 +265,11 @@ var bc_nspicker = {
     /**
      * Toggle the link wizard
      */
-    toggle: function(){
-        if(bc_nspicker.$picker.css('display') == 'none'){
+    toggle: function () {
+        "use strict";
+        if (bc_nspicker.$picker.css('display') === 'none') {
             bc_nspicker.show();
-        }else{
+        } else {
             bc_nspicker.hide();
         }
     },
@@ -270,30 +280,34 @@ var bc_nspicker = {
      * window with added pages and then close/hide the Namespace
      * picker.
      */
-    selectNamespace: function(){
+    selectNamespace: function () {
+        "use strict";
         var $resultlinks = jQuery('#bc__nspicker_result a');
+        var content;
+        var pages;
+        var name;
 
-        content = LANG.plugins.bookcreator.added_pages+"\n\n";
+        content = LANG.plugins.bookcreator.added_pages + "\n\n";
 
         // Intentionally skip index 0
         pages = 0;
-        $resultlinks.each (function(index) {
+        $resultlinks.each(function (index) {
             if (index > 0) {
                 name = jQuery(this).html();
 
                 // Only add pages, not namespaces
-                if (name.charAt(name.length-1) != ':') {
-                    content += name+"\n";
-                    pages++;
+                if (name.charAt(name.length - 1) !== ':') {
+                    content += name + "\n";
+                    pages += 1;
                     Bookcreator.selectedpages.addPage(name);
                 }
             }
         });
-        if (pages == 0) {
-            content += LANG.plugins.bookcreator.no_pages_selected+"\n";
+        if (pages === 0) {
+            content += LANG.plugins.bookcreator.no_pages_selected + "\n";
         }
         BookManager.updateListsFromStorage();
         window.alert(content);
         bc_nspicker.hide();
-    },
+    }
 };
