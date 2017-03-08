@@ -257,6 +257,14 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         $this->showPagelist($renderer, 'selected');
         $renderer->doc .= "<br />";
 
+        // Add namespace to selection
+        $form = new Doku_Form(array('method'=> 'post',
+                                    'class'=> 'selectnamespace'));
+        $form->addElement(form_makeButton('submit', '', $this->getLang('select_namespace')));
+        $renderer->doc .= "<div align='center'>";
+        $renderer->doc .= $form->getForm();
+        $renderer->doc .= "</div>";
+
         // - excluded pages
         $renderer->doc .= '<div id="bookcreator__delpglst">';
         $this->showPagelist($renderer, 'deleted');
@@ -266,14 +274,6 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         $form = new Doku_Form(array('method'=> 'post',
                                     'class'=> 'clearactive'));
         $form->addElement(form_makeButton('submit', '', $this->getLang('reset')));
-        $renderer->doc .= "<div align='center'>";
-        $renderer->doc .= $form->getForm();
-        $renderer->doc .= "</div>";
-
-        // Add namespace to selection
-        $form = new Doku_Form(array('method'=> 'post',
-                                    'class'=> 'selectnamespace'));
-        $form->addElement(form_makeButton('submit', '', $this->getLang('select_namespace')));
         $renderer->doc .= "<div align='center'>";
         $renderer->doc .= $form->getForm();
         $renderer->doc .= "</div>";
