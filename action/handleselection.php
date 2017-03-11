@@ -70,6 +70,11 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
                     $page =  $INPUT->post->str('savedselectionname');
                     $this->deleteSavedSelection($page);
                     break;
+                case 'searchPages':
+                    $namespace =  $INPUT->post->str('ns');
+                    $recursive =  $INPUT->post->str('r');
+                    $this->searchPages($namespace, $recursive);
+                    break;
                 default:
                     $this->response['error'] .= 'unknown action';
             }
@@ -277,5 +282,35 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
         }
 
         return array($title, $list);
+    }
+
+    /**
+     * Returns an array of pages in the given namespace.
+     *
+     * @param string $ns The namespace to search in
+     * @param boolean $recursive Search in sub-namespaces too?
+     */
+    protected function searchPages($ns, $recursive) {
+        global $conf;
+
+        // Use inc/search.php
+        if ($recursive == 'true') {
+            $opts = array();
+        } else {
+            $count = substr_count($ns, ':');
+            $opts = array('depth' => 1+$count);
+        }
+        $items = array();
+        $ns = trim($ns, ':');
+        $ns = utf8_encodeFN(str_replace(':', '/', $ns));
+        search($items, $conf['datadir'], 'search_allpages', $opts, $ns);
+
+        // Generate result.
+        $pages = array();
+        foreach ($items as $item) {
+            $pages [] = $item['id'];
+        }
+        $this->response = array();
+        $this->response['pages'] = $pages;
     }
 }

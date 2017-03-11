@@ -187,6 +187,10 @@ div.bookcreator__panel {
     margin-left: 0.5em;
 }
 
+#bc__nspicker_recursive {
+    margin-right: 0.5em;
+}
+
 #bc__nspicker_result {
     background-color: @ini_background;
     width:  40vw;

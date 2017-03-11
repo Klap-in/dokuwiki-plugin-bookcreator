@@ -37,8 +37,9 @@ var bc_nspicker = {
             })
             .html(
                 '<div>' + LANG.plugins.bookcreator.select_namespace + ' <input type="text" class="edit" id="bc__nspicker_entry" autocomplete="off" />' +
-                        '<input type="button" value="Select" id="bc__nspicker_select">' +
-                        '<input type="button" value="Cancel" id="bc__nspicker_cancel">' +
+                        '<input type="button" value="' + LANG.plugins.bookcreator.select + '" id="bc__nspicker_select">' +
+                        '<input type="button" value="' + LANG.plugins.bookcreator.cancel + '" id="bc__nspicker_cancel">' +
+                        '<br><input type="checkbox" value="Recursive" id="bc__nspicker_recursive">' + LANG.plugins.bookcreator.add_subns_too +
                     '</div>' +
                     '<div id="bc__nspicker_result"></div>'
             )
@@ -65,7 +66,7 @@ var bc_nspicker = {
 
         // attach event handlers
         jQuery('#bc__nspicker .ui-dialog-titlebar-close').click(bc_nspicker.hide);
-        jQuery('#bc__nspicker_select').click(bc_nspicker.selectNamespace);
+        jQuery('#bc__nspicker_select').click(bc_nspicker.selectNamespace_exec);
         jQuery('#bc__nspicker_cancel').click(bc_nspicker.hide);
         bc_nspicker.$entry.keyup(bc_nspicker.onEntry);
         jQuery(bc_nspicker.result).on('click', 'a', bc_nspicker.onResultClick);
@@ -104,7 +105,7 @@ var bc_nspicker = {
                     bc_nspicker.resultClick($obj.find('a')[0]);
                 }
             } else if (bc_nspicker.$entry.val()) {
-                bc_nspicker.selectNamespace();
+                bc_nspicker.selectNamespace_exec();
             }
 
             e.preventDefault();
@@ -269,37 +270,57 @@ var bc_nspicker = {
     },
 
     /**
+     * Executes the AJAX call for the selected namespace lookup.
+     * Parameter "ns" is the namespace to search through. Parameter
+     * "r" specifies if the search should be recursive or not.
+     */
+    selectNamespace_exec: function () {
+        "use strict";
+        var $recursive = jQuery('#bc__nspicker_recursive');
+
+        jQuery.post(
+            DOKU_BASE + 'lib/exe/ajax.php',
+            {
+                call: 'plugin_bookcreator_call',
+                action: 'searchPages',
+                ns: bc_nspicker.$entry.val(),
+                r: $recursive.is(':checked'),
+                sectok: jQuery('input[name="sectok"]').val()
+            },
+            bc_nspicker.selectNamespace,
+            'json'
+        );
+    },
+
+    /**
      * Select Namespace.
      * Add all pages in the selected Namespace to the book, show
      * window with added pages and then close/hide the Namespace
      * picker.
      */
-    selectNamespace: function () {
+    selectNamespace: function (data) {
         "use strict";
-        var $resultlinks = jQuery('#bc__nspicker_result a');
         var content;
         var pages;
         var name;
+        var text;
 
-        content = LANG.plugins.bookcreator.added_pages + "\n\n";
-
-        // Intentionally skip index 0
+        // Go through the array of pages, add them and prepare
+        // a message for the user
         pages = 0;
-        $resultlinks.each(function (index) {
-            if (index > 0) {
-                name = jQuery(this).html();
-
-                // Only add pages, not namespaces
-                if (name.charAt(name.length - 1) !== ':') {
-                    content += name + "\n";
-                    pages += 1;
-                    Bookcreator.selectedpages.addPage(name);
-                }
-            }
-        });
+        content = LANG.plugins.bookcreator.added_pages + "\n\n";
+        if (data.hasOwnProperty('pages')) {
+            jQuery(data.pages).each(function (index) {
+                name = data.pages [index];
+                Bookcreator.selectedpages.addPage (name);
+                content += name + "\n";
+                pages += 1;
+            });
+        }
         if (pages === 0) {
             content += LANG.plugins.bookcreator.no_pages_selected + "\n";
         }
+
         BookManager.updateListsFromStorage();
         window.alert(content);
         bc_nspicker.hide();
