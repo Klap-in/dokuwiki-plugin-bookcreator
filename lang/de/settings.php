@@ -2,7 +2,7 @@
 
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
- * 
+ *
  */
 $lang['toolbar']               = 'Toolbar anzeigen';
 $lang['toolbar_o_never']       = 'Nie';
