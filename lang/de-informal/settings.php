@@ -3,6 +3,7 @@
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  *
+ * @author Felix Müller-Donath <j.felix@mueller-donath.de>
  */
 $lang['toolbar']               = 'Toolbar anzeigen';
 $lang['toolbar_o_never']       = 'Nie';
