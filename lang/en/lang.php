@@ -17,6 +17,7 @@ $lang['exportprint']     = "Printable version";
 $lang['exporttext']      = "Text only";
 
 $lang['title']           = "Document's Title";
+$lang['skipforbiddenpages']    = "Skip Forbidden Pages";
 
 $lang['addpage']         = "Add this page to your book";
 $lang['removepage']      = "Remove this page from your book";
