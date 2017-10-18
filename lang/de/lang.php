@@ -28,6 +28,7 @@ $lang['exportodt']             = 'Auswahl wird als ODT exportiert';
 $lang['exportprint']           = 'Druckversion';
 $lang['exporttext']            = 'Textversion';
 $lang['title']                 = 'Titel des Dokuments';
+$lang['skipforbiddenpages']    = 'Überspringe Seiten ohne Berechtigung';
 $lang['addpage']               = 'Diese Seite zum Buch hinzufügen';
 $lang['removepage']            = 'Diese Seite aus Buch entfernen';
 $lang['showbook']              = 'Buch anzeigen, ändern';
