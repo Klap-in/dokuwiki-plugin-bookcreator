@@ -297,6 +297,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         $form->addElement(form_makeTextField('book_title', $title, '', '', 'edit', array('size'=> 30)));
         $form->addElement(form_makeCheckboxField('book_skipforbiddenpages', '1', 'Skip Forbidden Pages','','book_skipforbiddenpages'));
         $form->addElement(form_makeListboxField('do', $values, $selected, '', '', '', array('size'=> 1)));
+        $form->addHidden('outputTarget', 'file');
         $form->addHidden('id', $ID);
         $form->addElement(form_makeButton('submit', '', $this->getLang('create')));
         $form->endFieldset();
