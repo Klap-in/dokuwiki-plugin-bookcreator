@@ -30,6 +30,7 @@ class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
         $controller->register_hook('DOKUWIKI_STARTED', 'AFTER', $this, '_extendJSINFO');
         $controller->register_hook('TPL_ACTION_GET', 'BEFORE', $this, 'allowaddbutton');
         $controller->register_hook('TEMPLATE_PAGETOOLS_DISPLAY', 'BEFORE', $this, 'addbutton');
+        $controller->register_hook('MENU_ITEMS_ASSEMBLY', 'AFTER', $this, 'addsvgbutton', array());
     }
 
     /**
@@ -129,6 +130,16 @@ class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
                 array('plugin_bookcreator_addtobook' => tpl_action('plugin_bookcreator_addtobook', true, 'li', true, '<span>', '</span>')) +
                 array_slice($event->data['items'], -1, 1, true);
         }
+    }
+
+    /**
+     * Add 'export pdf' button to page tools, new SVG based mechanism
+     *
+     * @param Doku_Event $event
+     */
+    public function addsvgbutton(Doku_Event $event) {
+        if($event->data['view'] != 'page') return;
+        array_splice($event->data['items'], -1, 0, [new \dokuwiki\plugin\bookcreator\MenuItem()]);
     }
 
     /**

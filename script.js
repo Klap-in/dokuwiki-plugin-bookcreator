@@ -210,17 +210,29 @@ var Bookcreator = {
      */
     updatePage: function() {
 
-        var $addtobookBtn = jQuery('.plugin_bookcreator_addtobook'),
+        var $addtobookBtn2 = jQuery('.plugin_bookcreator_addtobook'),
+            $addtobookBtn = jQuery('.plugin_bookcreator__addtobook'),
             $bookbar = jQuery('.bookcreator__bookbar');
 
         //pagetool add/remove button
-        $addtobookBtn.css( "display", "block");
+        /* TODO DEPRECATED 2017  */
+        $addtobookBtn2.css( "display", "block");
+        if ($addtobookBtn2.length) { //exists the addtobook link
+            var text = LANG.plugins.bookcreator['btn_' + (this.isCurrentPageSelected ? 'remove' : 'add') + 'tobook'];
+
+            $addtobookBtn2
+                .toggleClass('remove', this.isCurrentPageSelected)
+                .attr('title', text)
+                .children('span').html(text);
+        }
+
+        //pagetool add/remove button
         if ($addtobookBtn.length) { //exists the addtobook link
             var text = LANG.plugins.bookcreator['btn_' + (this.isCurrentPageSelected ? 'remove' : 'add') + 'tobook'];
 
-            $addtobookBtn
+            $addtobookBtn.find('a')
                 .toggleClass('remove', this.isCurrentPageSelected)
-                .attr('title', text)
+                .attr('title', text).blur()
                 .children('span').html(text);
         }
 
@@ -718,9 +730,10 @@ jQuery(function () {
 
         //bookbar buttons
         jQuery('a.bookcreator__tglPgSelection').click(Bookcreator.clickAddRemoveButton);
-        //pagetool button
+        //pagetool button TODO DEPRECATED 2017
         jQuery('.plugin_bookcreator_addtobook').click(Bookcreator.clickAddRemoveButton);
-
+        //pagetool button
+        jQuery('.plugin_bookcreator__addtobook').click(Bookcreator.clickAddRemoveButton);
         //gui
         Bookcreator.updatePage();
     }

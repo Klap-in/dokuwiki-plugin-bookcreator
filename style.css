@@ -117,6 +117,11 @@ div.bookcreator__panel {
  * Page tools
  * show add/remove icon
  */
+
+/* OLD BUTTONS DEPRECATED     since 2017    */
+
+
+
 #dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook {
     background-position: right -90px;
 }
@@ -163,6 +168,20 @@ div.bookcreator__panel {
 [dir=rtl] #dokuwiki__pagetools ul li a.plugin_bookcreator_addtobook.remove {
     background-position: left -180px;
 }
+
+/* NEW SVG BUTTONS       since 2017    */
+/* svg has two paths, toggling depending on selection state of page */
+#dokuwiki__pagetools div.tools ul li.plugin_bookcreator__addtobook a .bookmin {
+    display: none;
+}
+
+#dokuwiki__pagetools div.tools ul li.plugin_bookcreator__addtobook a.remove .bookplus {
+    display: none;
+}
+#dokuwiki__pagetools div.tools ul li.plugin_bookcreator__addtobook a.remove .bookmin {
+    display: block;
+}
+
 /**
  * page add/remove button
  */
