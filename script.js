@@ -723,7 +723,7 @@ var BookManager  = {
 
 
 jQuery(function () {
-    //Tools for selection a page
+    //Tools for selecting a page
     if(JSINFO.bookcreator.areToolsVisible) {
         Bookcreator.init();
         Bookcreator.setupUpdateObserver();
@@ -736,6 +736,9 @@ jQuery(function () {
         jQuery('.plugin_bookcreator__addtobook').click(Bookcreator.clickAddRemoveButton);
         //gui
         Bookcreator.updatePage();
+    } else {
+        //hide addtobook button from pagetool
+        jQuery('.plugin_bookcreator__addtobook').hide();
     }
 
     //bookmanager
