@@ -26,6 +26,7 @@ $lang['exportodt']             = 'Exporter la sélection en ODT.';
 $lang['exportprint']           = 'Version imprimable';
 $lang['exporttext']            = 'Version texte seul';
 $lang['title']                 = 'Titre du document';
+$lang['skipforbiddenpages']    = 'Ignorer les pages interdites';
 $lang['addpage']               = 'Ajouter cette page à votre livre';
 $lang['removepage']            = 'Retirer cette page de votre livre';
 $lang['showbook']              = 'Voir ou modifier le livre';
