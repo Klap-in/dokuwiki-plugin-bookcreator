@@ -3,6 +3,7 @@
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  *
+ * @author mark prins <mprins@users.sf.net>
  * @author Rene <wllywlnt@yahoo.com>
  * @author Peter van Diest <peter.van.diest@xs4all.nl>
  * @author klapinklapin <klapinklapin@gmail.com>
@@ -26,6 +27,7 @@ $lang['exportodt']             = 'Exporteer selectie naar ODT';
 $lang['exportprint']           = 'Printbare versie';
 $lang['exporttext']            = 'Alleen tekst';
 $lang['title']                 = 'Titel van het document';
+$lang['skipforbiddenpages']    = 'Sla uitgesloten pagina\'s over';
 $lang['addpage']               = 'Pagina toevoegen';
 $lang['removepage']            = 'Verwijder pagina';
 $lang['showbook']              = 'Toon boek ';
