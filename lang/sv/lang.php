@@ -24,6 +24,7 @@ $lang['exportodt']             = 'Exportera urval till ODT';
 $lang['exportprint']           = 'Utskriftsbar version';
 $lang['exporttext']            = 'Enbart text';
 $lang['title']                 = 'Dokumentets titel';
+$lang['skipforbiddenpages']    = 'Hoppa över ej tillåtna sidor';
 $lang['addpage']               = 'Lägg till denna sida till din bok';
 $lang['removepage']            = 'Ta bort denna sida från din bok';
 $lang['showbook']              = 'Hantera bok';
