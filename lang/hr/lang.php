@@ -24,6 +24,7 @@ $lang['exportodt']             = 'Izvoz odabira u ODT';
 $lang['exportprint']           = 'Verzija za ispis';
 $lang['exporttext']            = 'Samo tekst';
 $lang['title']                 = 'Naziv dokumenta';
+$lang['skipforbiddenpages']    = 'Preskoči zabranjene stranice';
 $lang['addpage']               = 'Dodaj ovu stranu u knjigu';
 $lang['removepage']            = 'Ukloni ovu stranicu iz knjige';
 $lang['showbook']              = 'Prikaži, izmjeni knjigu';
