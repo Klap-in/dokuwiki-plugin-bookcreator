@@ -3,6 +3,7 @@
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  *
+ * @author HokkaidoPerson <dosankomali@yahoo.co.jp>
  * @author Hideaki SAWADA <chuno@live.jp>
  * @author Nobuyuki Fukuyori <self@spumoni.org>
  */
@@ -25,6 +26,7 @@ $lang['exportodt']             = 'ODT ファイルで出力';
 $lang['exportprint']           = '印刷バージョン';
 $lang['exporttext']            = 'テキストのみ';
 $lang['title']                 = '文書の表題';
+$lang['skipforbiddenpages']    = 'アクセスが拒否されたページをスキップする';
 $lang['addpage']               = 'このページをブックに追加します。';
 $lang['removepage']            = 'このページをブックから削除します。';
 $lang['showbook']              = '修正したブックを表示する。';
