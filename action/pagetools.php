@@ -5,9 +5,6 @@
  * @author     Gerrit Uitslag <klapinklapin@gmail.com>
  */
 
-// must be run within Dokuwiki
-if(!defined('DOKU_INC')) die();
-
 /**
  * Show book bar and pagetool button at a wiki page
  */

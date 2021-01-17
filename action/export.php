@@ -4,9 +4,6 @@
  * @author     Gerrit Uitslag <klapinklapin@gmail.com>
  */
 
-// must be run within Dokuwiki
-if(!defined('DOKU_INC')) die();
-
 /**
  * Take care of exporting only pages in selection, and not the bookmanager page itself
  */

@@ -4,9 +4,6 @@
  * @author     Gerrit Uitslag <klapinklapin@gmail.com>
  */
 
-// must be run within Dokuwiki
-if(!defined('DOKU_INC')) die();
-
 /**
  * Show book bar and pagetool button at a wiki page
  */
@@ -75,21 +72,19 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
             }
         }
 
-        $json = new JSON();
         header('Content-Type: application/json');
-        echo $json->encode($this->response);
+        echo json_encode($this->response);
     }
 
     /**
      * Get POSTed selection
      *
-     * @return array|mixed
+     * @return array
      */
     protected function getPOSTedSelection() {
         global $INPUT;
-        $json = new JSON(JSON_LOOSE_TYPE);
 
-        $selection = $json->decode($INPUT->post->str('selection', '', true));
+        $selection = json_decode($INPUT->post->str('selection', '', true), true);
         if(!is_array($selection)) {
             $selection = array();
         }
@@ -99,7 +94,7 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
     /**
      * Return the titles and urls to given pageids
      *
-     * @param array[] $selection
+     * @param array $selection
      */
     private function retrievePageInfo($selection) {
         foreach($selection as $pageid) {
