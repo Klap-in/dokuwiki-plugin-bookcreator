@@ -95,24 +95,24 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
     }
 
     /**
-     * @param string        $mode render mode e.g. text, xhtml, meta,...
+     * @param string        $format render mode e.g. text, xhtml, meta,...
      * @param Doku_Renderer &$renderer
      * @param array         $data return of handle()
      * @return bool
      */
-    function render($mode, Doku_Renderer $renderer, $data) {
+    function render($format, Doku_Renderer $renderer, $data) {
         global $ID;
         global $INPUT;
 
         list($type, $num, $order) = $data;
 
         if($type == "bookmanager") {
-            if($mode == 'text' && $INPUT->str('do') == 'export_text') {
-                $mode = 'xhtml';
+            if($format == 'text' && $INPUT->str('do') == 'export_text') {
+                $format = 'xhtml';
             }
 
-            if($mode == 'xhtml') {
-                /** @var $renderer Doku_Renderer_xhtml */
+            if($format == 'xhtml') {
+                /** @var Doku_Renderer_xhtml $renderer */
                 $renderer->info['cache'] = false;
 
                 // verification that if the user can save / delete the selections
@@ -142,8 +142,8 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         } else {
             // type == archive
 
-            if($mode == 'xhtml') {
-                /** @var $renderer Doku_Renderer_xhtml */
+            if($format == 'xhtml') {
+                /** @var Doku_Renderer_xhtml $renderer */
                 // generates the list of saved selections
                 $this->renderSelectionslist($renderer, $bookmanager = false, $this->getConf('book_page'), $order, $num);
             }
@@ -202,12 +202,11 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
      *
      * @param Doku_renderer_xhtml $renderer
      */
-    private function exportOnScreen(&$renderer) {
+    private function exportOnScreen($renderer) {
         global $ID;
         global $INPUT;
 
-        $json = new JSON(JSON_LOOSE_TYPE);
-        $list = $json->decode($INPUT->str('selection', '', true));
+        $list = json_decode($INPUT->str('selection', '', true), true);
         if(!is_array($list) || empty($list)) {
             http_status(400);
             print $this->getLang('empty');
@@ -218,10 +217,8 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         $renderer->doc = '';
 
         $render_mode = 'xhtml';
-//        $lf_subst    = '';
         if($INPUT->str('do') == 'export_text') {
             $render_mode = 'text';
-//            $lf_subst    = DOKU_LF;//'<br>';   //TODO: strange choice to replace by br
         }
 
         $skippedpages = array();
@@ -244,9 +241,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         $keep = $ID;
         foreach($list as $page) {
             $ID = $page;
-//            $renderer->doc .= str_replace(DOKU_LF, $lf_subst, p_cached_output(wikiFN($page), $render_mode, $page)); //p_wiki_xhtml($page,$REV,false);
-            $renderer->doc .= p_cached_output(wikiFN($page), $render_mode, $page); //p_wiki_xhtml($page,$REV,false);
-
+            $renderer->doc .= p_cached_output(wikiFN($page), $render_mode, $page);
         }
 
         //add mark for removing everything after these rendered pages, see action component 'export'
@@ -283,9 +278,9 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
         $form = new Doku_Form(array('method'=> 'post',
                                     'class'=> 'clearactive'));
         $form->addElement(form_makeButton('submit', '', $this->getLang('reset')));
-        $renderer->doc .= "<div align='center'>";
+        $renderer->doc .= '<div>';
         $renderer->doc .= $form->getForm();
-        $renderer->doc .= "</div>";
+        $renderer->doc .= '</div>';
 
         //close left column - open right column
         $renderer->doc .= "</div>";
