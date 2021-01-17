@@ -17,7 +17,7 @@ function Storage(key) {
  * @returns {boolean}
  */
 Storage.prototype.isSelected = function(pageid) {
-    return this._storage.indexOf(pageid) != -1;
+    return this._storage.indexOf(pageid) !== -1;
 };
 
 /**
@@ -66,7 +66,7 @@ Storage.prototype.deletePage = function(pageid) {
  */
 Storage.prototype._deletePage = function(pageid) {
     var pos = this._storage.indexOf(pageid);
-    if(pos == -1) return [];
+    if(pos === -1) return [];
 
     return this._storage.splice(pos, 1);
 };
@@ -209,30 +209,35 @@ var Bookcreator = {
      * Update the interface to current selection
      */
     updatePage: function() {
-
-        var $addtobookBtn2 = jQuery('.plugin_bookcreator_addtobook'),
-            $addtobookBtn = jQuery('.plugin_bookcreator__addtobook'),
+        //$addtobookBtn2 = jQuery('.plugin_bookcreator_addtobook,a.plugin_bookcreator_addtobook'),
+        var $addtobookBtn = jQuery('.plugin_bookcreator__addtobook'),
             $bookbar = jQuery('.bookcreator__bookbar');
 
         //pagetool add/remove button
-        /* TODO DEPRECATED 2017  */
-        $addtobookBtn2.css( "display", "block");
-        if ($addtobookBtn2.length) { //exists the addtobook link
-            var text = LANG.plugins.bookcreator['btn_' + (this.isCurrentPageSelected ? 'remove' : 'add') + 'tobook'];
-
-            $addtobookBtn2
-                .toggleClass('remove', this.isCurrentPageSelected)
-                .attr('title', text)
-                .children('span').html(text);
-        }
+        // /* TODO DEPRECATED 2017  */
+        // $addtobookBtn2.css( "display", "block");
+        // if ($addtobookBtn2.length) { //exists the addtobook link
+        //     var text = LANG.plugins.bookcreator['btn_' + (this.isCurrentPageSelected ? 'remove' : 'add') + 'tobook'];
+        //
+        //     $addtobookBtn2
+        //         .toggleClass('remove', this.isCurrentPageSelected)
+        //         .attr('title', text)
+        //         .children('span').html(text);
+        // }
 
         //pagetool add/remove button
-        if ($addtobookBtn.length) { //exists the addtobook link
-            var text = LANG.plugins.bookcreator['btn_' + (this.isCurrentPageSelected ? 'remove' : 'add') + 'tobook'];
+        if ($addtobookBtn.length) { //exists the addtobook item in pagetools?
+            let text = LANG.plugins.bookcreator['btn_' + (this.isCurrentPageSelected ? 'remove' : 'add') + 'tobook'];
 
             $addtobookBtn.find('a')
                 .toggleClass('remove', this.isCurrentPageSelected)
-                .attr('title', text).blur()
+                .attr('title', text).trigger('blur')
+                .children('span').html(text);
+
+            // Workaround for Bootstrap3 Template uses <a> instead of <li>
+            jQuery('a.plugin_bookcreator__addtobook')
+                .toggleClass('remove', this.isCurrentPageSelected)
+                .attr('title', text).trigger('blur')
                 .children('span').html(text);
         }
 
@@ -258,14 +263,8 @@ var Bookcreator = {
             return false;
         }
 
-        if(JSINFO.bookcreator.showBookbar == 'always'
-            || JSINFO.bookcreator.showBookbar == 'noempty' && this.selectedpages.count() > 0) {
-            // always show, or noempty and count>0
-            return true;
-        } else {
-            // never show or noempty and count=0
-            return false;
-        }
+        return JSINFO.bookcreator.showBookbar === 'always'
+            || JSINFO.bookcreator.showBookbar === 'noempty' && this.selectedpages.count() > 0;
     }
 };
 
@@ -282,11 +281,11 @@ var BookManager  = {
 
     setupUpdateObserver: function(){
         jQuery(window).on('storage', function(event) {
-            if(event.key == Bookcreator.selectedpages.localStorageKey) {
+            if(event.key === Bookcreator.selectedpages.localStorageKey) {
                 BookManager.init();
                 BookManager.updateListsFromStorage();
             }
-            if(event.key == BookManager.booktitle.localStorageKey) {
+            if(event.key === BookManager.booktitle.localStorageKey) {
                 BookManager.fillTitle();
             }
         })
@@ -405,7 +404,7 @@ var BookManager  = {
             return id.substr(4);
         });
 
-        if(selectionname == 'selected') {
+        if(selectionname === 'selected') {
             selection = Bookcreator.selectedpages.getSelection();
         } else {
             selection = BookManager.deletedpages.getSelection();
@@ -504,7 +503,7 @@ var BookManager  = {
             endindex = ui.item.index();
 
         if(isItemSortedWithinList) {
-            if(startindex != endindex) {
+            if(startindex !== endindex) {
                 if(isAddAction) {
                     Bookcreator.selectedpages.movePage(pageid, endindex);
                 } else {
@@ -538,10 +537,10 @@ var BookManager  = {
         //confirm dialog
         var msg,
             comfirmed = false;
-        if (action == "delete") {
+        if (action === "delete") {
             msg = LANG.plugins.bookcreator.confirmdel;
         } else {
-            if (Bookcreator.selectedpages.count() == 0) {
+            if (Bookcreator.selectedpages.count() === 0) {
                 comfirmed = true;
             }
             msg = LANG.plugins.bookcreator.confirmload;
@@ -572,7 +571,7 @@ var BookManager  = {
                 DOKU_BASE + 'lib/exe/ajax.php',
                 {
                     call: 'plugin_bookcreator_call',
-                    action: (action == 'load' ? 'loadSavedSelection' : 'deleteSavedSelection'),
+                    action: (action === 'load' ? 'loadSavedSelection' : 'deleteSavedSelection'),
                     savedselectionname: pageid,
                     sectok: jQuery('input[name="sectok"]').val()
                 },
@@ -626,8 +625,8 @@ var BookManager  = {
 
         function setMsg($msg, msg, state) {
             $msg.html(msg)
-                .toggleClass('error', state == -1)
-                .toggleClass('success', state == 1);
+                .toggleClass('error', state === -1)
+                .toggleClass('success', state === 1);
         }
 
         if(data.hasOwnProperty('error')) {
@@ -663,7 +662,7 @@ var BookManager  = {
         var $this = jQuery(this),
             do_action = $this.find('select[name="do"]').val();
 
-        if(do_action == 'export_html' || do_action == 'export_text') {
+        if(do_action === 'export_html' || do_action === 'export_text') {
             //just extend the form
             $this.append(
                 '<input type="hidden" name="selection" value="'
@@ -730,8 +729,8 @@ jQuery(function () {
 
         //bookbar buttons
         jQuery('a.bookcreator__tglPgSelection').click(Bookcreator.clickAddRemoveButton);
-        //pagetool button TODO DEPRECATED 2017
-        jQuery('.plugin_bookcreator_addtobook').click(Bookcreator.clickAddRemoveButton);
+        // //pagetool button TODO DEPRECATED 2017
+        // jQuery('.plugin_bookcreator_addtobook').click(Bookcreator.clickAddRemoveButton);
         //pagetool button
         jQuery('.plugin_bookcreator__addtobook').click(Bookcreator.clickAddRemoveButton);
         //gui

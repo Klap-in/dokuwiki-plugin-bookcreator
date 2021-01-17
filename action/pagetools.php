@@ -44,40 +44,45 @@ class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
         /**
          * Display toolbar
          */
-        echo "<div class='bookcreator__bookbar' style='vertical-align:bottom;'>";
+        $html = "<div class='bookcreator__bookbar' style='vertical-align:bottom;'>";
 
         //add page to selection
-        echo "<div class='bookcreator__panel' id='bookcreator__add'>";
-        echo '  <b>' . $this->getLang('toolbar') . '</b><br>';
-        echo '  <a class="bookcreator__tglPgSelection" href="#">';
-        echo "    <img src='" . DOKU_URL . "lib/plugins/bookcreator/images/add.png'>&nbsp;" . $this->getLang('addpage');
-        echo "  </a>";
-        echo "</div>";
+        $html .= '<div class="bookcreator__panel" id="bookcreator__add">
+                      <b>' . $this->getLang('toolbar') . '</b><br>
+                      <a class="bookcreator__tglPgSelection bc__bookmarkplus" href="#">
+                       '. inlineSVG(__DIR__ . '/../images/bookmark-plus.svg') . '
+                        &nbsp;' . $this->getLang('addpage') . '
+                    </a>
+                  </div>';
 
         //remove page to selection
-        echo "<div class='bookcreator__panel' id='bookcreator__remove'>";
-        echo '  <b>' . $this->getLang('toolbar') . '</b><br>';
-        echo '  <a class="bookcreator__tglPgSelection" href="#">';
-        echo "    <img src='" . DOKU_URL . "lib/plugins/bookcreator/images/del.png'>&nbsp;" . $this->getLang('removepage');
-        echo "  </a>&nbsp;";
-        echo "</div>";
+        $html .= '<div class="bookcreator__panel" id="bookcreator__remove">
+                      <b>' . $this->getLang('toolbar') . '</b><br>
+                      <a class="bookcreator__tglPgSelection bc__bookmarkmin" href="#">
+                      ' . inlineSVG(__DIR__ . '/../images/bookmark-minus.svg') . '
+                      &nbsp;' . $this->getLang('removepage') . '
+                      </a>&nbsp;
+                  </div>';
 
         //pointer to Book Manager
-        echo "<div class='bookcreator__panel' ><br>";
-        echo "  <a href='" . wl($this->getConf('book_page')) . "'>";
-        echo "    <img src='" . DOKU_URL . "lib/plugins/bookcreator/images/smallbook.png'>&nbsp;" . $this->getLang('showbook');
-        echo "    (<span id='bookcreator__pages'>0</span> " . $this->getLang('pages') . ")";
-        echo "  </a>";
-        echo "</div>";
+        $html .= '<div class="bookcreator__panel" >
+                      <br>
+                      <a href="' . wl($this->getConf('book_page')) . '" class="bc__manager">
+                      ' . inlineSVG(__DIR__ . '/../images/notebook-edit-outline.svg') . '
+                      &nbsp;' . $this->getLang('showbook') . '(<span id="bookcreator__pages">0</span> ' . $this->getLang('pages') . ')
+                      </a>
+                  </div>';
 
         // pointer to help
-        echo "<div class='bookcreator__panel' style='float:right;'>";
-        echo "  <a href='" . wl($this->getConf('help_page')) . "'>";
-        echo "    <img src='" . DOKU_URL . "lib/plugins/bookcreator/images/help.png'>&nbsp;" . $this->getLang('help');
-        echo "  </a>";
-        echo "</div>";
+        $html .= '<div class="bookcreator__panel" style="float:right;">
+                      <a href="' . wl($this->getConf('help_page')) . '" class="bc__bookmarkhelp">
+                      ' . inlineSVG(__DIR__ . '/../images/help-circle.svg') . '
+                      &nbsp;' . $this->getLang('help') . '
+                      </a>
+                  </div>';
 
-        echo "</div>";
+        $html .= '</div>';
+        echo $html;
 
     }
 
