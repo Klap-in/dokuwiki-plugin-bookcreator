@@ -49,3 +49,4 @@ $lang['titlepreparedownload']  = 'Förbereder nedladdning...';
 $lang['preparingdownload']     = 'Vi förbereder din nedladdning, vänligen vänta...';
 $lang['titleerrordownload']    = 'Fel';
 $lang['faileddownload']        = 'Det uppstod ett problem vid generering av din nedladdning';
+$lang['forbidden']             = 'Du har inte tillträde till följande sidor: %s.<br/><br/>Använd inställningen \'Uteslut förbjudna sidor\' för att skapa din bok med de tillgängliga sidorna.';

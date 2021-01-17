@@ -224,6 +224,23 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
 //            $lf_subst    = DOKU_LF;//'<br>';   //TODO: strange choice to replace by br
         }
 
+        $skippedpages = array();
+        foreach($list as $index => $pageid) {
+            if(auth_quickaclcheck($pageid) < AUTH_READ) {
+                $skippedpages[] = $pageid;
+                unset($list[$index]);
+            }
+        }
+        $list = array_filter($list, 'strlen'); //use of strlen() callback prevents removal of pagename '0'
+
+        //if selection contains forbidden pages throw (overridable) warning
+        if(!$INPUT->bool('book_skipforbiddenpages') && !empty($skippedpages)) {
+            $msg = hsc(join(', ', $skippedpages));
+            http_status(400);
+            print sprintf($this->getLang('forbidden'), $msg);
+            exit();
+        }
+
         $keep = $ID;
         foreach($list as $page) {
             $ID = $page;

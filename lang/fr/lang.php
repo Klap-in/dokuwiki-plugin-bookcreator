@@ -51,3 +51,4 @@ $lang['titlepreparedownload']  = 'Téléchargement en préparation...';
 $lang['preparingdownload']     = 'Nous préparons le téléchargement, veuillez patienter...';
 $lang['titleerrordownload']    = 'Erreur';
 $lang['faileddownload']        = 'Il y a eu un problème dans la préparation du téléchargement.';
+$lang['forbidden']             = 'Vous n\'avez pas accès à ces pages : %s.<br/><br/>Utilisez l\'option \'Sauter les pages interdites\' pour créer votre livre avec les pages disponibles.';

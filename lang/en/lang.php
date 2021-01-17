@@ -59,3 +59,4 @@ $lang['titlepreparedownload']   = "Preparing Download...";
 $lang['preparingdownload']      = "We are preparing your download, please wait...";
 $lang['titleerrordownload']     = "Error";
 $lang['faileddownload']         = "There was a problem generating your download.";
+$lang['forbidden']         = "You have no access to these pages: %s.<br/><br/>Use option 'Skip Forbidden Pages' to create your book with the available pages.";

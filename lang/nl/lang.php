@@ -52,3 +52,4 @@ $lang['titlepreparedownload']  = 'Download Voorbereiden...';
 $lang['preparingdownload']     = 'We zijn uw download aan het voorbereiden, even geduld alstublieft...';
 $lang['titleerrordownload']    = 'Fout';
 $lang['faileddownload']        = 'Er was een probleem bij het genereren van uw download.';
+$lang['forbidden']             = 'Je hebt geen toegang tot deze pagina\'s: %s.<br/><br/>Gebruik de  optie \'Verboden pagina\'s overslaan\' om het boek te maken met de beschikbare pagina\'s.';

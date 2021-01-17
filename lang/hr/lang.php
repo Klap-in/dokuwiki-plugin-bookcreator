@@ -49,3 +49,4 @@ $lang['titlepreparedownload']  = 'Priprema preuzimanja...';
 $lang['preparingdownload']     = 'Pripremamo vaše preuzimanje, molimo sačekajte...';
 $lang['titleerrordownload']    = 'Greška';
 $lang['faileddownload']        = 'Nastao je problem pri kreiranju vašeg preuzimanja.';
+$lang['forbidden']             = 'Nemate pristup ovim stranicama: %s.<br/><br/>Koristite opciju \'Skip Forbidden Pages\' da kreirate knjigu s raspoloživim stranicama.';

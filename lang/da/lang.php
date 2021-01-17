@@ -50,3 +50,4 @@ $lang['titlepreparedownload']  = 'Forbereder download...';
 $lang['preparingdownload']     = 'Vi gør klar til din download, vent venligst...';
 $lang['titleerrordownload']    = 'Fejl';
 $lang['faileddownload']        = 'Der opstod et problem under klargøring af din download';
+$lang['forbidden']             = 'Du har ikke adgang til disse sider: %s.<br/><br/>Brug indstillingen \'Spring forbudte sider over\' for at fortsætte med de sider du har adgang til.';

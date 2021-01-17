@@ -40,3 +40,4 @@ $lang['js']['showpage']              = 'Mostrar página';
 $lang['delselection']          = 'Remover a seleção salva';
 $lang['loadselection']         = 'Carregar seleção salva';
 $lang['showselection']         = "Mostrar seleção salva";
+$lang['forbidden']             = 'Você não tem acesso a essas páginas: %s.<br/><br/>Use a opção \'Ignorar Páginas Proibidas\' para criar seu livro com as páginas disponíveis.';

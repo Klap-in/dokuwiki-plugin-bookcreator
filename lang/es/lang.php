@@ -43,3 +43,4 @@ $lang['js']['showpage']              = 'Mostrar página';
 $lang['delselection']          = 'Eliminar selección guardada';
 $lang['showselection']         = 'Mostrar selección guardada';
 $lang['loadselection']         = 'Cargar selección guardada';
+$lang['forbidden']             = 'No tiene acceso a estas páginas:%s.<br/><br/>Use la opción \'Saltar páginas prohibidas\' para crear su libro con las páginas disponibles.';

@@ -52,3 +52,4 @@ $lang['titlepreparedownload']  = 'Připravuje se stažení...';
 $lang['preparingdownload']     = 'Připravujeme pro vás stažení, prosím čekejte...';
 $lang['titleerrordownload']    = 'Chyba';
 $lang['faileddownload']        = 'Při generování vašeho stažení nastal problém.';
+$lang['forbidden']             = 'Nemáte přístup k těmto stránkám: %s.<br/><br/>Chcete-li vytvořit svou knihu dostupných stránek, použijte volbu „Přeskočit zakázané stránky“.';

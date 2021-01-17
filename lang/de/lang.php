@@ -53,3 +53,4 @@ $lang['titlepreparedownload']  = 'Download wird vorbereitet...';
 $lang['preparingdownload']     = 'Wir bereiten Ihren Download vor, bitte warten...';
 $lang['titleerrordownload']    = 'Fehler';
 $lang['faileddownload']        = 'Beim Generieren des Downloads ist ein Fehler aufgetreten.';
+$lang['forbidden']             = 'Sie haben keine Berechtigung für folgende Seiten: %s.<br/><br/>Benutzen Sie die Option \'Seiten ohne Berechtigung auslassen\' um das Buch mit den verfügbaren Seiten zu erstellen.';

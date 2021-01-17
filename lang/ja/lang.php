@@ -51,3 +51,4 @@ $lang['titlepreparedownload']  = 'ダウンロードの準備中...';
 $lang['preparingdownload']     = 'ダウンロードを準備しています、お待ちください...';
 $lang['titleerrordownload']    = 'エラー';
 $lang['faileddownload']        = 'ダウンロード作成中に問題が発生しました。';
+$lang['forbidden']             = 'ページ %s へのアクセス権限がありません。<br/><br/>利用可能なページで冊子を作成するには、「アクセス出来ないページを飛ばす」オプションをご利用下さい。';
