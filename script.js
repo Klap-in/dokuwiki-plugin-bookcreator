@@ -229,10 +229,16 @@ var Bookcreator = {
         if ($addtobookBtn.length) { //exists the addtobook item in pagetools?
             let text = LANG.plugins.bookcreator['btn_' + (this.isCurrentPageSelected ? 'remove' : 'add') + 'tobook'];
 
-            $addtobookBtn.find('a')
+            let $a = $addtobookBtn.find('a')
                 .toggleClass('remove', this.isCurrentPageSelected)
-                .attr('title', text).trigger('blur')
-                .children('span').html(text);
+                .attr('title', text).trigger('blur');
+            let $span = $a.children('span');
+            if($span.length) {
+                $span.html(text);
+            } else {
+                //e.g vector template does not use svg, so has no span
+                $a.html(text);
+            }
 
             // Workaround for Bootstrap3 Template uses <a> instead of <li>
             jQuery('a.plugin_bookcreator__addtobook')
