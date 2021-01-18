@@ -65,9 +65,9 @@ var bc_nspicker = {
         }
 
         // attach event handlers
-        jQuery('#bc__nspicker .ui-dialog-titlebar-close').click(bc_nspicker.hide);
-        jQuery('#bc__nspicker_select').click(bc_nspicker.selectNamespace_exec);
-        jQuery('#bc__nspicker_cancel').click(bc_nspicker.hide);
+        jQuery('#bc__nspicker .ui-dialog-titlebar-close').on('click', bc_nspicker.hide);
+        jQuery('#bc__nspicker_select').on('click', bc_nspicker.selectNamespace_exec);
+        jQuery('#bc__nspicker_cancel').on('click', bc_nspicker.hide);
         bc_nspicker.$entry.keyup(bc_nspicker.onEntry);
         jQuery(bc_nspicker.result).on('click', 'a', bc_nspicker.onResultClick);
     },
@@ -303,7 +303,6 @@ var bc_nspicker = {
         var content;
         var pages;
         var name;
-        var text;
 
         // Go through the array of pages, add them and prepare
         // a message for the user
