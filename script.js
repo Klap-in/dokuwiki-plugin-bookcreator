@@ -1,4 +1,5 @@
 /* DOKUWIKI:include script/jquery.fileDownload.js */
+/* DOKUWIKI:include script/nspicker.js */
 
 /**
  * Storage object for an array with a selection of pages
@@ -771,6 +772,15 @@ jQuery(function () {
         jQuery('form.clearactive button').on('click', function(event) {
             event.preventDefault();
             BookManager.clearSelections();
+        });
+
+        //add namespace to selection button
+        bc_nspicker.init(jQuery('#dokuwiki__content'));
+        jQuery('form.selectnamespace button').on('click', function(event) {
+            bc_nspicker.val = null;
+            bc_nspicker.toggle();
+            event.preventDefault();
+            return 'bc__nspicker';
         });
 
         BookManager.updateListsFromStorage();
