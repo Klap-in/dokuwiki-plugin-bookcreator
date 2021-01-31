@@ -213,6 +213,12 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
                 if(!is_array($list) || empty($list)) {
                     throw new Exception($this->getLang('empty'));
                 }
+            } elseif($INPUT->has('savedselection')) {
+                //export a saved selection of the Bookcreator Plugin
+                /** @var action_plugin_bookcreator_handleselection $SelectionHandling */
+                $SelectionHandling = plugin_load('action', 'bookcreator_handleselection');
+                $savedselection = $SelectionHandling->loadSavedSelection($INPUT->str('savedselection'));
+                $list = $savedselection['selection'];
             }
 
             //remove first part of bookmanager page
