@@ -205,39 +205,43 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
     private function exportOnScreen($renderer) {
         global $ID;
         global $INPUT;
-
-        $list = json_decode($INPUT->str('selection', '', true), true);
-        if(!is_array($list) || empty($list)) {
-            http_status(400);
-            print $this->getLang('empty');
-            exit();
-        }
-
-        //remove first part of bookmanager page
-        $renderer->doc = '';
-
-        $render_mode = 'xhtml';
-        if($INPUT->str('do') == 'export_text') {
-            $render_mode = 'text';
-        }
-
-        $skippedpages = array();
-        foreach($list as $index => $pageid) {
-            if(auth_quickaclcheck($pageid) < AUTH_READ) {
-                $skippedpages[] = $pageid;
-                unset($list[$index]);
+        try{
+            $list = array();
+            if($INPUT->has('selection')) {
+                //export current list from the bookmanager
+                $list = json_decode($INPUT->str('selection', '', true), true);
+                if(!is_array($list) || empty($list)) {
+                    throw new Exception($this->getLang('empty'));
+                }
             }
-        }
-        $list = array_filter($list, 'strlen'); //use of strlen() callback prevents removal of pagename '0'
 
-        //if selection contains forbidden pages throw (overridable) warning
-        if(!$INPUT->bool('book_skipforbiddenpages') && !empty($skippedpages)) {
-            $msg = hsc(join(', ', $skippedpages));
+            //remove first part of bookmanager page
+            $renderer->doc = '';
+
+            $render_mode = 'xhtml';
+            if($INPUT->str('do') == 'export_text') {
+                $render_mode = 'text';
+            }
+
+            $skippedpages = array();
+            foreach($list as $index => $pageid) {
+                if(auth_quickaclcheck($pageid) < AUTH_READ) {
+                    $skippedpages[] = $pageid;
+                    unset($list[$index]);
+                }
+            }
+            $list = array_filter($list, 'strlen'); //use of strlen() callback prevents removal of pagename '0'
+
+            //if selection contains forbidden pages throw (overridable) warning
+            if(!$INPUT->bool('book_skipforbiddenpages') && !empty($skippedpages)) {
+                $msg = hsc(join(', ', $skippedpages));
+                throw new Exception(sprintf($this->getLang('forbidden'), $msg));
+            }
+        } catch (Exception $e) {
             http_status(400);
-            print sprintf($this->getLang('forbidden'), $msg);
+            print $e->getMessage();
             exit();
         }
-
         $keep = $ID;
         foreach($list as $page) {
             $ID = $page;

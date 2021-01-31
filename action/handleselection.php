@@ -11,7 +11,6 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
 
     /** @var helper_plugin_bookcreator */
     protected $hlp;
-    protected $response;
 
     /**
      * Constructor
@@ -44,41 +43,42 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
 
         global $INPUT;
 
-        $this->response['error'] = '';
-
-        if(!checkSecurityToken()) {
-            $this->response['error'] .= 'Security Token did not match. Possible CSRF attack.';
-        } else {
+        try {
+            if(!checkSecurityToken()) {
+                throw new Exception('Security Token did not match. Possible CSRF attack.');
+            }
 
             $action = $INPUT->post->str('action', '', true);
             switch($action) {
                 case 'retrievePageinfo':
-                    $this->retrievePageInfo($this->getPOSTedSelection());
+                    $response = $this->retrievePageInfo($this->getPOSTedSelection());
                     break;
                 case 'saveSelection':
-                    $title =  $INPUT->post->str('savedselectionname');
-                    $this->saveSelection($title, $this->getPOSTedSelection());
+                    $title = $INPUT->post->str('savedselectionname');
+                    $response = $this->saveSelection($title, $this->getPOSTedSelection());
                     break;
                 case 'loadSavedSelection':
-                    $page =  $INPUT->post->str('savedselectionname');
-                    $this->loadSavedSelection($page);
+                    $page = $INPUT->post->str('savedselectionname');
+                    $response = $this->loadSavedSelection($page);
                     break;
                 case 'deleteSavedSelection':
-                    $page =  $INPUT->post->str('savedselectionname');
-                    $this->deleteSavedSelection($page);
+                    $page = $INPUT->post->str('savedselectionname');
+                    $response = $this->deleteSavedSelection($page);
                     break;
                 case 'searchPages':
-                    $namespace =  $INPUT->post->str('ns');
-                    $recursive =  $INPUT->post->str('r');
-                    $this->searchPages($namespace, $recursive);
+                    $namespace = $INPUT->post->str('ns');
+                    $recursive = $INPUT->post->str('r');
+                    $response = $this->searchPages($namespace, $recursive);
                     break;
                 default:
-                    $this->response['error'] .= 'unknown action';
+                    $response['error'] = 'unknown action ';
             }
+        } catch(Exception $e){
+            $response['error'] = $e->getMessage();
         }
 
         header('Content-Type: application/json');
-        echo json_encode($this->response);
+        echo json_encode($response);
     }
 
     /**
@@ -100,15 +100,18 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
      * Return the titles and urls to given pageids
      *
      * @param array $selection
+     * @return array with slection
      */
     private function retrievePageInfo($selection) {
+        $response['selection'] = array();
         foreach($selection as $pageid) {
             $page = cleanID($pageid);
             if(auth_quickaclcheck($pageid) < AUTH_READ) {
                 continue;
             }
-            $this->response['selection'][$page] = array(wl($page, false, true, "&"), $this->getTitle($page));
+            $response['selection'][$page] = array(wl($page, false, true, "&"), $this->getTitle($page));
         }
+        return $response;
     }
 
     /**
@@ -158,89 +161,91 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
      * Selection is saved as bullet list on a wikipage
      *
      * @param string $savedSelectionName Title for saved selection
-     * @param array[] $selection
+     * @param array $selection
+     * @return array with message and item for the list of saved selections
+     * @throws Exception
      */
     private function saveSelection($savedSelectionName, $selection) {
         if(auth_quickaclcheck($this->getConf('save_namespace').':*') < AUTH_CREATE) {
-            $this->response['error'] .= 'no access to namespace: ' . $this->getConf('save_namespace');
+            throw new Exception('no access to namespace: ' . $this->getConf('save_namespace'));
         }
-
         if(empty($selection)) {
-            $this->response['error'] .= $this->getLang('empty');
+            throw new Exception($this->getLang('empty'));
         }
-
         if(empty($savedSelectionName)){
-            $this->response['error'] .= $this->getLang('needtitle');
+            throw new Exception($this->getLang('needtitle'));
         }
 
+        //generate content
+        $content = "====== ".$savedSelectionName." ======".DOKU_LF;
 
-        if(empty($this->response['error'])) {
-            //generate content
-            $content = "====== ".$savedSelectionName." ======".DOKU_LF;
-
-            foreach($selection as $pageid) {
-                $content .= "  * [[:$pageid]]".DOKU_LF;
-            }
-
-            $save_pageid = cleanID($this->getConf('save_namespace') . ":" . $savedSelectionName);
-            saveWikiText($save_pageid, $content, $this->getLang('selectionstored'));
-
-            $this->response['succes'] = sprintf($this->getLang('saved'), $save_pageid);
-
-            $item = array(
-                'id' => $save_pageid,
-                'mtime' => filemtime(wikiFN($save_pageid))
-            );
-            $this->response['item'] = $this->hlp->createListitem($item, true);
+        foreach($selection as $pageid) {
+            $content .= "  * [[:$pageid]]".DOKU_LF;
         }
+
+        $save_pageid = cleanID($this->getConf('save_namespace') . ":" . $savedSelectionName);
+        saveWikiText($save_pageid, $content, $this->getLang('selectionstored'));
+
+        $response['succes'] = sprintf($this->getLang('saved'), $save_pageid);
+
+        $item = array(
+            'id' => $save_pageid,
+            'mtime' => filemtime(wikiFN($save_pageid))
+        );
+        $response['item'] = $this->hlp->createListitem($item, true);
+        return $response;
     }
 
     /**
      * Handle request for deleting of selection list
      *
      * @param string $page with saved selection
+     * @return array with message and deleted page name
+     * @throws Exception
      */
     private function deleteSavedSelection($page) {
         if(auth_quickaclcheck($this->getConf('save_namespace').':*') < AUTH_CREATE) {
-            $this->response['error'] .= 'no access to namespace: ' . $this->getConf('save_namespace');
+            throw new Exception('no access to namespace: ' . $this->getConf('save_namespace'));
         }
 
         $pageid = cleanID($this->getConf('save_namespace') . ":" . $page);
 
         if(!file_exists(wikiFN($pageid))){
-            $this->response['error'] .= sprintf($this->getLang('selectiondontexist'), $pageid);
+            throw new Exception(sprintf($this->getLang('selectiondontexist'), $pageid));
         }
 
-        if(empty($this->response['error'])) {
-            saveWikiText($pageid, '', $this->getLang('selectiondeleted'));
-            $this->response['success'] = sprintf($this->getLang('deleted'), $pageid);
-            $this->response['deletedpage'] = noNS($pageid);
-        }
+        saveWikiText($pageid, '', $this->getLang('selectiondeleted'));
+        $response['success'] = sprintf($this->getLang('deleted'), $pageid);
+        $response['deletedpage'] = noNS($pageid);
+        return $response;
     }
 
     /**
      * Load the specified saved selection
      *
      * @param string $page with saved selection
+     * @return array with title and a list of pages
+     * @throws Exception
      */
-    protected function loadSavedSelection($page) {
+    public function loadSavedSelection($page) {
         $pageid = cleanID($this->getConf('save_namespace') . ":" . $page);
 
+        if($page === '') {
+            throw new Exception(sprintf($this->getLang('selectiondontexist'), $pageid .':'));
+        }
+
         if(auth_quickaclcheck($pageid) < AUTH_READ) {
-            $this->response['error'] .= sprintf($this->getLang('selectionforbidden'), $pageid);
+            throw new Exception(sprintf($this->getLang('selectionforbidden'), $pageid));
         }
 
         if(!file_exists(wikiFN($pageid))) {
-            $this->response['error'] .= sprintf($this->getLang('selectiondontexist'), $pageid);
+            throw new Exception(sprintf($this->getLang('selectiondontexist'), $pageid));
         }
 
-        if(empty($this->response['error'])) {
-            list($title, $list) = $this->getSavedSelection($pageid);
-            $this->response = array(
-                'title' => $title,
-                'selection' => $list
-            );
-        }
+        list($title, $list) = $this->getSavedSelection($pageid);
+        $response['title'] = $title;
+        $response['selection'] = $list;
+        return $response;
     }
 
     /**
@@ -284,6 +289,7 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
      *
      * @param string $ns The namespace to search in
      * @param boolean $recursive Search in sub-namespaces too?
+     * @return array with a list pages
      */
     protected function searchPages($ns, $recursive) {
         global $conf;
@@ -305,7 +311,8 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
         foreach ($items as $item) {
             $pages [] = $item['id'];
         }
-        $this->response = array();
-        $this->response['pages'] = $pages;
+
+        $response['pages'] = $pages;
+        return $response;
     }
 }
