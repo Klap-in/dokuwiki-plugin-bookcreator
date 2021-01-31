@@ -13,7 +13,7 @@ if(!defined('DOKU_INC')) die();
  * All DokuWiki plugins to extend the parser/rendering mechanism
  * need to inherit from this class
  */
-class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
+class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
 
     /** @var helper_plugin_bookcreator */
     protected $hlp;
@@ -28,7 +28,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
      * @param string $mode
      */
     function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('~~\w*?BOOK.*?~~', $mode, 'plugin_bookcreator');
+        $this->Lexer->addSpecialPattern('~~\w*?BOOK.*?~~', $mode, 'plugin_bookcreator_bookmanager');
     }
 
     /**
