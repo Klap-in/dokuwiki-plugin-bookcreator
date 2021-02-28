@@ -13,7 +13,7 @@ if(!defined('DOKU_INC')) die();
  * All DokuWiki plugins to extend the parser/rendering mechanism
  * need to inherit from this class
  */
-class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
+class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
 
     /** @var helper_plugin_bookcreator */
     protected $hlp;
@@ -28,7 +28,7 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
      * @param string $mode
      */
     function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('~~\w*?BOOK.*?~~', $mode, 'plugin_bookcreator');
+        $this->Lexer->addSpecialPattern('~~\w*?BOOK.*?~~', $mode, 'plugin_bookcreator_bookmanager');
     }
 
     /**
@@ -80,12 +80,17 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
             list(/* $junk */, $params) = explode(':', $match, 2);
             list($param1, $param2) = explode('&', $params, 2);
 
+            $sortoptions = ['date', 'title'];
             if(is_numeric($param1)) {
-                $num = $param1;
-                if(is_string($param2)) $order = $param2;
-            } elseif(is_string($param1)) {
-                $order = $param1;
-                if(is_numeric($param2)) $num = $param2;
+                $num = (int) $param1;
+                if(in_array($param2, $sortoptions)) {
+                    $order = $param2;
+                }
+            } elseif(is_numeric($param2)) {
+                $num = (int) $param2;
+                if(in_array($param1, $sortoptions)) {
+                    $order = $param1;
+                }
             }
 
         }
@@ -205,39 +210,49 @@ class syntax_plugin_bookcreator extends DokuWiki_Syntax_Plugin {
     private function exportOnScreen($renderer) {
         global $ID;
         global $INPUT;
-
-        $list = json_decode($INPUT->str('selection', '', true), true);
-        if(!is_array($list) || empty($list)) {
-            http_status(400);
-            print $this->getLang('empty');
-            exit();
-        }
-
-        //remove first part of bookmanager page
-        $renderer->doc = '';
-
-        $render_mode = 'xhtml';
-        if($INPUT->str('do') == 'export_text') {
-            $render_mode = 'text';
-        }
-
-        $skippedpages = array();
-        foreach($list as $index => $pageid) {
-            if(auth_quickaclcheck($pageid) < AUTH_READ) {
-                $skippedpages[] = $pageid;
-                unset($list[$index]);
+        try{
+            $list = array();
+            if($INPUT->has('selection')) {
+                //export current list from the bookmanager
+                $list = json_decode($INPUT->str('selection', '', true), true);
+                if(!is_array($list) || empty($list)) {
+                    throw new Exception($this->getLang('empty'));
+                }
+            } elseif($INPUT->has('savedselection')) {
+                //export a saved selection of the Bookcreator Plugin
+                /** @var action_plugin_bookcreator_handleselection $SelectionHandling */
+                $SelectionHandling = plugin_load('action', 'bookcreator_handleselection');
+                $savedselection = $SelectionHandling->loadSavedSelection($INPUT->str('savedselection'));
+                $list = $savedselection['selection'];
             }
-        }
-        $list = array_filter($list, 'strlen'); //use of strlen() callback prevents removal of pagename '0'
 
-        //if selection contains forbidden pages throw (overridable) warning
-        if(!$INPUT->bool('book_skipforbiddenpages') && !empty($skippedpages)) {
-            $msg = hsc(join(', ', $skippedpages));
+            //remove first part of bookmanager page
+            $renderer->doc = '';
+
+            $render_mode = 'xhtml';
+            if($INPUT->str('do') == 'export_text') {
+                $render_mode = 'text';
+            }
+
+            $skippedpages = array();
+            foreach($list as $index => $pageid) {
+                if(auth_quickaclcheck($pageid) < AUTH_READ) {
+                    $skippedpages[] = $pageid;
+                    unset($list[$index]);
+                }
+            }
+            $list = array_filter($list, 'strlen'); //use of strlen() callback prevents removal of pagename '0'
+
+            //if selection contains forbidden pages throw (overridable) warning
+            if(!$INPUT->bool('book_skipforbiddenpages') && !empty($skippedpages)) {
+                $msg = hsc(join(', ', $skippedpages));
+                throw new Exception(sprintf($this->getLang('forbidden'), $msg));
+            }
+        } catch (Exception $e) {
             http_status(400);
-            print sprintf($this->getLang('forbidden'), $msg);
+            print $e->getMessage();
             exit();
         }
-
         $keep = $ID;
         foreach($list as $page) {
             $ID = $page;

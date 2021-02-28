@@ -2,3 +2,4 @@
 # but were removed later. An up to date plugin should not have any of
 # the files installed
 action.php
+syntax.php
