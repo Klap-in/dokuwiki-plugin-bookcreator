@@ -5,7 +5,7 @@
  * @group plugin_bookcreator
  * @group plugins
  */
-class general_plugin_bookcreator_test extends DokuWikiTest
+class generalTest extends DokuWikiTest
 {
 
     /**
