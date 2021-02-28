@@ -86,11 +86,13 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
                 if(in_array($param2, $sortoptions)) {
                     $order = $param2;
                 }
+            } elseif(in_array($param1, $sortoptions)) {
+                $order = $param1;
+                if(is_numeric($param2)) {
+                    $num = (int)$param2;
+                }
             } elseif(is_numeric($param2)) {
                 $num = (int) $param2;
-                if(in_array($param1, $sortoptions)) {
-                    $order = $param1;
-                }
             }
 
         }
