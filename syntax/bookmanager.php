@@ -80,12 +80,17 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
             list(/* $junk */, $params) = explode(':', $match, 2);
             list($param1, $param2) = explode('&', $params, 2);
 
+            $sortoptions = ['date', 'title'];
             if(is_numeric($param1)) {
-                $num = $param1;
-                if(is_string($param2)) $order = $param2;
-            } elseif(is_string($param1)) {
-                $order = $param1;
-                if(is_numeric($param2)) $num = $param2;
+                $num = (int) $param1;
+                if(in_array($param2, $sortoptions)) {
+                    $order = $param2;
+                }
+            } elseif(is_numeric($param2)) {
+                $num = (int) $param2;
+                if(in_array($param1, $sortoptions)) {
+                    $order = $param1;
+                }
             }
 
         }
