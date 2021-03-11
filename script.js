@@ -66,7 +66,7 @@ Storage.prototype.deletePage = function(pageid) {
  * @private
  */
 Storage.prototype._deletePage = function(pageid) {
-    var pos = this._storage.indexOf(pageid);
+    let pos = this._storage.indexOf(pageid);
     if(pos === -1) return [];
 
     return this._storage.splice(pos, 1);
@@ -121,7 +121,7 @@ Storage.prototype._save = function() {
  * Load selection from browser's localStorage
  */
 Storage.prototype.load = function() {
-    var source = window.localStorage.getItem(this.localStorageKey);
+    let source = window.localStorage.getItem(this.localStorageKey);
 
     try {
         this._storage = JSON.parse(source) || [];
@@ -151,7 +151,7 @@ CachedProperty.prototype.get = function() {
 /**
  * Performs bookcreator functionality at wiki pages
  */
-var Bookcreator = {
+let Bookcreator = {
 
 
     selectedpages: new Storage('bookcreator_selectedpages'),
@@ -211,7 +211,7 @@ var Bookcreator = {
      */
     updatePage: function() {
         //$addtobookBtn2 = jQuery('.plugin_bookcreator_addtobook,a.plugin_bookcreator_addtobook'),
-        var $addtobookBtn = jQuery('.plugin_bookcreator__addtobook'),
+        let $addtobookBtn = jQuery('.plugin_bookcreator__addtobook'),
             $bookbar = jQuery('.bookcreator__bookbar');
 
         //pagetool add/remove button
@@ -275,7 +275,7 @@ var Bookcreator = {
     }
 };
 
-var BookManager  = {
+let BookManager  = {
     cache: {},
     booktitle: new CachedProperty('bookcreator_booktitle'),
     deletedpages: new Storage('bookcreator_deletedpages'),
@@ -303,7 +303,7 @@ var BookManager  = {
      */
     updateListsFromStorage: function() {
         //get selection changes
-        var notcachedpages = jQuery(Bookcreator.selectedpages.getSelection()).not(Object.keys(this.cache)).get();
+        let notcachedpages = jQuery(Bookcreator.selectedpages.getSelection()).not(Object.keys(this.cache)).get();
         notcachedpages = notcachedpages.concat(jQuery(BookManager.deletedpages.getSelection()).not(Object.keys(this.cache)).get());
 
         //add to list at page and to cache
@@ -338,7 +338,7 @@ var BookManager  = {
      * Use updated selected pages selection for updating deleted pages selection and gui
      */
     updateLists: function() {
-        var $ul_deleted = jQuery('ul.pagelist.deleted'),
+        let $ul_deleted = jQuery('ul.pagelist.deleted'),
             $ul_selected = jQuery('ul.pagelist.selected'),
             deletedpages = BookManager.deletedpages.getSelection(),
             selectedpages = Bookcreator.selectedpages.getSelection();
@@ -346,7 +346,7 @@ var BookManager  = {
         BookManager.refillList($ul_selected, selectedpages);
 
         //deleted pages selection could still contain re-added pages
-        var filtereddeletedpages = jQuery(deletedpages).not(selectedpages).get();
+        let filtereddeletedpages = jQuery(deletedpages).not(selectedpages).get();
         BookManager.deletedpages.setSelection(filtereddeletedpages);
 
         BookManager.refillList($ul_deleted, filtereddeletedpages);
@@ -363,15 +363,17 @@ var BookManager  = {
         $ul_selection.empty();
 
         //recreate li items
-        var liopen1 = "<li class='level1' id='pg__",
-            liopen2a = "' title='" + LANG.plugins.bookcreator.sortable +"'><a class='action' title='",
-            liopen2b = "'></a>&nbsp;&nbsp;<a href='",
+        let liopen1 = "<li class='level1' id='pg__",
+            liopen2 = "' title='" + LANG.plugins.bookcreator.sortable + "'>" +
+                "<a class='action remove' title='" + LANG.plugins.bookcreator['remove'] + "'>" +
+                '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path d="M17,3H7A2,2 0 0,0 5,5V21L12,18L19,21V5A2,2 0 0,0 17,3M15,11H9V9H15V11Z"></path></svg>' +
+                "</a><a class='action include' title='" + LANG.plugins.bookcreator['include'] + "'>" +
+                '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path d="M17,3A2,2 0 0,1 19,5V21L12,18L5,21V5C5,3.89 5.9,3 7,3H17M11,7V9H9V11H11V13H13V11H15V9H13V7H11Z"></path></svg>' +
+                "</a>&nbsp;&nbsp;<a href='",
             liopen3 = "' title='" + LANG.plugins.bookcreator.showpage + "'>",
             liclose = "</a></li>";
 
-        var actionlbl = $ul_selection.hasClass('selected') ? 'remove' : 'include',
-            liopen2 = liopen2a + LANG.plugins.bookcreator[actionlbl] + liopen2b,
-            i = 0,
+        let i = 0,
             itemsToInsert = [];
 
         jQuery.each(selection, function(index, page){
@@ -402,7 +404,7 @@ var BookManager  = {
      * @returns {Array}
      */
     getNotdisplayedPages: function(selectionname) {
-        var sortedIDs,
+        let sortedIDs,
             selection;
 
         sortedIDs = jQuery('div.bookcreator__pagelist').find('ul.pagelist.'+selectionname).sortable('toArray');
@@ -441,21 +443,18 @@ var BookManager  = {
      * handler for move buttons on the list items
      */
     movePage: function() {
-        var $a = jQuery(this),
+        let $a = jQuery(this),
             $li = $a.parent(),
             pageid = $li.attr('id').substr(4);
 
         //true=add to selected list, false=remove from selected list
-        var isAddAction = $li.parent().hasClass('deleted');
+        let isAddAction = $li.parent().hasClass('deleted');
 
         //move page to other list
-        var listclass = isAddAction ? 'selected' : 'deleted';
+        let listclass = isAddAction ? 'selected' : 'deleted';
         $li.appendTo(jQuery('div.bookcreator__pagelist ul.pagelist.' + listclass));
 
         BookManager.toggleSelectedPage(pageid, isAddAction);
-
-        //update interface
-        $a.attr('title', LANG.plugins.bookcreator[isAddAction ? 'remove' : 'include']);
     },
 
 
@@ -466,15 +465,12 @@ var BookManager  = {
      * @param ui
      */
     receivedFromOtherSelection: function (event, ui) {
-        var pageid = ui.item.attr('id').substr(4),
+        let pageid = ui.item.attr('id').substr(4),
             isAddAction = ui.item.parent().hasClass('selected'),
             position = ui.item.index();
 
         //store new status
         BookManager.toggleSelectedPage(pageid, isAddAction, position);
-
-        //update layout
-        ui.item.children('a.action').attr('title', LANG.plugins.bookcreator[isAddAction ? 'remove' : 'include']);
     },
 
     /**
@@ -504,7 +500,7 @@ var BookManager  = {
      * @param ui
      */
     stopSort: function(event, ui) {
-        var isAddAction = ui.item.parent().hasClass('selected'),
+        let isAddAction = ui.item.parent().hasClass('selected'),
             pageid = ui.item.attr('id').substr(4),
             startindex = ui.item.data("startindex"),
             endindex = ui.item.index();
@@ -537,12 +533,12 @@ var BookManager  = {
      * click handler: load or delete saved selections
      */
     handleSavedselectionAction: function() {
-        var $this = jQuery(this),
+        let $this = jQuery(this),
             action = ($this.hasClass('delete') ? 'delete' : 'load'),
-            pageid = $this.parent().attr('id').substr(5);
+            pageid = $this.parent().data('pageId');
 
         //confirm dialog
-        var msg,
+        let msg,
             comfirmed = false;
         if (action === "delete") {
             msg = LANG.plugins.bookcreator.confirmdel;
@@ -558,6 +554,8 @@ var BookManager  = {
 
         if (comfirmed) {
             function processResponse(data) {
+                let $msg = $this.parent().parent().parent().find('.message'); //get $msg before deletion of the li elem
+
                 //action: loadSavedSelection
                 if (data.hasOwnProperty('selection')) {
                     BookManager.clearSelections();
@@ -567,10 +565,9 @@ var BookManager  = {
                 }
                 //action: deleteSavedSelection
                 if (data.hasOwnProperty('deletedpage')) {
-                    jQuery('#sel__' + data.deletedpage).remove();
+                    jQuery('.bkctrsavsel__' + data.deletedpage).remove();
                 }
 
-                var $msg = jQuery('#bookcreator__selections__list').find('.message');
                 BookManager.setMessage($msg, data);
             }
 
@@ -592,17 +589,17 @@ var BookManager  = {
      * Save selection at a wiki page
      */
     saveSelection: function($this) {
-        var $fieldset = $this.parent(),
+        let $fieldset = $this.parent(),
             $title = $fieldset.find('input[name="bookcreator_title"]'),
             title = $title.val();
 
         function processResponse(data) {
             if (data.hasOwnProperty('item')) {
-                jQuery('#bookcreator__selections__list').find('ul').prepend(data.item);
+                jQuery('.bookcreator__selections__list').find('ul').prepend(data.item);
                 $title.val('');
             }
 
-            var $msg = $fieldset.find('.message');
+            let $msg = $fieldset.find('.message');
             BookManager.setMessage($msg, data);
         }
 
@@ -627,7 +624,7 @@ var BookManager  = {
      * @param {Object} data
      */
     setMessage: function($msg, data) {
-        var msg = false,
+        let msg = false,
             state;
 
         function setMsg($msg, msg, state) {
@@ -656,7 +653,7 @@ var BookManager  = {
      *
      */
     fillTitle: function() {
-        var title = BookManager.booktitle.get();
+        let title = BookManager.booktitle.get();
         jQuery('input[name="book_title"]').val(title);
     },
 
@@ -666,7 +663,7 @@ var BookManager  = {
      * @param event
      */
     downloadSelection: function(event) {
-        var $this = jQuery(this),
+        let $this = jQuery(this),
             do_action = $this.find('select[name="do"]').val();
 
         if(do_action === 'export_html' || do_action === 'export_text') {
@@ -678,13 +675,13 @@ var BookManager  = {
             );
         } else {
             //download in background and shows dialog
-            var formdata = $this.serializeArray();
+            let formdata = $this.serializeArray();
             formdata.push({
                 name: 'selection',
                 value: JSON.stringify(Bookcreator.selectedpages.getSelection())
             });
 
-            var $preparingFileModal = jQuery("#preparing-file-modal");
+            let $preparingFileModal = jQuery("#preparing-file-modal");
             $preparingFileModal.dialog({ modal: true });
 
             jQuery.fileDownload(
@@ -710,8 +707,8 @@ var BookManager  = {
     },
 
     htmlSpecialCharsEntityEncode: function (str) {
-        var htmlSpecialCharsRegEx = /[<>&\r\n"']/gm;
-        var htmlSpecialCharsPlaceHolders = {
+        let htmlSpecialCharsRegEx = /[<>&\r\n"']/gm;
+        let htmlSpecialCharsPlaceHolders = {
             '<': 'lt;',
             '>': 'gt;',
             '&': 'amp;',
@@ -735,11 +732,11 @@ jQuery(function () {
         Bookcreator.setupUpdateObserver();
 
         //bookbar buttons
-        jQuery('a.bookcreator__tglPgSelection').click(Bookcreator.clickAddRemoveButton);
+        jQuery('a.bookcreator__tglPgSelection').on('click', Bookcreator.clickAddRemoveButton);
         // //pagetool button TODO DEPRECATED 2017
         // jQuery('.plugin_bookcreator_addtobook').click(Bookcreator.clickAddRemoveButton);
         //pagetool button
-        jQuery('.plugin_bookcreator__addtobook').click(Bookcreator.clickAddRemoveButton);
+        jQuery('.plugin_bookcreator__addtobook').on('click', Bookcreator.clickAddRemoveButton);
         //gui
         Bookcreator.updatePage();
     } else {
@@ -748,7 +745,7 @@ jQuery(function () {
     }
 
     //bookmanager
-    var $pagelist = jQuery('div.bookcreator__pagelist');
+    let $pagelist = jQuery('div.bookcreator__pagelist');
     if ($pagelist.length) {
         BookManager.init();
 
@@ -794,7 +791,7 @@ jQuery(function () {
         });
 
         jQuery('input[name="book_title"]').on('change', function() {
-            var value = jQuery(this).val();
+            let value = jQuery(this).val();
             BookManager.booktitle.set(value);
         });
 
@@ -802,6 +799,6 @@ jQuery(function () {
     }
 
     //saved selection list
-    jQuery('#bookcreator__selections__list').find('ul')
+    jQuery('.bookcreator__selections__list').find('ul')
         .on('click', 'a.action', BookManager.handleSavedselectionAction);
 });

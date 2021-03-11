@@ -89,22 +89,37 @@ div.bookcreator__panel {
 }
 .dokuwiki .bookcreator__pagelist li{
     margin: 0;
+    background-color: #fafafa;
 }
 /* delete and include bottons */
 .dokuwiki .bookcreator__pagelist ul li a.action{
-    width: 14px;
-    height:14px;
+    width: 16px;
+    height:16px;
     display: inline-block;
-    background:transparent url('images/remove.png') center bottom no-repeat;
     cursor: pointer;
+    vertical-align: middle;
 }
-.dokuwiki .bookcreator__pagelist ul.selected li a.action{
-    background-image: url('images/remove.png');
-    content: attr(data-titlerem);
+.dokuwiki .bookcreator__pagelist ul.selected li a.action.include {
+    display: none;
 }
-.dokuwiki .bookcreator__pagelist ul.deleted li a.action{
-    background-image: url('images/include.png');
-    content: attr(data-titleadd);
+.dokuwiki .bookcreator__pagelist ul.selected li a.action.remove {
+    display: inline-block;
+}
+.dokuwiki .bookcreator__pagelist ul.selected li a.action svg{
+    fill: #b1240c;
+    height: 18px;
+    width: 18px;
+}
+.dokuwiki .bookcreator__pagelist ul.deleted li a.action.include {
+    display: inline-block;
+}
+.dokuwiki .bookcreator__pagelist ul.deleted li a.action.remove {
+    display: none;
+}
+.dokuwiki .bookcreator__pagelist ul.deleted li a.action svg{
+    fill: #00b000;
+    height: 18px;
+    width: 18px;
 }
 
 .dokuwiki .bookcreator__manager div.bookcreator__actions {
@@ -119,7 +134,7 @@ div.bookcreator__panel {
     margin-bottom: 1em;
 }
 .dokuwiki .bookcreator__manager fieldset legend,
-.dokuwiki #bookcreator__selections__list fieldset legend {
+.dokuwiki .bookcreator__selections__list fieldset legend {
     font-weight: bold;
 }
 
@@ -129,8 +144,22 @@ div.bookcreator__panel {
 /*
  * List of saved selections
  */
-#bookcreator__selections__list fieldset {
+.dokuwiki .bookcreator__selections__list fieldset {
     text-align:left;
+}
+
+.bookcreator__selections__list svg {
+    height: 18px;
+    width: 18px;
+    vertical-align: middle;
+    fill: @ini_link;
+}
+.bookcreator__selections__list .load svg {
+    fill: @ini_text;
+}
+
+.bookcreator__selections__list .delete svg {
+    fill: @ini_missing;
 }
 
 /*

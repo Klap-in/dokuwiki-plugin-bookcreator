@@ -186,7 +186,7 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
         $save_pageid = cleanID($this->getConf('save_namespace') . ":" . $savedSelectionName);
         saveWikiText($save_pageid, $content, $this->getLang('selectionstored'));
 
-        $response['succes'] = sprintf($this->getLang('saved'), $save_pageid);
+        $response['success'] = sprintf($this->getLang('saved'), $save_pageid);
 
         $item = array(
             'id' => $save_pageid,

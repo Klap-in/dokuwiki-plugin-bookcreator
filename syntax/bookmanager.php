@@ -94,7 +94,6 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
             } elseif(is_numeric($param2)) {
                 $num = (int) $param2;
             }
-
         }
 
         return array($type, $num, $order);
@@ -171,35 +170,25 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
      * the list with save selections is only displayed once, and the bookmanager with priority
      */
     public function renderSelectionslist($renderer, $bookmanager, $bmpage, $order, $num = 0) {
-        static $selectionlistshown = false;
-
-        if($selectionlistshown == true) {
-            $renderer->doc .= $this->getLang('duplicate');
-
-        } else {
-            $result = $this->_getlist($order, $num);
-            if(sizeof($result) > 0) {
-                $form = new Doku_Form(array('method'=> 'post',
-                                            'id'=>     'bookcreator__selections__list',
-                                            'name'=>   'bookcreator__selections__list',
-                                            'action'=> wl($bmpage)));
-                if($bookmanager) {
-                    $form->startFieldset($this->getLang('listselections'));
-                    $form->addElement('<div class="message"></div>');
-                }
-                $form->addElement($this->_showlist($result, $bookmanager));
-                $form->addHidden('do', '');
-                $form->addHidden('task', '');
-                $form->addHidden('page', '');
-                if($bookmanager) {
-                    $form->endFieldset();
-                }
-
-                $renderer->doc .= $form->getForm();
+        $result = $this->getlist($order, $num);
+        if(sizeof($result) > 0) {
+            $form = new Doku_Form(array('method'=> 'post',
+                                        'class'=>  'bookcreator__selections__list',
+                                        'action'=> wl($bmpage)));
+            if($bookmanager) {
+                $form->startFieldset($this->getLang('listselections'));
+                $form->addElement('<div class="message"></div>');
             }
-            $selectionlistshown = true;
-        }
+            $form->addElement($this->showlist($result, $bookmanager));
+            $form->addHidden('do', '');
+            $form->addHidden('task', '');
+            $form->addHidden('page', '');
+            if($bookmanager) {
+                $form->endFieldset();
+            }
 
+            $renderer->doc .= $form->getForm();
+        }
     }
 
 
@@ -423,10 +412,10 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
      * Lists saved selections, by looking up corresponding pages in the reserverd namespace
      *
      * @param string $order sort by 'date' or 'title'
-     * @param int    $limit maximum number of selections
+     * @param int    $limit maximum number of selections, 0=all
      * @return array
      */
-    private function _getlist($order, $limit = 0) {
+    private function getlist($order, $limit = 0) {
         global $conf;
 
         $ns      = cleanID($this->getConf('save_namespace'));
@@ -462,7 +451,7 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
      * @param bool  $isbookmanager
      * @return string html of list
      */
-    private function _showlist($result, $isbookmanager = false) {
+    private function showlist($result, $isbookmanager = false) {
         $output = '<ul>'.DOKU_LF;
         foreach($result as $item) {
             $output .= $this->hlp->createListitem($item, $isbookmanager);

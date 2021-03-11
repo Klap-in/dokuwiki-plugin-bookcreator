@@ -6,9 +6,6 @@
  * @author  Gerrit Uitslag <klapinklapin@gmail.com>
  */
 
-// must be run within Dokuwiki
-if(!defined('DOKU_INC')) die();
-
 /**
  * Class helper_plugin_bookcreator
  */
@@ -17,7 +14,7 @@ class helper_plugin_bookcreator extends DokuWiki_Plugin {
     /**
      * Create a item for list of available saved selections
      *
-     * @param $item array with at least the entries:
+     * @param array $item with at least the entries:
      *   - string 'id'    pageid
      *   - int    'mtime' unixtime modification date
      * @param bool $isbookmanager   if in bookmanager, show delete button(if allowed) and date
@@ -28,20 +25,20 @@ class helper_plugin_bookcreator extends DokuWiki_Plugin {
         $nons      = noNS($item['id']);
         $url       = wl($this->getConf('save_namespace').":".$nons);
 
-        $out = "<li class='level1' id='sel__$nons'>";
+        $out = "<li class='level1 bkctrsavsel__$nons' data-page-id='$nons'>";
         if(($isbookmanager) && (auth_quickaclcheck($item['id']) >= AUTH_DELETE)) {
-            $out .= "<a class='action delete' href='#delete'>";
-            $out .= "<img src='".DOKU_URL."lib/plugins/bookcreator/images/remove.png' title='{$this->getLang('delselection')}'/>";
-            $out .= "</a>&nbsp;&nbsp";
+            $out .= "<a class='action delete' href='#deletesavedselection' title='{$this->getLang('delselection')}'>"
+                 . inlineSVG(__DIR__ . '/images/notebook-remove-outline.svg')
+                 . "</a>&nbsp;";
         }
-        $out .= "<a class='action load' href='#load'>";
-        $out .= "<img src='".DOKU_URL."lib/plugins/bookcreator/images/include.png' title='{$this->getLang('loadselection')}'/>";
-        $out .= "</a>&nbsp;&nbsp;";
-        $out .= "<a href='$url' title='{$this->getLang('showselection')}'>$itemtitle</a>";
+        $out .= "<a class='action load' href='#loadsavedselection' title='{$this->getLang('loadselection')}'>"
+             . inlineSVG(__DIR__ . '/images/notebook-edit-outline.svg')
+             . "</a>&nbsp;"
+             . "<a href='$url' title='{$this->getLang('showselection')}'>".inlineSVG(__DIR__ . '/images/notebook-outline.svg')." $itemtitle</a>";
         if($isbookmanager) {
             $out .= ' ('.dformat($item['mtime']).')';
         }
-        $out .= '</li>'.DOKU_LF;
+        $out .= '</li>';
 
         return $out;
     }
