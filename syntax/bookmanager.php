@@ -7,7 +7,7 @@
  */
 
 // must be run within Dokuwiki
-if(!defined('DOKU_INC')) die();
+use dokuwiki\Form\Form;
 
 /**
  * All DokuWiki plugins to extend the parser/rendering mechanism
@@ -172,22 +172,22 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
     public function renderSelectionslist($renderer, $bookmanager, $bmpage, $order, $num = 0) {
         $result = $this->getlist($order, $num);
         if(sizeof($result) > 0) {
-            $form = new Doku_Form(array('method'=> 'post',
-                                        'class'=>  'bookcreator__selections__list',
-                                        'action'=> wl($bmpage)));
+            $form = new Form(['action'=> wl($bmpage)]);
+            $form->addClass('bookcreator__selections__list');
+
             if($bookmanager) {
-                $form->startFieldset($this->getLang('listselections'));
-                $form->addElement('<div class="message"></div>');
+                $form->addFieldsetOpen($this->getLang('listselections'));
+                $form->addHTML('<div class="message"></div>');
             }
-            $form->addElement($this->showlist($result, $bookmanager));
-            $form->addHidden('do', '');
-            $form->addHidden('task', '');
-            $form->addHidden('page', '');
+            $form->addHTML($this->showlist($result, $bookmanager));
+            $form->setHiddenField('do', '');
+            $form->setHiddenField('task', '');
+            $form->setHiddenField('page', '');
             if($bookmanager) {
-                $form->endFieldset();
+                $form->addFieldsetClose();
             }
 
-            $renderer->doc .= $form->getForm();
+            $renderer->doc .= $form->toHTML();
         }
     }
 
@@ -265,7 +265,7 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
      */
     private function showBookManager($renderer, $usercansave) {
         global $ID;
-        $title = '';
+//        $title = '';
 
         //start main container - open left column
         $renderer->doc .= "<div class='bookcreator__manager'>";
@@ -276,11 +276,14 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
         $renderer->doc .= "<br />";
 
         // Add namespace to selection
-        $form = new Doku_Form(array('method'=> 'post',
-                                    'class'=> 'selectnamespace'));
-        $form->addElement(form_makeButton('submit', '', $this->getLang('select_namespace')));
-        $renderer->doc .= "<div align='center'>";
-        $renderer->doc .= $form->getForm();
+
+        $form = new dokuwiki\Form\Form();
+        $form->addClass('selectnamespace');
+        $form->addButton('selectns', $this->getLang('select_namespace'))
+            ->attr('type', 'submit');
+
+        $renderer->doc .= "<div class='bookcreator__selectns'>";
+        $renderer->doc .= $form->toHTML();
         $renderer->doc .= "</div>";
 
         // - excluded pages
@@ -289,18 +292,18 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
         $renderer->doc .= '</div>';
 
         // Reset current selection
-        $form = new Doku_Form(array('method'=> 'post',
-                                    'class'=> 'clearactive'));
-        $form->addElement(form_makeButton('submit', '', $this->getLang('reset')));
+        $form = new Form();
+        $form->addClass('clearactive');
+        $form->addButton('resetselection', $this->getLang('reset'))
+            ->attr('type', 'submit');
+
         $renderer->doc .= '<div>';
-        $renderer->doc .= $form->getForm();
+        $renderer->doc .= $form->toHTML();
         $renderer->doc .= '</div>';
 
         //close left column - open right column
         $renderer->doc .= "</div>";
         $renderer->doc .= "<div class='bookcreator__actions'>";
-
-
         // PDF Export
         $values   = array('export_html'=> $this->getLang('exportprint'));
         $selected = 'export_html';
@@ -316,48 +319,61 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
             $selected                 = 'export_pdfbook';
         }
 
-        $form = new Doku_Form(array('method'=> 'post',
-                                    'class'=> 'downloadselection'));
-        $form->startFieldset($this->getLang('export'));
-        $form->addElement($this->getLang('title')." ");
-        $form->addElement(form_makeTextField('book_title', $title, '', '', 'edit', array('size'=> 30)));
-        $form->addElement(form_makeCheckboxField('book_skipforbiddenpages', '1', $this->getLang('skipforbiddenpages'),'','book_skipforbiddenpages'));
-        $form->addElement(form_makeListboxField('do', $values, $selected, '', '', '', array('size'=> 1)));
-        $form->addHidden('outputTarget', 'file');
-        $form->addHidden('id', $ID);
-        $form->addElement(form_makeButton('submit', '', $this->getLang('create')));
-        $form->endFieldset();
+        $form = new Form();
+        $form->addClass('downloadselection');
 
-        $renderer->doc .= $form->getForm();
+        $form->addFieldsetOpen($this->getLang('export'));
+
+        $form->addHTML($this->getLang('title')." ");
+        $form->addTextInput('book_title')
+            ->addClass('edit')
+            ->attrs(['size'=> 30]);
+        $form->addCheckbox('book_skipforbiddenpages', $this->getLang('skipforbiddenpages'))
+            ->addClass('book_skipforbiddenpages'); //note: class extra at input
+        $form->addDropdown('do', $values)
+            ->val($selected)
+            ->attrs(['size'=> 1]);
+        $form->setHiddenField('outputTarget', 'file');
+        $form->setHiddenField('id', $ID);
+        $form->addButton('exportselection', $this->getLang('create'))->attr('type', 'submit');
+
+        $form->addFieldsetClose();
+
+        $renderer->doc .= $form->toHTML();
 
 
         // Save current selection to a wikipage
         if($usercansave) {
-            $form = new Doku_Form(array('method'=> 'post',
-                                        'class'=> 'saveselection'));
-            $form->startFieldset($this->getLang('saveselection'));
-            $form->addElement('<div class="message"></div>');
-            $form->addElement(form_makeTextField('bookcreator_title', $title, '', '', 'edit'));
-            $form->addHidden('task', 'save');
-            $form->addElement(form_makeButton('submit', '', $this->getLang('save')));
-            $form->endFieldset();
+            $form = new Form();
+            $form->addClass('saveselection');
 
-            $renderer->doc .= $form->getForm();
+
+            $form->addFieldsetOpen($this->getLang('saveselection'));
+
+            $form->addHTML('<div class="message"></div>');
+            $form->addTextInput('bookcreator_title')
+                ->addClass('edit');
+            $form->setHiddenField('task', 'save');
+            $form->addButton('saveselection', $this->getLang('save'))->attr('type', 'submit');
+
+            $form->addFieldsetClose();
+
+            $renderer->doc .= $form->toHTML();
         }
 
         //close containers
-        $renderer->doc .= '</div>';
-        $renderer->doc .= "</div><div class='clearer'></div>";
-        $renderer->doc .= "<br />";
+        $renderer->doc .= '</div>'
+                        . "</div><div class='clearer'></div>"
+                        . "<br />";
 
-        $renderer->doc .= "<div id='preparing-file-modal' title='{$this->getLang("titlepreparedownload")}' style='display: none;'>";
-        $renderer->doc .=   $this->getLang('preparingdownload');
-        $renderer->doc .= '    <div class="ui-progressbar-value ui-corner-left ui-corner-right" style="width: 100%; height:22px; margin-top: 20px;"></div>';
-        $renderer->doc .= '</div>';
+        $renderer->doc .= "<div id='preparing-file-modal' title='{$this->getLang("titlepreparedownload")}' style='display: none;'>"
+                        . $this->getLang('preparingdownload')
+                        . '    <div class="ui-progressbar-value ui-corner-left ui-corner-right" style="width: 100%; height:22px; margin-top: 20px;"></div>'
+                        . '</div>';
 
-        $renderer->doc .= "<div id='error-modal' title='{$this->getLang("titleerrordownload")}' style='display: none;'>";
-        $renderer->doc .= '<div class="downloadresponse">$this->getLang(\'faileddownload\')</div>';
-        $renderer->doc .= '</div>';
+        $renderer->doc .= "<div id='error-modal' title='{$this->getLang("titleerrordownload")}' style='display: none;'>"
+                        . "    <div class='downloadresponse'>{$this->getLang('faileddownload')}</div>"
+                        . '</div>';
 
         return true;
     }

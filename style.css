@@ -138,7 +138,7 @@ div.bookcreator__panel {
     font-weight: bold;
 }
 
-.dokuwiki .book_skipforbiddenpages {
+.dokuwiki label.book_skipforbiddenpages {
     display: block;
 }
 /*
@@ -210,6 +210,12 @@ div.bookcreator__panel {
 
 /* Namespace picker (opens by clicking on button "Add Namespace to Selection")
 ******************************************************************************/
+.bookcreator__selectns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 #bc__nspicker {
 }
 
