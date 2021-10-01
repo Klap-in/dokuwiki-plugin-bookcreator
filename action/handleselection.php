@@ -258,27 +258,34 @@ class action_plugin_bookcreator_handleselection extends DokuWiki_Action_Plugin {
         $title = '';
         $list  = array();
 
-        $pagecontent = rawWiki($pageid);
-        $lines       = explode("\n", $pagecontent);
+        // Get rendered XHTML content from page cache
+        $pagecontent = p_cached_output(wikiFn($pageid));
+        $dom = new DOMDocument();
+        $dom->loadHTML($pagecontent);
+        $dom = simplexml_import_dom($dom);
+        $title = trim($dom->body->h1[0]);
 
-        foreach($lines as $i => $line) {
-            //skip nonsense
-            if(trim($line) == '') continue;
-            if((($i > 0) && substr($line, 0, 7) != "  * [[:")) continue;
-
-            //read title and list
-            if($i === 0) {
-                $title = trim(str_replace("======", '', $line));
-            } else {
-                $line        = str_replace("  * [[:", '', $line);
-                $line        = str_replace("]]", '', $line);
-                list($id, /* $title */) = explode('|', $line, 2);
-                $id = cleanID($id);
-                if($id == '') {
-                    continue;
-                }
-                $list[] = $id;
+        foreach($dom->body->div->ul as $l) {
+          foreach ($l->li as $leaf) {
+            $a = [];
+            if (!empty($leaf->div->a)) {
+              foreach ($leaf->div->a as $e) {
+                $a[] = $e;
+              } 
             }
+            if (!empty($leaf->a)) {
+              foreach ($leaf->a as $e) {
+                $a[] = $e;
+              } 
+            }
+            foreach ($a as $line) {
+              $id = (string) $line['data-wiki-id'][0];
+              if (empty($id)) {
+                continue;
+              }
+              $list[] = cleanID($id);
+            }
+          }
         }
 
         return array($title, $list);
