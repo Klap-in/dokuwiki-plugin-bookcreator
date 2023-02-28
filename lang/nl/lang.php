@@ -3,10 +3,10 @@
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  *
+ * @author Gerrit <klapinklapin@gmail.com>
  * @author mark prins <mprins@users.sf.net>
  * @author Rene <wllywlnt@yahoo.com>
  * @author Peter van Diest <peter.van.diest@xs4all.nl>
- * @author klapinklapin <klapinklapin@gmail.com>
  */
 $lang['empty']                 = 'Er zijn nog geen pagina\'s geselecteerd.';
 $lang['toprint']               = 'Geselecteerde pagina\'s';
@@ -20,6 +20,14 @@ $lang['js']['confirmdel']      = 'Weet u zeker dat u deze selectie uit het archi
 $lang['js']['confirmload']     = 'Weet u zeker dat u deze selectie wilt laden en dus de huidige selectie wilt overschrijven?';
 $lang['js']['btn_addtobook']   = 'Voeg toe aan boek';
 $lang['js']['btn_removetobook'] = 'Verwijder uit boek';
+$lang['js']['namespace_picker'] = 'Namespace-kiezer';
+$lang['js']['select_namespace'] = 'Selecteer Namespace:';
+$lang['js']['added_pages']     = 'Deze pagina\'s worden toegevoegd:';
+$lang['js']['no_pages_selected'] = 'Geen. 
+(Is de namespace leeg?)';
+$lang['js']['select']          = 'Selecteer';
+$lang['js']['cancel']          = 'Annuleer';
+$lang['js']['add_subns_too']   = 'Ook pagina\'s vanuit de subnamespace toevoegen?';
 $lang['export']                = 'Exporteer selectie';
 $lang['create']                = 'Exporteer';
 $lang['exportpdf']             = 'Exporteer selectie naar PDF';
@@ -48,8 +56,10 @@ $lang['selectionstored']       = 'Selectie opgeslagen';
 $lang['selectiondeleted']      = 'Selectie verwijderd';
 $lang['selectiondontexist']    = 'Selectie bestaat niet op pagina \'%s\'';
 $lang['selectionforbidden']    = 'U hebt geen toegang tot de selectie op pagina \'%s\'';
+$lang['exportselection']       = 'Exporteer de opgeslagen selectie \'%s\' als %s';
 $lang['titlepreparedownload']  = 'Download Voorbereiden...';
 $lang['preparingdownload']     = 'We zijn uw download aan het voorbereiden, even geduld alstublieft...';
 $lang['titleerrordownload']    = 'Fout';
 $lang['faileddownload']        = 'Er was een probleem bij het genereren van uw download.';
 $lang['forbidden']             = 'Je hebt geen toegang tot deze pagina\'s: %s.<br/><br/>Gebruik de  optie \'Verboden pagina\'s overslaan\' om het boek te maken met de beschikbare pagina\'s.';
+$lang['select_namespace']      = 'Een Namespace toevoegen...';
