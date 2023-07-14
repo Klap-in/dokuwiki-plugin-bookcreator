@@ -772,9 +772,18 @@ jQuery(function () {
         });
 
         //add namespace to selection button
-        bc_nspicker.init(jQuery('#dokuwiki__content'));
+        bc_nspicker.init(jQuery('.dokuwiki:first'));
         jQuery('form.selectnamespace button').on('click', function(event) {
             bc_nspicker.val = null;
+
+            //place dialog near the button
+            let offset = jQuery(this).offset();
+            let offsetparent = jQuery(this).parent().parent().offset();
+            bc_nspicker.$picker.css({
+                'top': offset.top + 'px',
+                'left': offsetparent.left - 0 + 'px',
+            });
+
             bc_nspicker.toggle();
             event.preventDefault();
             return 'bc__nspicker';

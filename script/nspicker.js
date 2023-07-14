@@ -47,7 +47,7 @@ var bc_nspicker = {
             .attr('id', 'bc__nspicker')
             .css({
                 'position': 'absolute',
-                'top': (pos.top + 20) + 'px',
+                'top': (pos.top + 20) + 'px', //overwritten later with position of Add Namespace button.
                 'left': (pos.left + 80) + 'px'
             })
             .hide()
