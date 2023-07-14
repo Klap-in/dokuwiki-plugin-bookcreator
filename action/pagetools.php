@@ -168,9 +168,7 @@ class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
         }
 
         // not skip page?
-        $exists = false; //assume that page does not exists
-        $id = $ID;
-        resolve_pageid('', $id, $exists);
+        $exists = page_exists($ID);
 
         $skipPagesRegexp = join("|", explode(",", preg_quote($this->getConf('skip_ids'))));
         if(!$exists || ($this->getConf('skip_ids') !== '' && preg_match("/$skipPagesRegexp/i", $ID))) {
