@@ -5,17 +5,12 @@
  * @author     Gerrit Uitslag <klapinklapin@gmail.com>
  */
 
+use dokuwiki\plugin\bookcreator\MenuItem;
+
 /**
  * Show book bar and pagetool button at a wiki page
  */
 class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
-
-    /**
-     * Constructor
-     */
-    function __construct() {
-//        $this->setupLocale();    //TODO required?
-    }
 
     /**
      * Registers a callback function for a given event
@@ -23,23 +18,21 @@ class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
      * @param Doku_Event_Handler $controller
      */
     function register(Doku_Event_Handler $controller) {
-        $controller->register_hook('TPL_ACT_RENDER', 'BEFORE', $this, 'bookbar', array());
+        $controller->register_hook('TPL_ACT_RENDER', 'BEFORE', $this, 'bookbar');
         $controller->register_hook('DOKUWIKI_STARTED', 'AFTER', $this, '_extendJSINFO');
         $controller->register_hook('TPL_ACTION_GET', 'BEFORE', $this, 'allowaddbutton');
-        $controller->register_hook('TEMPLATE_PAGETOOLS_DISPLAY', 'BEFORE', $this, 'addbutton');
-        $controller->register_hook('MENU_ITEMS_ASSEMBLY', 'AFTER', $this, 'addsvgbutton', array());
+        $controller->register_hook('MENU_ITEMS_ASSEMBLY', 'AFTER', $this, 'addsvgbutton');
     }
 
     /**
      *  Prints html of bookbar (performed before the wikipage content is output)
      *
      * @param Doku_Event $event event object by reference
-     * @param array $param empty
      */
-    public function bookbar(Doku_Event $event, $param) {
+    public function bookbar(Doku_Event $event) {
         if($event->data != 'show') return; // nothing to do for us
 
-        if(!$this->isVisible($isbookbar = true)) return;
+        if(!$this->isVisible(true)) return;
 
         /**
          * Display toolbar
@@ -90,9 +83,8 @@ class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
      * Add additional info to $JSINFO
      *
      * @param Doku_Event $event
-     * @param mixed $param not defined
      */
-    public function _extendJSINFO(Doku_Event $event, $param) {
+    public function _extendJSINFO(Doku_Event $event) {
         global $JSINFO;
 
         $JSINFO['bookcreator']['areToolsVisible'] = $this->isVisible();
@@ -103,35 +95,13 @@ class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
      * Accepts the 'addtobook' action, while using the default action link properties.
      *
      * @param Doku_Event $event
-     * @param $param
      */
-    public function allowaddbutton(Doku_Event $event, $param) {
+    public function allowaddbutton(Doku_Event $event) {
         if($event->data['type'] != 'plugin_bookcreator_addtobook') {
             return;
         }
 
         $event->preventDefault();
-    }
-
-    /**
-     * Add 'add page'-button to pagetools
-     *
-     * @param Doku_Event $event
-     * @param mixed $param not defined
-     */
-    public function addbutton(Doku_Event $event, $param) {
-        global $lang;
-
-        if($this->hasAccessToBookmanager() && $event->data['view'] == 'main') {
-            //store string in global lang array
-            $jslocal = $this->getLang('js');
-            $lang['btn_plugin_bookcreator_addtobook'] = $jslocal['btn_addtobook'] ;
-
-            $event->data['items'] =
-                array_slice($event->data['items'], 0, -1, true) +
-                array('plugin_bookcreator_addtobook' => tpl_action('plugin_bookcreator_addtobook', true, 'li', true, '<span>', '</span>')) +
-                array_slice($event->data['items'], -1, 1, true);
-        }
     }
 
     /**
@@ -141,7 +111,7 @@ class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
      */
     public function addsvgbutton(Doku_Event $event) {
         if($event->data['view'] != 'page') return;
-        array_splice($event->data['items'], -1, 0, [new \dokuwiki\plugin\bookcreator\MenuItem()]);
+        array_splice($event->data['items'], -1, 0, [new MenuItem()]);
     }
 
     /**
