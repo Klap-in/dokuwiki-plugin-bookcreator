@@ -55,6 +55,9 @@ $lang['selectiondeleted']       = "Selection deleted";
 $lang['selectiondontexist']     = "Selection doesn't exist at page '%s'";
 $lang['selectionforbidden']     = "You have no access to selection at page '%s'";
 $lang['exportselection']        = "Export the saved selection '%s' as %s";
+$lang['export_htmlns']          = 'Export namespace "%s:" to screen as html';
+$lang['export_textns']          = 'Export namespace "%s:" to screen as text';
+
 
 $lang['titlepreparedownload']   = "Preparing Download...";
 $lang['preparingdownload']      = "We are preparing your download, please wait...";

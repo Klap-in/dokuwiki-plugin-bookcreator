@@ -63,7 +63,7 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
      * @param   int          $state   The lexer state for the match
      * @param   int          $pos     The character position of the matched text
      * @param   Doku_Handler $handler The Doku_Handler object
-     * @return  bool|array Return an array with all data you want to use in render, false don't add an instruction
+     * @return  array Return an array with all data you want to use in render, false don't add an instruction
      */
     function handle($match, $state, $pos, Doku_Handler $handler) {
 
@@ -113,10 +113,6 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
         list($type, $num, $order) = $data;
 
         if($type == "bookmanager") {
-            if($format == 'text' && $INPUT->str('do') == 'export_text') {
-                $format = 'xhtml';
-            }
-
             if($format == 'xhtml') {
                 /** @var Doku_Renderer_xhtml $renderer */
                 $renderer->info['cache'] = false;
@@ -126,24 +122,22 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
 
                 //intervents the normal export_* handling
                 $do = $INPUT->str('do');
-                $allowed_onscreen_exports = array(
+                $ignore_onscreen_exports = [
                     'export_html',
-                    'export_text'
-                );
-                if(in_array($do, $allowed_onscreen_exports)) {
-                    //export as xhtml or text
-                    $this->exportOnScreen($renderer);
-
-                } else {
-                    //show the bookmanager
-                    $this->showBookManager($renderer, $usercansave);
-
-                    // Displays the list of saved selections
-                    $this->renderSelectionslist($renderer, $bookmanager = true, $ID, $order);
-                    $renderer->doc .= "<br />";
+                    'export_htmlns'
+                ];
+                if(in_array($do, $ignore_onscreen_exports)) {
+                    //export as xhtml or text, is handled in action component 'export'
+                    return false;
                 }
+
+                //show the bookmanager
+                $this->showBookManager($renderer, $usercansave);
+
+                // Displays the list of saved selections
+                $this->renderSelectionslist($renderer, true, $ID, $order);
+                $renderer->doc .= "<br />";
             }
-            return false;
 
         } else {
             // type == archive
@@ -151,10 +145,10 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
             if($format == 'xhtml') {
                 /** @var Doku_Renderer_xhtml $renderer */
                 // generates the list of saved selections
-                $this->renderSelectionslist($renderer, $bookmanager = false, $this->getConf('book_page'), $order, $num);
+                $this->renderSelectionslist($renderer, false, $this->getConf('book_page'), $order, $num);
             }
-            return false;
         }
+        return false;
     }
 
     /**
@@ -191,77 +185,12 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
         }
     }
 
-
-
-    /**
-     * Handle export request for exporting the selection as html or text
-     *
-     * @param Doku_renderer_xhtml $renderer
-     */
-    private function exportOnScreen($renderer) {
-        global $ID;
-        global $INPUT;
-        try{
-            $list = array();
-            if($INPUT->has('selection')) {
-                //export current list from the bookmanager
-                $list = json_decode($INPUT->str('selection', '', true), true);
-                if(!is_array($list) || empty($list)) {
-                    throw new Exception($this->getLang('empty'));
-                }
-            } elseif($INPUT->has('savedselection')) {
-                //export a saved selection of the Bookcreator Plugin
-                /** @var action_plugin_bookcreator_handleselection $SelectionHandling */
-                $SelectionHandling = plugin_load('action', 'bookcreator_handleselection');
-                $savedselection = $SelectionHandling->loadSavedSelection($INPUT->str('savedselection'));
-                $list = $savedselection['selection'];
-            }
-
-            //remove first part of bookmanager page
-            $renderer->doc = '';
-
-            $render_mode = 'xhtml';
-            if($INPUT->str('do') == 'export_text') {
-                $render_mode = 'text';
-            }
-
-            $skippedpages = array();
-            foreach($list as $index => $pageid) {
-                if(auth_quickaclcheck($pageid) < AUTH_READ) {
-                    $skippedpages[] = $pageid;
-                    unset($list[$index]);
-                }
-            }
-            $list = array_filter($list, 'strlen'); //use of strlen() callback prevents removal of pagename '0'
-
-            //if selection contains forbidden pages throw (overridable) warning
-            if(!$INPUT->bool('book_skipforbiddenpages') && !empty($skippedpages)) {
-                $msg = hsc(join(', ', $skippedpages));
-                throw new Exception(sprintf($this->getLang('forbidden'), $msg));
-            }
-        } catch (Exception $e) {
-            http_status(400);
-            print $e->getMessage();
-            exit();
-        }
-        $keep = $ID;
-        foreach($list as $page) {
-            $ID = $page;
-            $renderer->doc .= p_cached_output(wikiFN($page), $render_mode, $page);
-        }
-
-        //add mark for removing everything after these rendered pages, see action component 'export'
-        $renderer->doc .= '<!-- END EXPORTED PAGES -->';
-        $ID = $keep;
-    }
-
     /**
      * Displays the Bookmanager - Let organize selections and export them
      * Only visible when a selection is loaded from the save selections or from cookie FIXME
      *
      * @param Doku_renderer_xhtml $renderer
      * @param bool                $usercansave User has permissions to save the selection
-     * @return bool false: empty cookie, true: selection found and bookmanager is rendered
      */
     private function showBookManager($renderer, $usercansave) {
         global $ID;
@@ -305,7 +234,9 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
         $renderer->doc .= "</div>";
         $renderer->doc .= "<div class='bookcreator__actions'>";
         // PDF Export
-        $values   = array('export_html'=> $this->getLang('exportprint'));
+        $values   = [
+            'export_html'=> $this->getLang('exportprint')
+        ];
         $selected = 'export_html';
         if(file_exists(DOKU_PLUGIN."text/renderer.php") && !plugin_isdisabled("text")) {
             $values['export_text'] = $this->getLang('exporttext');
@@ -375,7 +306,6 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
                         . "    <div class='downloadresponse'>{$this->getLang('faileddownload')}</div>"
                         . '</div>';
 
-        return true;
     }
 
     /**
