@@ -29,11 +29,15 @@ class action_plugin_bookcreator_export extends DokuWiki_Action_Plugin {
      * @param Event $event
      */
     public function renameDoExportNSAction(Event $event) {
-        // our event?
         $allowedEvents = ['export_htmlns', 'export_textns'];
-        if(!in_array($event->data, $allowedEvents)) return;
+        if(in_array($event->data, $allowedEvents)) {
+            $event->data = substr($event->data, 0, -2);
+        }
 
-        $event->data = substr($event->data, 0, -2); // remove ns from name
+        //export_xhtml is built-in xhtml export with header
+        if($event->data === 'export_html') { // also act_clean() does this rename
+            $event->data = 'export_xhtml';
+        }
     }
 
     /**
