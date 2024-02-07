@@ -77,8 +77,8 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
         $num   = 10;
         $order = 'date';
         if($type == 'archive') {
-            list(/* $junk */, $params) = explode(':', $match, 2);
-            list($param1, $param2) = explode('&', $params, 2);
+            [/* $junk */, $params] = array_pad(explode(':', $match, 2), 2, '');
+            [$param1, $param2] = array_pad(explode('&', $params, 2),2, '');
 
             $sortoptions = ['date', 'title'];
             if(is_numeric($param1)) {
@@ -102,7 +102,7 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
 
     /**
      * @param string        $format render mode e.g. text, xhtml, meta,...
-     * @param Doku_Renderer &$renderer
+     * @param Doku_Renderer $renderer
      * @param array         $data return of handle()
      * @return bool
      */
@@ -349,7 +349,7 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
      * @return int
      */
     function _titlesort($a, $b) {
-        if($a['id'] <= $b['id']) return -1;
+        if($a['id'] < $b['id']) return -1;
         if($a['id'] > $b['id']) return 1;
         return 0;
     }
@@ -398,11 +398,11 @@ class syntax_plugin_bookcreator_bookmanager extends DokuWiki_Syntax_Plugin {
      * @return string html of list
      */
     private function showlist($result, $isbookmanager = false) {
-        $output = '<ul>'.DOKU_LF;
+        $output = '<ul>';
         foreach($result as $item) {
             $output .= $this->hlp->createListitem($item, $isbookmanager);
         }
-        $output .= '</ul>'.DOKU_LF;
+        $output .= '</ul>';
         return $output;
     }
 }

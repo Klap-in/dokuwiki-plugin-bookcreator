@@ -60,10 +60,10 @@ class syntax_plugin_bookcreator_exportlink extends DokuWiki_Syntax_Plugin
     {
         global $ID;
         $match = substr($match, 2, -2); //remove ~~
-        list($type, $match) = explode('>', $match, 2);
+        [$type, $match] = array_pad(explode('>', $match, 2),2, '');
 
         $type = strtolower(substr($type, 0, -2)); //remove NS
-        list($ns, $title) = explode('|', $match, 2);
+        [$ns, $title] = array_pad(explode('|', $match, 2), 2, '');
         $id = $ns . ':start';
         $resolver = new PageResolver($ID);
         $page = $resolver->resolveId($id);

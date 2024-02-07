@@ -46,7 +46,7 @@ class syntax_plugin_bookcreator_exportsaved extends DokuWiki_Syntax_Plugin
     public function handle($match, $state, $pos, Doku_Handler $handler)
     {
         $match = substr($match, 2, -2); // strip markup
-        list($type, $savedSelectionPage) = explode(':', $match, 2);
+        [$type, $savedSelectionPage] = array_pad(explode(':', $match, 2), 2, '');
         //type: EXPORT...
         $type = strtolower(substr($type, 6));
         $exporturl = [
@@ -60,8 +60,8 @@ class syntax_plugin_bookcreator_exportsaved extends DokuWiki_Syntax_Plugin
         }
         $link = $exporturl[$type];
 
-        list($savedSelectionPage, $linktitle) = explode('|', $savedSelectionPage, 2);
-        list($savedSelectionPage, $extraParameters) = explode('&', $savedSelectionPage, 2);
+        [$savedSelectionPage, $linktitle] = array_pad(explode('|', $savedSelectionPage, 2), 2, '');
+        [$savedSelectionPage, $extraParameters] = array_pad(explode('&', $savedSelectionPage, 2), 2, '');
 
         $ns = $this->getConf('save_namespace');
         $savedSelectionPageid = cleanID($ns . ":" . $savedSelectionPage);
