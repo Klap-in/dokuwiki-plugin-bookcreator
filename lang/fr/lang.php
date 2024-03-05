@@ -3,8 +3,8 @@
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  *
- * @author Hérisson grognon <dodoperso@laposte.net>
  * @author Schplurtz le Déboulonné <schplurtz@laposte.net>
+ * @author Hérisson grognon <dodoperso@laposte.net>
  * @author lerdt <pro@nicolas-hemard.eu>
  * @author Nicolas Friedli <nicolas@theologique.ch>
  */
@@ -20,13 +20,14 @@ $lang['js']['confirmdel']      = 'Voulez-vous vraiment supprimer cette sélectio
 $lang['js']['confirmload']     = 'Voulez-vous vraiment charger cette sélection en remplacement de la sélection actuelle ?';
 $lang['js']['btn_addtobook']   = 'Ajouter au livre.';
 $lang['js']['btn_removetobook'] = 'Retirer du livre.';
-$lang['js']['select_namespace'] = 'Sélectionnez un espace de noms :';
+$lang['js']['namespace_picker'] = 'Sélecteur de catégorie';
+$lang['js']['select_namespace'] = 'Sélectionnez une catégorie :';
 $lang['js']['added_pages']     = 'Ces pages ont été ajoutées :';
 $lang['js']['no_pages_selected'] = 'Aucun. 
-(L\'espace de noms est-il vide ?)';
+(La catégorie est-elle vide ?)';
 $lang['js']['select']          = 'Sélectionner';
 $lang['js']['cancel']          = 'Annuler';
-$lang['js']['add_subns_too']   = 'Ajouter les pages dans les sous-espaces de noms ?';
+$lang['js']['add_subns_too']   = 'Ajouter les pages dans les sous-catégories ?';
 $lang['export']                = 'Exporter la sélection.';
 $lang['create']                = 'Exporter';
 $lang['exportpdf']             = 'Exporter en PDF';
@@ -56,9 +57,11 @@ $lang['selectiondeleted']      = 'La sélection a été effacée';
 $lang['selectiondontexist']    = 'La sélection est inexistante à la page \'%s\'';
 $lang['selectionforbidden']    = 'Vous n\'avez pas d\'accès à la sélection à la page \'%s\'';
 $lang['exportselection']       = 'Exporter la sélection sauvegardée \'%s\' en tant que %s';
+$lang['export_htmlns']         = 'Exporter vers l\'écran la catégorie "%s:" en html';
+$lang['export_textns']         = 'Exporter vers l\'écran la catégorie "%s:" en texte';
 $lang['titlepreparedownload']  = 'Téléchargement en préparation...';
 $lang['preparingdownload']     = 'Nous préparons le téléchargement, veuillez patienter...';
 $lang['titleerrordownload']    = 'Erreur';
 $lang['faileddownload']        = 'Il y a eu un problème dans la préparation du téléchargement.';
 $lang['forbidden']             = 'Vous n\'avez pas accès à ces pages : %s.<br/><br/>Utilisez l\'option \'Sauter les pages interdites\' pour créer votre livre avec les pages disponibles.';
-$lang['select_namespace']      = 'Ajouter un espace de noms...';
+$lang['select_namespace']      = 'Ajouter une catégorie...';
