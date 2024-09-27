@@ -62,7 +62,7 @@ class action_plugin_bookcreator_pagetools extends DokuWiki_Action_Plugin {
                       <br>
                       <a href="' . wl($this->getConf('book_page')) . '" class="bc__manager">
                       ' . inlineSVG(__DIR__ . '/../images/notebook-edit-outline.svg') . '
-                      &nbsp;' . $this->getLang('showbook') . '(<span id="bookcreator__pages">0</span> ' . $this->getLang('pages') . ')
+                      &nbsp;' . $this->getLang('showbook') . ' (<span id="bookcreator__pages">0</span> ' . $this->getLang('pages') . ')
                       </a>
                   </div>';
 
