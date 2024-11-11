@@ -727,7 +727,7 @@ let BookManager  = {
 
 jQuery(function () {
     //Tools for selecting a page
-    if(JSINFO.bookcreator.areToolsVisible) {
+    if(typeof JSINFO.bookcreator !== "undefined" && JSINFO.bookcreator.areToolsVisible) {
         Bookcreator.init();
         Bookcreator.setupUpdateObserver();
 
