@@ -1,24 +1,30 @@
 <?php
 /**
- * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
- * @author     Gerrit Uitslag <klapinklapin@gmail.com>
+ * @license GPL 2 (http://www.gnu.org/licenses/gpl.html)
+ * @author  Gerrit Uitslag <klapinklapin@gmail.com>
+ * @author  Josquin DEHAENE <jo@foobarjo.org>
  */
 
 use dokuwiki\Extension\Event;
+use dokuwiki\plugin\structpublish\meta\Constants;
+use dokuwiki\plugin\structpublish\meta\Revision;
 
 /**
  * Take care of exporting only pages in selection, and not the bookmanager page itself
  */
-class action_plugin_bookcreator_export extends DokuWiki_Action_Plugin {
+class action_plugin_bookcreator_export extends DokuWiki_Action_Plugin
+{
 
     /**
      * Registers a callback function for a given event
      *
      * @param Doku_Event_Handler $controller
      */
-    public function register(Doku_Event_Handler $controller) {
+    public function register(Doku_Event_Handler $controller)
+    {
         $controller->register_hook('ACTION_EXPORT_POSTPROCESS', 'BEFORE', $this, 'replacePageExportBySelection');
         $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'renameDoExportNSAction');
+        $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'structpublishFilterSelection');
     }
 
     /**
@@ -28,7 +34,8 @@ class action_plugin_bookcreator_export extends DokuWiki_Action_Plugin {
      *
      * @param Event $event
      */
-    public function renameDoExportNSAction(Event $event) {
+    public function renameDoExportNSAction(Event $event)
+    {
         $allowedEvents = ['export_htmlns', 'export_textns'];
         if(in_array($event->data, $allowedEvents)) {
             $event->data = substr($event->data, 0, -2);
@@ -45,7 +52,8 @@ class action_plugin_bookcreator_export extends DokuWiki_Action_Plugin {
      *
      * @param Event $event
      */
-    public function replacePageExportBySelection(Event $event) {
+    public function replacePageExportBySelection(Event $event)
+    {
         if(!in_array($event->data['mode'], ['text', 'xhtml'])) {
             //skip other export modes
             return;
@@ -62,7 +70,9 @@ class action_plugin_bookcreator_export extends DokuWiki_Action_Plugin {
                 }
             } elseif($INPUT->has('savedselection')) {
                 //export a saved selection of the Bookcreator Plugin
-                /** @var action_plugin_bookcreator_handleselection $SelectionHandling */
+                /**
+ * @var action_plugin_bookcreator_handleselection $SelectionHandling 
+*/
                 $SelectionHandling = plugin_load('action', 'bookcreator_handleselection');
                 $savedselection = $SelectionHandling->loadSavedSelection($INPUT->str('savedselection'));
                 $list = $savedselection['selection'];
@@ -141,19 +151,24 @@ class action_plugin_bookcreator_export extends DokuWiki_Action_Plugin {
         // exclude ids
         $excludes = $INPUT->arr('excludes');
         if (!empty($excludes)) {
-            $result = array_filter($result, function ($item) use ($excludes) {
-                return !in_array($item['id'], $excludes);
-            });
+            $result = array_filter(
+                $result, function ($item) use ($excludes) {
+                    return !in_array($item['id'], $excludes);
+                }
+            );
         }
         // exclude namespaces
         $excludesns = $INPUT->arr('excludesns');
         if (!empty($excludesns)) {
-            $result = array_filter($result, function ($item) use ($excludesns) {
-                foreach ($excludesns as $ns) {
-                    if (strpos($item['id'], $ns . ':') === 0) return false;
+            $result = array_filter(
+                $result, function ($item) use ($excludesns) {
+                    foreach ($excludesns as $ns) {
+                        if (strpos($item['id'], $ns . ':') === 0) { return false;
+                        }
+                    }
+                    return true;
                 }
-                return true;
-            });
+            );
         }
 
         //sorting
@@ -179,4 +194,77 @@ class action_plugin_bookcreator_export extends DokuWiki_Action_Plugin {
         }
         return $list;
     }
+
+    public function structpublishFilterSelection(Doku_Event $event, $param)
+    {
+        global $INPUT;
+        global $ID;
+        global $INFO;
+        global $REV;
+
+        $do = $INPUT->str('do');
+
+        if (!in_array($do, ['export_pdfbook', 'export_html', 'export_text', 'export_odtbook'])) { return;
+        }
+
+        if (plugin_isdisabled('structpublish')) { return;
+        }
+
+        $selectionRaw = $INPUT->str('selection', '', true);
+        $selection = json_decode($selectionRaw, true);
+
+        if (!is_array($selection)) { return;
+        }
+
+        /**
+ * @var helper_plugin_structpublish_db $dbHelper 
+*/
+        $dbHelper = plugin_load('helper', 'structpublish_db');
+        if (!$dbHelper || plugin_isdisabled('structpublish')) { return;
+        }
+
+        $filtered = [];
+
+        foreach ($selection as $item) {
+
+            $id = is_array($item) && isset($item['id']) ? $item['id'] : (is_string($item) ? $item : null);
+            if (!$id) { continue;
+            }
+
+            // force reload of the globals
+            $keep = $ID;
+            $ID = $id;
+            $INFO = pageinfo();
+
+            if ($dbHelper->isPublishable($ID)) {
+                $revision = new Revision($ID, $INFO['currentrev']);
+
+                $isPublished = $revision->getStatus() === Constants::STATUS_PUBLISHED;
+                $latest = $revision->getLatestPublishedRevision();
+
+
+                // Select published version or nothing to user with no Role and no ACL write
+                if (!$dbHelper->isPublisher($ID) && auth_quickaclcheck($ID) < 2) {
+                    // there is no published revision, removing from selection
+                    if (!$isPublished && is_null($latest)) {
+                        continue;
+                    }else{
+                        $rev = $latest->getRev();
+
+                    }
+                }else{
+                    $rev = $revision->getRev();
+                }
+                $revisions[$ID] = $rev;
+            }
+            $filtered[] = $ID;
+
+            $ID = $keep;
+        }
+        // Replace the filtered selection and assign specific revisions
+        $INPUT->set('selection', json_encode($filtered));
+        $INPUT->set('revisions', json_encode($revisions));
+    }
+
 }
+
