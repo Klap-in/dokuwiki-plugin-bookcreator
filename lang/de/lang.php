@@ -3,6 +3,7 @@
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  *
+ * @author Andreas Heil <aeheil@gmail.com>
  * @author Hella <hella.breitkopf@gmail.com>
  * @author ronny <el_cherone@airpost.net>
  * @author Thor Weinreich <thorweinreich@nefkom.net>
@@ -60,6 +61,8 @@ $lang['selectiondeleted']      = 'Auswahl gelöscht';
 $lang['selectiondontexist']    = 'Auswahl existiert nicht auf Seite \'%s\'';
 $lang['selectionforbidden']    = 'Sie haben keinen Zugriff auf die Auswahl auf Seite \'%s\'';
 $lang['exportselection']       = 'Die Auswahl \'%s\' als %s exportieren';
+$lang['export_htmlns']         = 'Exportiere den Namensraum "%s:" auf den Bildschirm im HTML-Format';
+$lang['export_textns']         = 'Exportiere den Namensraum "%s:" auf den Bildschirm im Text-Format';
 $lang['titlepreparedownload']  = 'Download wird vorbereitet...';
 $lang['preparingdownload']     = 'Wir bereiten Ihren Download vor, bitte warten...';
 $lang['titleerrordownload']    = 'Fehler';
