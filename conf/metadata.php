@@ -17,8 +17,8 @@ $meta['save_namespace'] = array('string');
 
 $meta['skip_ids'] = array('multicheckbox',
                           '_choices' => array( 'sidebar'
-                                              ,'user'
-                                              ,'group'
+                                              ,'user:'
+                                              ,'group:'
                                               ,'playground'
                                               ,'wiki:syntax'
                                               ,'wiki:ebook'
