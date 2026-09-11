@@ -5,6 +5,7 @@
  *
  * Czech language strings for the BookCreator Plugin
  *
+ * @author E32k <Erik32konto@gmail.com>
  * @author Eva Cerniňáková <cerninakova@gmail.com>
  * @author Jakub Jirutka <jakub@jirutka.cz>
  */
@@ -20,6 +21,9 @@ $lang['js']['confirmdel']      = 'Opravdu chcete odstranit tento výběr?';
 $lang['js']['confirmload']     = 'Opravdu chcete načíst tento výběr a nahradit všechny aktuálně vybrané stránky?';
 $lang['js']['btn_addtobook']   = 'Přidat do knihy';
 $lang['js']['btn_removetobook'] = 'Odebrat z knihy';
+$lang['js']['added_pages']     = 'Přidáné stránky:';
+$lang['js']['select']          = 'Vybrat';
+$lang['js']['cancel']          = 'Zrušit';
 $lang['export']                = 'Export výběru';
 $lang['create']                = 'Export';
 $lang['exportpdf']             = 'PDF';
