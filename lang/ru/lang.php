@@ -3,6 +3,7 @@
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  *
+ * @author Alexander <ChanSee89@Mail.RU>
  * @author Konstantin Bobovskiy <kbobovskiy@yandex.ru>
  * @author Aleksandr Selivanov <alexgearbox@gmail.com>
  */
@@ -18,6 +19,7 @@ $lang['js']['confirmdel']      = 'Вы действительно хотите �
 $lang['js']['confirmload']     = 'Вы действительно хотите загрузить этот шаблон с заменой существующих страниц?';
 $lang['js']['btn_addtobook']   = 'Добавить в книгу';
 $lang['js']['btn_removetobook'] = 'Удалить из книги';
+$lang['js']['cancel']          = 'Отмена';
 $lang['export']                = 'Экспортировать шаблон';
 $lang['create']                = 'Экспорт';
 $lang['exportpdf']             = 'Экспортировать шаблон в PDF';
